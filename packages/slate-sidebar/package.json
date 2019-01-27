@@ -1,0 +1,8 @@
+{
+  "name": "slate-sidebar",
+  "version": "0.1.0",
+  "description": "A sidebar for slate-js",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false
+}
