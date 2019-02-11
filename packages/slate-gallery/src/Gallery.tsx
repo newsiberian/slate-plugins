@@ -41,6 +41,14 @@ interface GalleryProps {
   editor: Slate.Editor;
   node: Slate.Block;
   readOnly: boolean;
+  /**
+   * Placeholder text
+   */
+  placeholder?: string | React.ReactNode;
+  /**
+   * Placeholder that appears on image drop
+   */
+  droppingPlaceholder?: string | React.ReactNode;
 }
 
 interface GalleryState {
@@ -114,10 +122,21 @@ export default class Gallery extends React.Component<GalleryProps, GalleryState>
   }
 
   render() {
-    const { attributes, readOnly } = this.props;
+    const {
+      attributes,
+      readOnly,
+    } = this.props;
     const { images } = this.state;
 
     if (!readOnly) {
+      const placeholder = this.props.placeholder
+        ? this.props.placeholder
+        : <p>Drop images here, or click to select images to upload</p>;
+
+      const droppingPlaceholder = this.props.droppingPlaceholder
+        ? this.props.droppingPlaceholder
+        : <p>Drop images here...</p>;
+
       return (
         <Dropzone multiple onDrop={this.handleDrop}>
           {({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject }) => {
@@ -129,13 +148,18 @@ export default class Gallery extends React.Component<GalleryProps, GalleryState>
               ...(isDragReject ? rejected : {}),
             };
 
+            const placeholderNode = () => {
+              if (!images.length) {
+                return isDragActive ? droppingPlaceholder : placeholder;
+              }
+              return null;
+            };
+
             return (
               <div {...attributes} {...getRootProps()} style={style}>
                 <input {...getInputProps()} />
 
-                {isDragActive
-                  ? <p>Drop images here...</p>
-                  : <p>Drop images here, or click to select images to upload</p>}
+                {placeholderNode()}
 
                 <Grid images={images} />
               </div>
