@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "module": "es2015",
+    "module": "es6",
     "target": "es5",
     "lib": ["es7", "dom"],
+    "jsx": "react",
     "moduleResolution": "node",
     "baseUrl": ".",
     "sourceMap": true,
@@ -11,8 +12,6 @@
     "declarationMap": true,
     "noUnusedLocals": true,
     "removeComments": true,
-    "skipLibCheck": true,
-    "rootDir": "src",
-    "outDir": "dist"
+    "skipLibCheck": true
   }
 }

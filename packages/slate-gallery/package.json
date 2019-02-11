@@ -1,0 +1,30 @@
+{
+  "name": "@mercuriya/slate-gallery",
+  "version": "0.1.0",
+  "description": "An image gallery for slate-js",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "react-dropzone": "^8.1.0",
+    "react-uid": "^2.2.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.1",
+    "slate": "*",
+    "slate-react": "*"
+  }
+}
