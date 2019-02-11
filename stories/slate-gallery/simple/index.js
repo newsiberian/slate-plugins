@@ -1,10 +1,9 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Value } from 'slate';
 import { Editor } from 'slate-react';
 
-import { galleryPlugin } from '../../packages/slate-gallery/lib';
-import { Button, Toolbar } from '../components';
+import { galleryPlugin } from '../../../packages/slate-gallery/lib';
+import { Button, Toolbar } from '../../components';
 
 const plugins = [galleryPlugin()];
 

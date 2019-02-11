@@ -33,12 +33,14 @@ const rejected = {
 } as React.CSSProperties;
 
 interface ExtendedFile extends File {
-  preview?: string;
+  src?: string;
 }
 
 interface GalleryProps {
   attributes: object;
   editor: Slate.Editor;
+  node: Slate.Block;
+  readOnly: boolean;
 }
 
 interface GalleryState {
@@ -55,28 +57,43 @@ export default class Gallery extends React.Component<GalleryProps, GalleryState>
     this.handleDrop = this.handleDrop.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.editor.readOnly) {
+      const data = this.props.node.get('data');
+      if (data.has('images')) {
+        data.map((value, key) => {
+          if (key === 'images') {
+            this.setState({
+              images: value,
+            });
+          }
+        });
+      }
+    }
+  }
+
   componentWillUnmount() {
     // Make sure to revoke the data uris to avoid memory leaks
-    this.state.images.forEach(file => URL.revokeObjectURL(file.preview));
+    this.state.images.forEach(file => URL.revokeObjectURL(file.src));
   }
 
   handleDrop(acceptedFiles) {
     // const { editor } = this.props;
     const { images } = this.state;
 
-    const previews = acceptedFiles.map(file => {
+    const srcs = acceptedFiles.map(file => {
       Object.assign(file, {
-        preview: URL.createObjectURL(file),
+        src: URL.createObjectURL(file),
       });
 
       return file;
     });
 
     this.setState({
-      images: [...images, ...previews],
+      images: [...images, ...srcs],
     });
 
-    // previews.forEach(image => {
+    // srcs.forEach(image => {
     //   changeData(editor, { images: [image] });
     // });
 
@@ -97,30 +114,41 @@ export default class Gallery extends React.Component<GalleryProps, GalleryState>
   }
 
   render() {
-    const { attributes } = this.props;
+    const { attributes, readOnly } = this.props;
     const { images } = this.state;
 
+    if (!readOnly) {
+      return (
+        <Dropzone multiple onDrop={this.handleDrop}>
+          {({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject }) => {
+            const style = {
+              ...root,
+              ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
+              ...(isDragActive ? active : {}),
+              ...(isDragAccept ? accepted : {}),
+              ...(isDragReject ? rejected : {}),
+            };
+
+            return (
+              <div {...attributes} {...getRootProps()} style={style}>
+                <input {...getInputProps()} />
+
+                {isDragActive
+                  ? <p>Drop images here...</p>
+                  : <p>Drop images here, or click to select images to upload</p>}
+
+                <Grid images={images} />
+              </div>
+            );
+          }}
+        </Dropzone>
+      );
+    }
+
     return (
-      <Dropzone multiple onDrop={this.handleDrop}>
-        {({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject }) => {
-          const style = {
-            ...root,
-            ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
-            ...(isDragActive ? active : {}),
-            ...(isDragAccept ? accepted : {}),
-            ...(isDragReject ? rejected : {}),
-          };
-
-          return (
-            <div {...attributes} {...getRootProps()} style={style}>
-              <input {...getInputProps()} />
-              {isDragActive ? <p>Drop images here...</p> : <p>Drop images here, or click to select images to upload</p>}
-
-              <Grid images={images} />
-            </div>
-          );
-        }}
-      </Dropzone>
+      <div {...attributes}>
+        <Grid images={images} />
+      </div>
     );
   }
 }

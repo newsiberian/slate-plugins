@@ -229,7 +229,7 @@ export default function Grid({ images }) {
             key={seed(image)}
             style={{ ...getItemStyle(index, maxLength), ...leftContainerStyle } as React.CSSProperties}
           >
-            <img style={img} src={image.preview} alt={image.name} />
+            <img style={img} src={image.src} alt={image.name} />
             {withLeft && <Left left={left} />}
           </div>
         );
