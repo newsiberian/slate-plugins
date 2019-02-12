@@ -12,6 +12,8 @@
     "declarationMap": true,
     "noUnusedLocals": true,
     "removeComments": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "rootDirs": ["src"],
+    "outDir": "lib"
   }
 }

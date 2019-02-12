@@ -219,7 +219,7 @@ export default function Grid({ images }) {
   // number of images that was left
   const left = length - maxLength;
 
-  // TODO: allow src-set
+  // TODO: allow srcset
 
   return (
     <div style={container(maxLength)}>

@@ -10,7 +10,7 @@ const root = {
 const span = {
   opacity: 0.6,
   color: 'grey',
-  fontSize: '8rem',
+  fontSize: '10vw',
   textShadow: '1px 1px 2px black, 0 0 1em white',
 } as React.CSSProperties;
 

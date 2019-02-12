@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Dropzone from 'react-dropzone';
+import Dropzone, { DropzoneProps } from 'react-dropzone';
 import * as Slate from 'slate';
 
 import Grid from './Grid';
@@ -49,6 +49,10 @@ interface GalleryProps {
    * Placeholder that appears on image drop
    */
   droppingPlaceholder?: string | React.ReactNode;
+  /**
+   * Props which goes to react-dropzone
+   */
+  dropzoneProps?: DropzoneProps;
 }
 
 interface GalleryState {
@@ -125,6 +129,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryState>
     const {
       attributes,
       readOnly,
+      dropzoneProps,
     } = this.props;
     const { images } = this.state;
 
@@ -138,7 +143,7 @@ export default class Gallery extends React.Component<GalleryProps, GalleryState>
         : <p>Drop images here...</p>;
 
       return (
-        <Dropzone multiple onDrop={this.handleDrop}>
+        <Dropzone multiple onDrop={this.handleDrop} {...dropzoneProps}>
           {({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject }) => {
             const style = {
               ...root,
