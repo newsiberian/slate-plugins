@@ -1,5 +1,4 @@
-import * as React from 'react';
-
+import React from 'react';
 import { useUIDSeed } from 'react-uid';
 
 import Left from './Left';
