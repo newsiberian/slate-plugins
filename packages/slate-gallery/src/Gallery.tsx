@@ -60,133 +60,6 @@ interface GalleryProps {
   imageComponent?: (args) => React.ReactNode;
 }
 
-// interface GalleryState {
-//   images?: ExtendedFile[];
-// }
-
-// TODO: if not editor focused, place gallery at the bottom of document
-
-// export default class Gallery extends React.Component<GalleryProps, GalleryState> {
-//   constructor(props: GalleryProps) {
-//     super(props);
-//     this.state = { images: [] };
-//
-//     this.handleDrop = this.handleDrop.bind(this);
-//   }
-//
-//   componentDidMount() {
-//     if (this.props.editor.readOnly) {
-//       const data = this.props.node.get('data');
-//       if (data.has('images')) {
-//         data.map((value, key) => {
-//           if (key === 'images') {
-//             this.setState({
-//               images: value,
-//             });
-//           }
-//         });
-//       }
-//     }
-//   }
-//
-//   componentWillUnmount() {
-//     // Make sure to revoke the data uris to avoid memory leaks
-//     this.state.images.forEach(file => URL.revokeObjectURL(file.src));
-//   }
-//
-//   handleDrop(acceptedFiles) {
-//     // const { editor } = this.props;
-//     const { images } = this.state;
-//
-//     const srcs = acceptedFiles.map(file => {
-//       Object.assign(file, {
-//         src: URL.createObjectURL(file),
-//       });
-//
-//       return file;
-//     });
-//
-//     this.setState({
-//       images: [...images, ...srcs],
-//     });
-//
-//     // srcs.forEach(image => {
-//     //   changeData(editor, { images: [image] });
-//     // });
-//
-//     // acceptedFiles.forEach(file => {
-//     //   const reader = new FileReader();
-//     //
-//     //   reader.addEventListener('load', function() {
-//     //     // editor.command(insertImage, this.result, node);
-//     //     changeData(editor, { images: [this.result] });
-//     //   });
-//     //
-//     //   reader.readAsDataURL(file);
-//     // });
-//
-//     // this.setState({
-//     //   images: [...images, ...acceptedFiles],
-//     // });
-//   }
-//
-//   render() {
-//     const {
-//       attributes,
-//       readOnly,
-//       dropzoneProps,
-//     } = this.props;
-//     const { images } = this.state;
-//
-//     if (!readOnly) {
-//       const placeholder = this.props.placeholder
-//         ? this.props.placeholder
-//         : <p>Drop images here, or click to select images to upload</p>;
-//
-//       const droppingPlaceholder = this.props.droppingPlaceholder
-//         ? this.props.droppingPlaceholder
-//         : <p>Drop images here...</p>;
-//
-//       return (
-//         <Dropzone multiple onDrop={this.handleDrop} {...dropzoneProps}>
-//           {({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject }) => {
-//             const style = {
-//               ...root,
-//               ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
-//               ...(isDragActive ? active : {}),
-//               ...(isDragAccept ? accepted : {}),
-//               ...(isDragReject ? rejected : {}),
-//             };
-//
-//             const placeholderNode = () => {
-//               if (!images.length) {
-//                 return isDragActive ? droppingPlaceholder : placeholder;
-//               }
-//               return null;
-//             };
-//
-//             return (
-//               <div {...attributes} {...getRootProps()} style={style}>
-//                 <input {...getInputProps()} />
-//
-//                 {placeholderNode()}
-//
-//                 <Grid images={images} />
-//               </div>
-//             );
-//           }}
-//         </Dropzone>
-//       );
-//     }
-//
-//     return (
-//       <div {...attributes}>
-//         <Grid images={images} />
-//       </div>
-//     );
-//   }
-// }
-
 /**
  *
  * @param {object} attributes
@@ -245,6 +118,14 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     setImages([...images, ...sources]);
   };
 
+  const handleEdit = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+  };
+
+  const handleRemove = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+  };
+
   if (!readOnly) {
     const placeholderNode = placeholder ? (
       placeholder
@@ -288,7 +169,13 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
               {info()}
 
-              <Grid images={images} imageComponent={imageComponent} />
+              <Grid
+                images={images}
+                imageComponent={imageComponent}
+                readOnly={readOnly}
+                onEdit={handleEdit}
+                onRemove={handleRemove}
+              />
             </div>
           );
         }}
@@ -298,7 +185,11 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
   return (
     <div {...attributes}>
-      <Grid images={images} imageComponent={imageComponent} />
+      <Grid
+        images={images}
+        imageComponent={imageComponent}
+        readOnly={readOnly}
+      />
     </div>
   );
 };

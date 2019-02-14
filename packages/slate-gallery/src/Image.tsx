@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Controls from './Controls';
 import Left from './Left';
 
 interface ExtendedFile extends File {
@@ -19,6 +20,9 @@ export interface ImageProps {
   wrapperStyle: React.CSSProperties;
   withLeft: boolean;
   left?: number;
+  readOnly: boolean;
+  onEdit?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onRemove?: (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 export interface ImageComponentArgs {
@@ -52,6 +56,9 @@ const Image: React.FunctionComponent<ImageProps> = ({
   wrapperStyle,
   withLeft,
   left,
+  readOnly,
+  onEdit,
+  onRemove,
 }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
@@ -74,6 +81,7 @@ const Image: React.FunctionComponent<ImageProps> = ({
 
   return (
     <div style={wrapperStyle}>
+      {!readOnly && <Controls onEdit={onEdit} onRemove={onRemove} />}
       <img
         style={imageStyle}
         src={image.src}

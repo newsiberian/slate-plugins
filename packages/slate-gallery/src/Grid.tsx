@@ -6,6 +6,9 @@ import Image, { TypeImage } from './Image';
 interface GridProps {
   images?: TypeImage[];
   imageComponent?: (args) => React.ReactNode;
+  readOnly: boolean;
+  onEdit?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onRemove?: (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 const buildGridContainer = (columns, rows): React.CSSProperties => ({
@@ -218,6 +221,9 @@ const container = size =>
 const Grid: React.FunctionComponent<GridProps> = ({
   images,
   imageComponent,
+  readOnly,
+  onEdit,
+  onRemove,
 }) => {
   const seed = useUIDSeed();
   const length = images.length || 1;
@@ -232,10 +238,9 @@ const Grid: React.FunctionComponent<GridProps> = ({
       {allowedImages.map((image, index) => {
         const key = seed(image) as string;
         const withLeft = Boolean(index === maxLength - 1 && left > 0);
-        const leftContainerStyle = withLeft ? { position: 'relative' } : {};
         const wrapperStyle = {
           ...getItemStyle(index, maxLength),
-          ...leftContainerStyle,
+          position: 'relative',
         } as React.CSSProperties;
 
         return (
@@ -246,6 +251,9 @@ const Grid: React.FunctionComponent<GridProps> = ({
             wrapperStyle={wrapperStyle}
             withLeft={withLeft}
             left={left}
+            readOnly={readOnly}
+            onEdit={onEdit}
+            onRemove={onRemove}
           />
         );
       })}
