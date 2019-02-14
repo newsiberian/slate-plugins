@@ -14,6 +14,7 @@ import image10 from '../public/image-10-1280x720.jpg';
 
 import Simple from './slate-gallery/simple';
 import ReadOnly from './slate-gallery/readOnly';
+import CustomImage from './slate-gallery/customImage';
 
 storiesOf('Slate editor gallery', module)
   .add('Simple', () => <Simple />)
@@ -146,12 +147,16 @@ storiesOf('Slate editor gallery', module)
         { src: image9 },
         { src: image10 },
       ]}
-      imageComponent={({ key, image, imageStyle, wrapperStyle, withLeft, left, LeftComponent }) => {
+      imageComponent={({ image, imageStyle, wrapperStyle, withLeft, left, LeftComponent }) => {
         return (
-          <div key={key} style={wrapperStyle}>
-            <img src={image.src} alt={image.name} style={{ ...imageStyle, border: '2px solid red' }} />
-            {withLeft && <LeftComponent left={left} />}
-          </div>
+          <CustomImage
+            image={image}
+            imageStyle={imageStyle}
+            wrapperStyle={wrapperStyle}
+            withLeft={withLeft}
+            left={left}
+            LeftComponent={LeftComponent}
+          />
         );
       }}
     />

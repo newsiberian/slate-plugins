@@ -14,7 +14,6 @@ interface ImageInterface {
 export type TypeImage = ExtendedFile | ImageInterface;
 
 export interface ImageProps {
-  key: string;
   image: TypeImage;
   imageComponent?: ({}) => React.ReactNode;
   wrapperStyle: React.CSSProperties;
@@ -23,11 +22,20 @@ export interface ImageProps {
 }
 
 export interface ImageComponentArgs {
-  key: string;
   image: TypeImage;
   imageStyle: React.CSSProperties;
+  /**
+   * This is important, since it contain computed position of image in css-grid
+   */
   wrapperStyle: React.CSSProperties;
+  /**
+   * Indicates that image contains an overlay text with number of left images
+   * which will not be displayed
+   */
   withLeft: boolean;
+  /**
+   * A number of images that left behind. They can be found by full-screen gallery
+   */
   left?: number;
   LeftComponent: React.ReactNode;
 }
@@ -39,7 +47,6 @@ const imageStyle = {
 } as React.CSSProperties;
 
 const Image: React.FunctionComponent<ImageProps> = ({
-  key,
   image,
   imageComponent,
   wrapperStyle,
@@ -56,7 +63,6 @@ const Image: React.FunctionComponent<ImageProps> = ({
 
   if (typeof imageComponent === 'function') {
     return imageComponent({
-      key,
       image,
       imageStyle,
       wrapperStyle,
@@ -67,7 +73,7 @@ const Image: React.FunctionComponent<ImageProps> = ({
   }
 
   return (
-    <div key={key} style={wrapperStyle}>
+    <div style={wrapperStyle}>
       <img
         style={imageStyle}
         src={image.src}
