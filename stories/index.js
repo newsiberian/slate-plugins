@@ -131,5 +131,28 @@ storiesOf('Slate editor gallery', module)
         { src: image10 },
       ]}
     />
+  ))
+  .add('Read only: custom image component as a function', () => (
+    <ReadOnly
+      images={[
+        { src: image1 },
+        { src: image2 },
+        { src: image3 },
+        { src: image4 },
+        { src: image5 },
+        { src: image6 },
+        { src: image7 },
+        { src: image8 },
+        { src: image9 },
+        { src: image10 },
+      ]}
+      imageComponent={({ key, image, imageStyle, wrapperStyle, withLeft, left, LeftComponent }) => {
+        return (
+          <div key={key} style={wrapperStyle}>
+            <img src={image.src} alt={image.name} style={{ ...imageStyle, border: '2px solid red' }} />
+            {withLeft && <LeftComponent left={left} />}
+          </div>
+        );
+      }}
+    />
   ));
-  // .add('With image', () => <Gallery />);

@@ -1,9 +1,15 @@
 import React from 'react';
+import { DropzoneProps } from 'react-dropzone';
 
 import Gallery from './Gallery';
 import { handleChange } from './utils';
 
-const galleryPlugin = (options = {}) => ({
+interface GalleryOptions {
+  dropzoneProps?: DropzoneProps;
+  imageComponent?: (args) => React.ReactNode;
+}
+
+const galleryPlugin = (options: GalleryOptions = {}) => ({
   onChange(editor, next) {
     return handleChange(editor, next);
   },
@@ -11,7 +17,7 @@ const galleryPlugin = (options = {}) => ({
   renderNode(props, editor, next) {
     switch (props.node.type) {
       case 'gallery':
-        return <Gallery editor={editor} {...props} />;
+        return <Gallery editor={editor} {...props} {...options} />;
       default:
         return next();
     }

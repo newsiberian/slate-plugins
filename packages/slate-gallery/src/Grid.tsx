@@ -1,20 +1,24 @@
 import React from 'react';
 import { useUIDSeed } from 'react-uid';
 
-import Left from './Left';
+import Image, { TypeImage } from './Image';
 
-const img = {
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-} as React.CSSProperties;
+interface GridProps {
+  images?: TypeImage[];
+  imageComponent?: (args) => React.ReactNode;
+}
 
-const buildGridContainer = (columns, rows) => ({
+const buildGridContainer = (columns, rows): React.CSSProperties => ({
   gridTemplateColumns: `repeat(${columns}, 1fr)`,
   gridTemplateRows: `repeat(${rows}, auto)`,
 });
 
-const buildGridItem = (gridColumnStart, gridColumnEnd, gridRowStart, gridRowEnd) => ({
+const buildGridItem = (
+  gridColumnStart,
+  gridColumnEnd,
+  gridRowStart,
+  gridRowEnd,
+) => ({
   gridColumnStart,
   gridColumnEnd,
   gridRowStart,
@@ -203,14 +207,18 @@ const getItemStyle = (index, size) => {
   }
 };
 
-const container = size => ({
-  display: 'grid',
-  ...buildGrid(size),
-  gridGap: 2.5,
-  marginTop: 16,
-}) as React.CSSProperties;
+const container = size =>
+  ({
+    display: 'grid',
+    ...buildGrid(size),
+    gridGap: 2.5,
+    marginTop: 16,
+  } as React.CSSProperties);
 
-export default function Grid({ images }) {
+const Grid: React.FunctionComponent<GridProps> = ({
+  images,
+  imageComponent,
+}) => {
   const seed = useUIDSeed();
   const length = images.length || 1;
   const maxLength = length > 9 ? 9 : length;
@@ -219,22 +227,30 @@ export default function Grid({ images }) {
   const left = length - maxLength;
 
   // TODO: allow srcset
-
   return (
     <div style={container(maxLength)}>
       {allowedImages.map((image, index) => {
-        const withLeft = index === maxLength - 1 && left > 0;
+        const key = seed(image) as string;
+        const withLeft = Boolean(index === maxLength - 1 && left > 0);
         const leftContainerStyle = withLeft ? { position: 'relative' } : {};
+        const wrapperStyle = {
+          ...getItemStyle(index, maxLength),
+          ...leftContainerStyle,
+        } as React.CSSProperties;
+
         return (
-          <div
-            key={seed(image)}
-            style={{ ...getItemStyle(index, maxLength), ...leftContainerStyle } as React.CSSProperties}
-          >
-            <img style={img} src={image.src} alt={image.name} />
-            {withLeft && <Left left={left} />}
-          </div>
+          <Image
+            key={key}
+            image={image}
+            imageComponent={imageComponent}
+            wrapperStyle={wrapperStyle}
+            withLeft={withLeft}
+            left={left}
+          />
         );
       })}
     </div>
   );
-}
+};
+
+export default Grid;

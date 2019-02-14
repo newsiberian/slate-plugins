@@ -32,10 +32,6 @@ const rejected = {
   borderColor: '#f55a4e',
 } as React.CSSProperties;
 
-// interface ExtendedFile extends File {
-//   src?: string;
-// }
-
 interface GalleryProps {
   attributes: object;
   editor: Slate.Editor;
@@ -53,6 +49,15 @@ interface GalleryProps {
    * Props which goes to react-dropzone
    */
   dropzoneProps?: DropzoneProps;
+  /**
+   * A custom image component. It will be rendered for readOnly: false case
+   *
+   * Please, check an Image component to use it as example
+   *
+   * @param image {object} - image properties
+   * @return {React.ReactNode} - custom image component
+   */
+  imageComponent?: (args) => React.ReactNode;
 }
 
 // interface GalleryState {
@@ -182,6 +187,19 @@ interface GalleryProps {
 //   }
 // }
 
+/**
+ *
+ * @param {object} attributes
+ * @param {Editor} editor
+ * @param {Block} node
+ * @param {string | React.ReactNode} placeholder
+ * @param {string | React.ReactNode} droppingPlaceholder
+ * @param {boolean} readOnly
+ * @param {DropzoneProps} dropzoneProps
+ * @param {(args) => React.ReactNode} imageComponent
+ * @return {any}
+ * @constructor
+ */
 const Gallery: React.FunctionComponent<GalleryProps> = ({
   attributes,
   editor,
@@ -190,6 +208,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   droppingPlaceholder,
   readOnly,
   dropzoneProps,
+  imageComponent,
 }) => {
   // TODO: do separate previews state
   const [images, setImages] = useState([]);
@@ -214,23 +233,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     };
   });
 
-  // const handleDrop = acceptedFiles => {
-  //   const previews = acceptedFiles.map(file => {
-  //     Object.assign(file, {
-  //       preview: URL.createObjectURL(file),
-  //     });
-  //
-  //     return file;
-  //   });
-  //
-  //   setImages([...images, ...acceptedFiles]);
-  //
-  //   previews.forEach(image => {
-  //     editor.command(insertImage, image, node);
-  //   });
-  // };
-
-  const handleDrop = acceptedFiles => {
+  const handleDrop = (acceptedFiles: File[]): void => {
     const sources = acceptedFiles.map(file => {
       Object.assign(file, {
         src: URL.createObjectURL(file),
@@ -238,17 +241,6 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
       return file;
     });
-
-    // acceptedFiles.forEach(file => {
-    //   const reader = new FileReader();
-    //
-    //   reader.addEventListener('load', function() {
-    //     // editor.command(insertImage, this.result, node);
-    //     changeData(editor, { images: [this.result] });
-    //   });
-    //
-    //   reader.readAsDataURL(file);
-    // });
 
     setImages([...images, ...sources]);
   };
@@ -296,7 +288,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
               {info()}
 
-              <Grid images={images} />
+              <Grid images={images} imageComponent={imageComponent} />
             </div>
           );
         }}
@@ -306,7 +298,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
   return (
     <div {...attributes}>
-      <Grid images={images} />
+      <Grid images={images} imageComponent={imageComponent} />
     </div>
   );
 };
