@@ -15,14 +15,19 @@ interface ImageInterface {
 export type TypeImage = ExtendedFile | ImageInterface;
 
 export interface ImageProps {
+  /**
+   * We need to know index in cases when we need to edit or remove image, so it
+   * is not used in Image component, but passed down to Controls component
+   */
+  index: number;
   image: TypeImage;
   imageComponent?: ({}) => React.ReactNode;
   wrapperStyle: React.CSSProperties;
   withLeft: boolean;
   left?: number;
   readOnly: boolean;
-  onEdit?: (e: React.MouseEvent<HTMLInputElement>) => void;
-  onRemove?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  onRemove?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 export interface ImageComponentArgs {
@@ -51,6 +56,7 @@ const imageStyle = {
 } as React.CSSProperties;
 
 const Image: React.FunctionComponent<ImageProps> = ({
+  index,
   image,
   imageComponent,
   wrapperStyle,
@@ -81,7 +87,9 @@ const Image: React.FunctionComponent<ImageProps> = ({
 
   return (
     <div style={wrapperStyle}>
-      {!readOnly && <Controls onEdit={onEdit} onRemove={onRemove} />}
+      {!readOnly && (
+        <Controls index={index} onEdit={onEdit} onRemove={onRemove} />
+      )}
       <img
         style={imageStyle}
         src={image.src}

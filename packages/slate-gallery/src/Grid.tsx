@@ -7,8 +7,8 @@ interface GridProps {
   images?: TypeImage[];
   imageComponent?: (args) => React.ReactNode;
   readOnly: boolean;
-  onEdit?: (e: React.MouseEvent<HTMLInputElement>) => void;
-  onRemove?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  onRemove?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 const buildGridContainer = (columns, rows): React.CSSProperties => ({
@@ -246,6 +246,7 @@ const Grid: React.FunctionComponent<GridProps> = ({
         return (
           <Image
             key={key}
+            index={index}
             image={image}
             imageComponent={imageComponent}
             wrapperStyle={wrapperStyle}

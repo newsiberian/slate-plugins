@@ -1,8 +1,9 @@
 import React from 'react';
 
 interface ControlsProps {
-  onEdit?: (e: React.MouseEvent<HTMLInputElement>) => void;
-  onRemove?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  index: number;
+  onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  onRemove?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 const root = {
@@ -14,15 +15,16 @@ const root = {
 } as React.CSSProperties;
 
 const Controls: React.FunctionComponent<ControlsProps> = ({
+  index,
   onEdit,
   onRemove,
 }) => {
   return (
     <div style={root}>
-      <button onClick={onEdit} title="Edit image description">
+      <button onClick={onEdit(index)} title="Edit image description">
         &#x270e;
       </button>
-      <button onClick={onRemove} title="Remove image">
+      <button onClick={onRemove(index)} title="Remove image">
         &#xd7;
       </button>
     </div>

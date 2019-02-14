@@ -118,12 +118,17 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     setImages([...images, ...sources]);
   };
 
-  const handleEdit = (event: React.MouseEvent<HTMLInputElement>) => {
+  const handleEdit = (index: number) => (
+    event: React.MouseEvent<HTMLInputElement>,
+  ) => {
     event.stopPropagation();
   };
 
-  const handleRemove = (event: React.MouseEvent<HTMLInputElement>) => {
+  const handleRemove = (index: number) => (
+    event: React.MouseEvent<HTMLInputElement>,
+  ) => {
     event.stopPropagation();
+    setImages(images.filter((image, i) => i !== index));
   };
 
   if (!readOnly) {
