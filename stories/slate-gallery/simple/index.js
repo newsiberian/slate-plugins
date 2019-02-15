@@ -5,8 +5,6 @@ import { Editor } from 'slate-react';
 import { galleryPlugin } from '../../../packages/slate-gallery/lib';
 import { Button, Toolbar } from '../../components';
 
-const plugins = [galleryPlugin()];
-
 /**
  * Define the default node type.
  * @type {String}
@@ -74,8 +72,10 @@ const renderEditor = (props, editor, next) => {
   );
 };
 
-export default function Gallery() {
+export default function Gallery(props) {
   const [value, setValue] = useState(initialValue);
+
+  const plugins = [galleryPlugin(props)];
 
   function onChange(editor) {
     setValue(editor.value);

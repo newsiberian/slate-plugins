@@ -3,6 +3,8 @@ import { storiesOf } from '@storybook/react';
 
 import './styles.css'
 
+import CustomControls from './slate-gallery/customControls';
+
 import image1 from '../public/image-1-1280x720.jpg';
 import image2 from '../public/image-2-1280x720.jpg';
 import image3 from '../public/image-3-1280x720.jpg';
@@ -170,5 +172,22 @@ storiesOf('Slate editor gallery', module)
         { src: image10 },
       ]}
       leftClassName="custom-left"
+    />
+  ))
+  .add('Controls custom component', () => (
+    <Simple
+      images={[
+        { src: image1 },
+        { src: image2 },
+        { src: image3 },
+        { src: image4 },
+        { src: image5 },
+        { src: image6 },
+        { src: image7 },
+        { src: image8 },
+        { src: image9 },
+        { src: image10 },
+      ]}
+      controlsComponent={(args) => <CustomControls {...args} />}
     />
   ));

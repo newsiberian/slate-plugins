@@ -13,3 +13,17 @@
     color: orange;
     font-size: 24px;
 }
+
+.custom-controls-root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 5px;
+    margin-left: 3px;
+    border: 1px solid burlywood;
+}
+
+.custom-controls-button {
+    padding: 5px 10px;
+
+}
