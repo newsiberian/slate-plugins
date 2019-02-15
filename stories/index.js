@@ -16,7 +16,6 @@ import image10 from '../public/image-10-1280x720.jpg';
 
 import Simple from './slate-gallery/simple';
 import ReadOnly from './slate-gallery/readOnly';
-import CustomImage from './slate-gallery/customImage';
 
 storiesOf('Slate editor gallery', module)
   .add('Simple', () => <Simple />)
