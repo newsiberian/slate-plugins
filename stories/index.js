@@ -139,16 +139,20 @@ storiesOf('Slate editor gallery', module)
       images={[
         { src: image1 },
         { src: image2 },
+      ]}
+      imageClassName="read-only-image"
+    />
+  ))
+  .add('Read only: image wrapper custom className', () => (
+    <ReadOnly
+      images={[
+        { src: image1 },
+        { src: image2 },
         { src: image3 },
         { src: image4 },
         { src: image5 },
-        { src: image6 },
-        { src: image7 },
-        { src: image8 },
-        { src: image9 },
-        { src: image10 },
       ]}
-      imageClassName="read-only-image"
+      imageWrapperClassName="custom-image-wrapper"
     />
   ))
   .add('Read only: custom left className', () => (
