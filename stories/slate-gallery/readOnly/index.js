@@ -4,12 +4,11 @@ import { Editor } from 'slate-react';
 
 import { galleryPlugin } from '../../../packages/slate-gallery/lib';
 
-export default function Gallery({ images, imageComponent }) {
+export default function Gallery(props) {
+  const { images, ...rest } = props;
   // I know, this is bad practise, but we need to reuse this component in many
   // stories, so we initiate plugins here
-  const plugins = [galleryPlugin({
-    imageComponent
-  })];
+  const plugins = [galleryPlugin(rest)];
 
   return (
     <section>

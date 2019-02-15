@@ -1,6 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
+import './styles.css'
+
 import image1 from '../public/image-1-1280x720.jpg';
 import image2 from '../public/image-2-1280x720.jpg';
 import image3 from '../public/image-3-1280x720.jpg';
@@ -133,7 +135,7 @@ storiesOf('Slate editor gallery', module)
       ]}
     />
   ))
-  .add('Read only: custom image component as a function', () => (
+  .add('Read only: custom image className', () => (
     <ReadOnly
       images={[
         { src: image1 },
@@ -147,17 +149,23 @@ storiesOf('Slate editor gallery', module)
         { src: image9 },
         { src: image10 },
       ]}
-      imageComponent={({ image, imageStyle, wrapperStyle, withLeft, left, LeftComponent }) => {
-        return (
-          <CustomImage
-            image={image}
-            imageStyle={imageStyle}
-            wrapperStyle={wrapperStyle}
-            withLeft={withLeft}
-            left={left}
-            LeftComponent={LeftComponent}
-          />
-        );
-      }}
+      imageClassName="read-only-image"
+    />
+  ))
+  .add('Read only: custom left className', () => (
+    <ReadOnly
+      images={[
+        { src: image1 },
+        { src: image2 },
+        { src: image3 },
+        { src: image4 },
+        { src: image5 },
+        { src: image6 },
+        { src: image7 },
+        { src: image8 },
+        { src: image9 },
+        { src: image10 },
+      ]}
+      leftClassName="custom-left"
     />
   ));
