@@ -14,11 +14,17 @@ const span = {
   textShadow: '1px 1px 2px black, 0 0 1em white',
 } as React.CSSProperties;
 
-interface Props {
+interface LeftProps {
   left: number;
+  leftClassName?: string;
 }
 
-export default React.memo(function Left({ left }: Props) {
+interface SpanProps {
+  className?: string;
+  style?: object;
+}
+
+export default React.memo(function Left({ left, leftClassName }: LeftProps) {
   const overlayEl = React.useRef(null);
 
   const updatePosition = () => {
@@ -32,14 +38,24 @@ export default React.memo(function Left({ left }: Props) {
     overlay.style.left = `${parentRect.width / 2 - overlayRect.width / 2}px`;
   };
 
-  React.useEffect((): void => {
-    // center position on first load
-    updatePosition();
-  });
+  React.useEffect(
+    (): void => {
+      // center position on first load
+      updatePosition();
+    },
+  );
+
+  const spanProps = {} as SpanProps;
+
+  if (leftClassName) {
+    spanProps.className = leftClassName;
+  } else {
+    spanProps.style = span;
+  }
 
   return (
     <div style={root} ref={overlayEl}>
-      <span style={span}>
+      <span {...spanProps}>
         {'+'}
         {left}
       </span>

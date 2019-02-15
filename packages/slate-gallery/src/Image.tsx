@@ -14,7 +14,7 @@ interface ImageInterface {
 
 export type TypeImage = ExtendedFile | ImageInterface;
 
-export interface ImageProps {
+interface ImageProps {
   /**
    * We need to know index in cases when we need to edit or remove image, so it
    * is not used in Image component, but passed down to Controls component
@@ -22,31 +22,22 @@ export interface ImageProps {
   index: number;
   image: TypeImage;
   imageComponent?: ({}) => React.ReactNode;
+  controlsComponent?: (args: ControlsComponentArgs) => React.ReactNode;
   wrapperStyle: React.CSSProperties;
   withLeft: boolean;
   left?: number;
   readOnly: boolean;
   onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
   onRemove?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  imageClassName?: string;
+  imageWrapperClassName?: string;
+  leftClassName?: string;
 }
 
-export interface ImageComponentArgs {
-  image: TypeImage;
-  imageStyle: React.CSSProperties;
-  /**
-   * This is important, since it contain computed position of image in css-grid
-   */
-  wrapperStyle: React.CSSProperties;
-  /**
-   * Indicates that image contains an overlay text with number of left images
-   * which will not be displayed
-   */
-  withLeft: boolean;
-  /**
-   * A number of images that left behind. They can be found by full-screen gallery
-   */
-  left?: number;
-  LeftComponent: React.ReactNode;
+interface ControlsComponentArgs {
+  index: number;
+  onEdit: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  onRemove: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 const imageStyle = {
@@ -59,14 +50,31 @@ const Image: React.FunctionComponent<ImageProps> = ({
   index,
   image,
   imageComponent,
+  controlsComponent,
   wrapperStyle,
   withLeft,
   left,
   readOnly,
   onEdit,
   onRemove,
+  imageClassName,
+  imageWrapperClassName,
+  leftClassName,
 }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
+
+  const imageWrapperProps = {} as { className?: string };
+  const imageProps = {} as { className?: string; style?: object };
+
+  if (imageWrapperClassName) {
+    imageWrapperProps.className = imageWrapperClassName;
+  }
+
+  if (imageClassName) {
+    imageProps.className = imageClassName;
+  } else {
+    imageProps.style = imageStyle;
+  }
 
   const handleLoad = (): void => {
     if (withLeft) {
@@ -74,29 +82,23 @@ const Image: React.FunctionComponent<ImageProps> = ({
     }
   };
 
-  if (typeof imageComponent === 'function') {
-    return imageComponent({
-      image,
-      imageStyle,
-      wrapperStyle,
-      withLeft,
-      left,
-      LeftComponent: Left,
-    } as ImageComponentArgs);
-  }
+  const renderControls = (): React.ReactNode => {
+    if (typeof controlsComponent === 'function') {
+      return controlsComponent({ index, onEdit, onRemove });
+    }
+    return <Controls index={index} onEdit={onEdit} onRemove={onRemove} />;
+  };
 
   return (
-    <div style={wrapperStyle}>
-      {!readOnly && (
-        <Controls index={index} onEdit={onEdit} onRemove={onRemove} />
-      )}
+    <div style={wrapperStyle} {...imageWrapperProps}>
+      {!readOnly && renderControls()}
       <img
-        style={imageStyle}
         src={image.src}
         alt={image.name}
         onLoad={handleLoad}
+        {...imageProps}
       />
-      {loaded && <Left left={left} />}
+      {loaded && <Left left={left} leftClassName={leftClassName} />}
     </div>
   );
 };

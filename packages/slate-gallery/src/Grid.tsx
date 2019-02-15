@@ -5,10 +5,13 @@ import Image, { TypeImage } from './Image';
 
 interface GridProps {
   images?: TypeImage[];
-  imageComponent?: (args) => React.ReactNode;
+  controlsComponent?: (args) => React.ReactNode;
   readOnly: boolean;
   onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
   onRemove?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  imageWrapperClassName?: string;
+  imageClassName?: string;
+  leftClassName?: string;
 }
 
 const buildGridContainer = (columns, rows): React.CSSProperties => ({
@@ -218,21 +221,16 @@ const container = size =>
     marginTop: 16,
   } as React.CSSProperties);
 
-const Grid: React.FunctionComponent<GridProps> = ({
-  images,
-  imageComponent,
-  readOnly,
-  onEdit,
-  onRemove,
-}) => {
+const Grid: React.FunctionComponent<GridProps> = props => {
   const seed = useUIDSeed();
+
+  const { images, ...rest } = props;
   const length = images.length || 1;
   const maxLength = length > 9 ? 9 : length;
   const allowedImages = images.slice(0, maxLength);
   // number of images that was left
   const left = length - maxLength;
 
-  // TODO: allow srcset
   return (
     <div style={container(maxLength)}>
       {allowedImages.map((image, index) => {
@@ -248,13 +246,10 @@ const Grid: React.FunctionComponent<GridProps> = ({
             key={key}
             index={index}
             image={image}
-            imageComponent={imageComponent}
             wrapperStyle={wrapperStyle}
             withLeft={withLeft}
             left={left}
-            readOnly={readOnly}
-            onEdit={onEdit}
-            onRemove={onRemove}
+            {...rest}
           />
         );
       })}

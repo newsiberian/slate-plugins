@@ -6,7 +6,10 @@ import { handleChange } from './utils';
 
 interface GalleryOptions {
   dropzoneProps?: DropzoneProps;
-  imageComponent?: (args) => React.ReactNode;
+  controlsComponent?: (args) => React.ReactNode;
+  imageClassName?: string;
+  imageWrapperClassName?: string;
+  leftClassName?: string;
 }
 
 const galleryPlugin = (options: GalleryOptions = {}) => ({

@@ -50,29 +50,52 @@ interface GalleryProps {
    */
   dropzoneProps?: DropzoneProps;
   /**
-   * A custom image component. It will be rendered for readOnly: false case
+   * Custom controls component. It is uses only for "readOnly: true" mode
+   * Handlers must be added to each child-button accordingly
+   * @param {number} args.index - index of image. It is required to handlers
+   * @param {(index: number) => (e: React.MouseEvent<HTMLInputElement>) => void} args.onEdit -
+   * edit image description handler.
+   * @param {(index: number) => (e: React.MouseEvent<HTMLInputElement>) => void} args.onRemove -
+   * remove image
+   * @return {React.ReactNode}
    *
-   * Please, check an Image component to use it as example
-   *
-   * @param image {object} - image properties
-   * @return {React.ReactNode} - custom image component
+   * Example:
+   * <div style={root}>
+   *   <button onClick={onEdit(index)} title="Edit image description">
+   *     Edit
+   *   </button>
+   *   <button onClick={onRemove(index)} title="Remove image">
+   *     Remove
+   *   </button>
+   * </div>
    */
-  imageComponent?: (args) => React.ReactNode;
+  controlsComponent?: (args) => React.ReactNode;
+  /**
+   * Image custom className
+   * We have a restriction here: if you will implement this property, then you
+   * will have add all css rules from default style, since, they will be skipped
+   *
+   * Example:
+   * .custom-image-class {
+   *   width: 100%;
+   *   height: 100%;
+   *   objectFit: cover;
+   *   ...rest
+   * }
+   */
+  imageClassName?: string;
+  /**
+   * Image wrapper custom className
+   */
+  imageWrapperClassName?: string;
+  /**
+   * Number of left images (+x) custom className
+   * We have a restriction here: if you will implement this property, then you
+   * will have create all rules from scratch, since, they default styles be skipped
+   */
+  leftClassName?: string;
 }
 
-/**
- *
- * @param {object} attributes
- * @param {Editor} editor
- * @param {Block} node
- * @param {string | React.ReactNode} placeholder
- * @param {string | React.ReactNode} droppingPlaceholder
- * @param {boolean} readOnly
- * @param {DropzoneProps} dropzoneProps
- * @param {(args) => React.ReactNode} imageComponent
- * @return {any}
- * @constructor
- */
 const Gallery: React.FunctionComponent<GalleryProps> = ({
   attributes,
   editor,
@@ -81,7 +104,10 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   droppingPlaceholder,
   readOnly,
   dropzoneProps,
-  imageComponent,
+  controlsComponent,
+  imageClassName,
+  imageWrapperClassName,
+  leftClassName,
 }) => {
   // TODO: do separate previews state
   const [images, setImages] = useState([]);
@@ -176,10 +202,13 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
               <Grid
                 images={images}
-                imageComponent={imageComponent}
+                controlsComponent={controlsComponent}
                 readOnly={readOnly}
                 onEdit={handleEdit}
                 onRemove={handleRemove}
+                imageClassName={imageClassName}
+                imageWrapperClassName={imageWrapperClassName}
+                leftClassName={leftClassName}
               />
             </div>
           );
@@ -192,8 +221,10 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     <div {...attributes}>
       <Grid
         images={images}
-        imageComponent={imageComponent}
         readOnly={readOnly}
+        imageClassName={imageClassName}
+        imageWrapperClassName={imageWrapperClassName}
+        leftClassName={leftClassName}
       />
     </div>
   );
