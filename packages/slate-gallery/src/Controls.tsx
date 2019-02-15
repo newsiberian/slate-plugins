@@ -2,8 +2,8 @@ import React from 'react';
 
 interface ControlsProps {
   index: number;
-  onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
-  onRemove?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  onEdit: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  onRemove: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 const root = {
