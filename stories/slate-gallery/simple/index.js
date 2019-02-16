@@ -34,12 +34,13 @@ const initialValue = Value.fromJSON({
 
 /**
  * Render the editor
+ * @param setSize
  * @param props
  * @param editor
  * @param next
  * @return {*}
  */
-const renderEditor = (props, editor, next) => {
+const renderEditor = setSize => (props, editor, next) => {
   const children = next();
 
   /**
@@ -65,6 +66,12 @@ const renderEditor = (props, editor, next) => {
         <Button onMouseDown={onAddGallery}>
           Add gallery
         </Button>
+        <label htmlFor="size">Size:</label>
+        <select defaultValue={9} name="size" id="size" onChange={e => setSize(e.target.value)}>
+          {[1,2,3,4,5,6,7,8,9].map(op => {
+            return <option value={op} key={op}>{op}</option>;
+          })}
+        </select>
       </Toolbar>
 
       {children}
@@ -74,8 +81,9 @@ const renderEditor = (props, editor, next) => {
 
 export default function Gallery(props) {
   const [value, setValue] = useState(initialValue);
+  const [size, setSize] = useState(9);
 
-  const plugins = [galleryPlugin(props)];
+  const plugins = [galleryPlugin({ ...props, size })];
 
   function onChange(editor) {
     setValue(editor.value);
@@ -87,7 +95,7 @@ export default function Gallery(props) {
         value={value}
         onChange={onChange}
         plugins={plugins}
-        renderEditor={renderEditor}
+        renderEditor={renderEditor(setSize)}
       />
     </section>
   );

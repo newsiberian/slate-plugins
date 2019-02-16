@@ -98,7 +98,7 @@ const Image: React.FunctionComponent<ImageProps> = ({
         onLoad={handleLoad}
         {...imageProps}
       />
-      {loaded && <Left left={left} leftClassName={leftClassName} />}
+      {readOnly && loaded && <Left left={left} leftClassName={leftClassName} />}
     </div>
   );
 };

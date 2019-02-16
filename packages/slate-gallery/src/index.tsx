@@ -5,6 +5,7 @@ import Gallery from './Gallery';
 import { handleChange } from './utils';
 
 interface GalleryOptions {
+  size?: number;
   dropzoneProps?: DropzoneProps;
   controlsComponent?: (args) => React.ReactNode;
   imageClassName?: string;

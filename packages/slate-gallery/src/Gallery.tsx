@@ -38,6 +38,16 @@ interface GalleryProps {
   node: Slate.Block;
   readOnly: boolean;
   /**
+   * Grid size - number of images that will be visible for "readOnly: false" mode
+   * All other images will be hidden, but user will have an ability to find them
+   * by opening full screen slider
+   *
+   * min value: 1
+   * max value: 9
+   * default: 9
+   */
+  size?: number;
+  /**
    * Placeholder text
    */
   placeholder?: string | React.ReactNode;
@@ -96,10 +106,15 @@ interface GalleryProps {
   leftClassName?: string;
 }
 
+const defaultProps = {
+  size: 9,
+};
+
 const Gallery: React.FunctionComponent<GalleryProps> = ({
   attributes,
   editor,
   node,
+  size,
   placeholder,
   droppingPlaceholder,
   readOnly,
@@ -202,6 +217,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
               <Grid
                 images={images}
+                size={size}
                 controlsComponent={controlsComponent}
                 readOnly={readOnly}
                 onEdit={handleEdit}
@@ -221,6 +237,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     <div {...attributes}>
       <Grid
         images={images}
+        size={size}
         readOnly={readOnly}
         imageClassName={imageClassName}
         imageWrapperClassName={imageWrapperClassName}
@@ -229,5 +246,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     </div>
   );
 };
+
+Gallery.defaultProps = defaultProps;
 
 export default Gallery;

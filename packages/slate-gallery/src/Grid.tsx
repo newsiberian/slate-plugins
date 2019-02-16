@@ -5,6 +5,7 @@ import Image, { TypeImage } from './Image';
 
 interface GridProps {
   images?: TypeImage[];
+  size: number;
   controlsComponent?: (args) => React.ReactNode;
   readOnly: boolean;
   onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
@@ -14,9 +15,14 @@ interface GridProps {
   leftClassName?: string;
 }
 
-const buildGridContainer = (columns, rows): React.CSSProperties => ({
+const buildGridContainer = (
+  columns: number,
+  rows: number,
+): React.CSSProperties => ({
   gridTemplateColumns: `repeat(${columns}, 1fr)`,
   gridTemplateRows: `repeat(${rows}, auto)`,
+  gridAutoRows: '1fr',
+  // gridAutoColumns: 'auto',
 });
 
 const buildGridItem = (
@@ -31,7 +37,7 @@ const buildGridItem = (
   gridRowEnd,
 });
 
-const buildGrid = size => {
+const buildGrid = (size: number) => {
   switch (size) {
     case 1:
     default:
@@ -54,29 +60,40 @@ const buildGrid = size => {
   }
 };
 
-const getPositionTwo = index => {
+const getPositionOne = (index: number) => {
+  switch (index) {
+    case 0:
+      return buildGridItem(1, 2, 1, 2);
+    default:
+      return {};
+  }
+};
+
+const getPositionTwo = (index: number) => {
   switch (index) {
     case 1:
       return buildGridItem(2, 3, 1, 2);
     case 0:
-    default:
       return buildGridItem(1, 2, 1, 2);
+    default:
+      return {};
   }
 };
 
-const getPositionThree = index => {
+const getPositionThree = (index: number) => {
   switch (index) {
     case 1:
       return buildGridItem(1, 2, 3, 4);
     case 2:
       return buildGridItem(2, 3, 3, 4);
     case 0:
-    default:
       return buildGridItem(1, 3, 1, 3);
+    default:
+      return {};
   }
 };
 
-const getPositionFour = index => {
+const getPositionFour = (index: number) => {
   switch (index) {
     case 1:
       return buildGridItem(1, 2, 3, 4);
@@ -85,12 +102,13 @@ const getPositionFour = index => {
     case 3:
       return buildGridItem(3, 4, 3, 4);
     case 0:
-    default:
       return buildGridItem(1, 4, 1, 3);
+    default:
+      return {};
   }
 };
 
-const getPositionFive = index => {
+const getPositionFive = (index: number) => {
   switch (index) {
     case 1:
       return buildGridItem(1, 3, 4, 7);
@@ -101,12 +119,13 @@ const getPositionFive = index => {
     case 4:
       return buildGridItem(3, 4, 5, 7);
     case 0:
-    default:
       return buildGridItem(1, 3, 1, 4);
+    default:
+      return {};
   }
 };
 
-const getPositionSix = index => {
+const getPositionSix = (index: number) => {
   switch (index) {
     case 1:
       return buildGridItem(3, 4, 1, 2);
@@ -119,12 +138,13 @@ const getPositionSix = index => {
     case 5:
       return buildGridItem(3, 4, 3, 4);
     case 0:
-    default:
       return buildGridItem(1, 3, 1, 3);
+    default:
+      return {};
   }
 };
 
-const getPositionSeven = index => {
+const getPositionSeven = (index: number) => {
   switch (index) {
     case 1:
       return buildGridItem(1, 2, 1, 2);
@@ -139,12 +159,13 @@ const getPositionSeven = index => {
     case 6:
       return buildGridItem(3, 4, 4, 5);
     case 0:
+      return buildGridItem(1, 4, 2, 4);
     default:
-      return buildGridItem(1, 5, 2, 4);
+      return {};
   }
 };
 
-const getPositionEight = index => {
+const getPositionEight = (index: number) => {
   switch (index) {
     case 1:
       return buildGridItem(1, 2, 1, 2);
@@ -161,12 +182,13 @@ const getPositionEight = index => {
     case 7:
       return buildGridItem(5, 7, 3, 4);
     case 0:
-    default:
       return buildGridItem(2, 6, 1, 3);
+    default:
+      return {};
   }
 };
 
-const getPositionNine = index => {
+const getPositionNine = (index: number) => {
   switch (index) {
     case 1:
       return buildGridItem(1, 2, 1, 2);
@@ -185,16 +207,18 @@ const getPositionNine = index => {
     case 8:
       return buildGridItem(4, 5, 3, 4);
     case 0:
-    default:
       return buildGridItem(2, 4, 1, 3);
+    default:
+      return {};
   }
 };
 
-const getItemStyle = (index, size) => {
+const getItemStyle = (index: number, size: number) => {
   switch (size) {
     case 1:
-    case 2:
     default:
+      return getPositionOne(index);
+    case 2:
       return getPositionTwo(index);
     case 3:
       return getPositionThree(index);
@@ -224,36 +248,40 @@ const container = size =>
 const Grid: React.FunctionComponent<GridProps> = props => {
   const seed = useUIDSeed();
 
-  const { images, ...rest } = props;
+  const { images, size, ...rest } = props;
   const length = images.length || 1;
-  const maxLength = length > 9 ? 9 : length;
-  const allowedImages = images.slice(0, maxLength);
+  const fixedSize = +size > 0 && +size <= 9 ? +size : 9;
+  const maxLength = length > fixedSize ? fixedSize : length;
+  // show all images for editable mode to give an ability to manage them
+  const allowedImages = props.readOnly ? images.slice(0, maxLength) : images;
   // number of images that was left
   const left = length - maxLength;
 
   return (
-    <div style={container(maxLength)}>
-      {allowedImages.map((image, index) => {
-        const key = seed(image) as string;
-        const withLeft = Boolean(index === maxLength - 1 && left > 0);
-        const wrapperStyle = {
-          ...getItemStyle(index, maxLength),
-          position: 'relative',
-        } as React.CSSProperties;
+    <>
+      <div style={container(maxLength)}>
+        {allowedImages.map((image, index) => {
+          const key = seed(image) as string;
+          const withLeft = Boolean(index === maxLength - 1 && left > 0);
+          const wrapperStyle = {
+            ...getItemStyle(index, maxLength),
+            position: 'relative',
+          } as React.CSSProperties;
 
-        return (
-          <Image
-            key={key}
-            index={index}
-            image={image}
-            wrapperStyle={wrapperStyle}
-            withLeft={withLeft}
-            left={left}
-            {...rest}
-          />
-        );
-      })}
-    </div>
+          return (
+            <Image
+              key={key}
+              index={index}
+              image={image}
+              wrapperStyle={wrapperStyle}
+              withLeft={withLeft}
+              left={left}
+              {...rest}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 };
 
