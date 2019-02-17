@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "react-dropzone": "^8.1.0",
+    "react-sortable-hoc": "^1.6.1",
     "react-uid": "^2.2.0",
     "use-onclickoutside": "^0.3.0"
   },

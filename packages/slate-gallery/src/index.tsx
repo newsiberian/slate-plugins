@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Gallery from './Gallery';
+import ReadOnlyGallery from './readOnly/Gallery';
 import { GalleryOptions } from './types';
 import { handleChange } from './utils';
 
@@ -11,8 +12,12 @@ const galleryPlugin = (options: GalleryOptions = {}) => ({
 
   renderNode(props, editor, next) {
     switch (props.node.type) {
-      case 'gallery':
+      case 'gallery': {
+        if (props.readOnly) {
+          return <ReadOnlyGallery editor={editor} {...props} {...options} />;
+        }
         return <Gallery editor={editor} {...props} {...options} />;
+      }
       default:
         return next();
     }

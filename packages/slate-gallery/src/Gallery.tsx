@@ -4,7 +4,6 @@ import Slate from 'slate';
 
 import EditModal from './EditModal';
 import Grid from './Grid';
-// import { changeData, insertImage } from './utils';
 import { GalleryOptions } from './types';
 
 const root = {
@@ -49,15 +48,11 @@ interface GalleryProps extends GalleryOptions {
   droppingPlaceholder?: string | React.ReactNode;
 }
 
-const defaultProps = {
-  size: 9,
-};
-
 const Gallery: React.FunctionComponent<GalleryProps> = ({
   attributes,
   editor,
   node,
-  size,
+  size = 9,
   placeholder,
   droppingPlaceholder,
   readOnly,
@@ -69,29 +64,15 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   imageWrapperClassName,
   leftClassName,
 }) => {
-  // TODO: do separate previews state
   const [images, setImages] = useState([]);
   const [open, setOpen] = useState<boolean>(false);
   // currently editable image index
   const [imageIndex, setImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    if (readOnly) {
-      const data = node.get('data');
-      if (data.has('images')) {
-        const savedImages = data.get('images');
-
-        if (Array.isArray(savedImages)) {
-          setImages(savedImages);
-        }
-      }
-    }
-
     return () => {
-      if (!readOnly) {
-        // Make sure to revoke the data uris to avoid memory leaks
-        images.forEach(file => URL.revokeObjectURL(file.src));
-      }
+      // Make sure to revoke the data uris to avoid memory leaks
+      images.forEach(file => URL.revokeObjectURL(file.src));
     };
   });
 
@@ -154,85 +135,67 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     );
   }
 
-  if (!readOnly) {
-    const placeholderNode = placeholder ? (
-      placeholder
-    ) : (
-      <p>Drop images here, or click to select images to upload</p>
-    );
+  const placeholderNode = placeholder ? (
+    placeholder
+  ) : (
+    <p>Drop images here, or click to select images to upload</p>
+  );
 
-    const droppingPlaceholderNode = droppingPlaceholder ? (
-      droppingPlaceholder
-    ) : (
-      <p>Drop images here...</p>
-    );
-
-    return (
-      <Dropzone multiple onDrop={handleDrop} {...dropzoneProps}>
-        {({
-          getRootProps,
-          getInputProps,
-          isDragActive,
-          isDragAccept,
-          isDragReject,
-        }) => {
-          const style = {
-            ...root,
-            ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
-            ...(isDragActive ? active : {}),
-            ...(isDragAccept ? accepted : {}),
-            ...(isDragReject ? rejected : {}),
-          };
-
-          const info = (): React.ReactNode | string | null => {
-            if (!images.length) {
-              return isDragActive ? droppingPlaceholderNode : placeholderNode;
-            }
-            return null;
-          };
-
-          return (
-            <div {...attributes} {...getRootProps()} style={style}>
-              <input {...getInputProps()} />
-
-              {info()}
-
-              <Grid
-                images={images}
-                size={size}
-                renderControls={renderControls}
-                renderImage={renderImage}
-                readOnly={readOnly}
-                onOpenEditModal={handleOpenEditModal}
-                onRemove={handleRemove}
-                imageClassName={imageClassName}
-                imageWrapperClassName={imageWrapperClassName}
-                leftClassName={leftClassName}
-              />
-
-              {renderEditModalComponent()}
-            </div>
-          );
-        }}
-      </Dropzone>
-    );
-  }
+  const droppingPlaceholderNode = droppingPlaceholder ? (
+    droppingPlaceholder
+  ) : (
+    <p>Drop images here...</p>
+  );
 
   return (
-    <div {...attributes}>
-      <Grid
-        images={images}
-        size={size}
-        renderImage={renderImage}
-        readOnly={readOnly}
-        imageClassName={imageClassName}
-        imageWrapperClassName={imageWrapperClassName}
-        leftClassName={leftClassName}
-      />
-    </div>
+    <Dropzone multiple onDrop={handleDrop} {...dropzoneProps}>
+      {({
+        getRootProps,
+        getInputProps,
+        isDragActive,
+        isDragAccept,
+        isDragReject,
+      }) => {
+        const style = {
+          ...root,
+          ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
+          ...(isDragActive ? active : {}),
+          ...(isDragAccept ? accepted : {}),
+          ...(isDragReject ? rejected : {}),
+        };
+
+        const info = (): React.ReactNode | string | null => {
+          if (!images.length) {
+            return isDragActive ? droppingPlaceholderNode : placeholderNode;
+          }
+          return null;
+        };
+
+        return (
+          <div {...attributes} {...getRootProps()} style={style}>
+            <input {...getInputProps()} />
+
+            {info()}
+
+            <Grid
+              images={images}
+              size={size}
+              renderControls={renderControls}
+              renderImage={renderImage}
+              readOnly={readOnly}
+              onOpenEditModal={handleOpenEditModal}
+              onRemove={handleRemove}
+              imageClassName={imageClassName}
+              imageWrapperClassName={imageWrapperClassName}
+              leftClassName={leftClassName}
+            />
+
+            {renderEditModalComponent()}
+          </div>
+        );
+      }}
+    </Dropzone>
   );
 };
-
-Gallery.defaultProps = defaultProps;
 
 export default Gallery;
