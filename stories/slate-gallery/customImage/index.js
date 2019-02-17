@@ -11,7 +11,7 @@ const styles = {
 };
 
 export default withStyles(styles)(function CustomImage({ classes, image, onLoad, readOnly }) {
-  if (!readOnly && typeof image.description === 'string' && image.description.length) {
+  if (readOnly && typeof image.description === 'string' && image.description.length) {
     return (
       <Tooltip title={image.description}>
         <img

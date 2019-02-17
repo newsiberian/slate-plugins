@@ -26,7 +26,7 @@ const EditModal: React.FunctionComponent<RenderEditModalArgs> = ({
     setOpen(false);
   }
 
-  function handleModify(e) {
+  function handleModify() {
     // sanitize input here if you want
     onEdit(index, value);
     handleClose();
