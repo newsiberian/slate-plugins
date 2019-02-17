@@ -5,6 +5,7 @@ import './styles.css'
 
 import CustomControls from './slate-gallery/customControls';
 import CustomEditModal from './slate-gallery/customEditModal';
+import CustomImage from './slate-gallery/customImage';
 
 import image1 from '../public/image-1-1280x720.jpg';
 import image2 from '../public/image-2-1280x720.jpg';
@@ -176,28 +177,24 @@ storiesOf('Slate editor gallery', module)
     />
   ))
   .add('Controls custom component', () => (
-    <Simple
-      images={[
-        { src: image1 },
-        { src: image2 },
-        { src: image3 },
-        { src: image4 },
-        { src: image5 },
-        { src: image6 },
-        { src: image7 },
-        { src: image8 },
-        { src: image9 },
-        { src: image10 },
-      ]}
-      renderControls={(args) => <CustomControls {...args} />}
+    <Simple renderControls={(args) => <CustomControls {...args} />}
     />
   ))
   .add('Edit modal custom component', () => (
-    <Simple
+    <Simple renderEditModal={(args) => <CustomEditModal {...args} />}
+    />
+  ))
+  .add('Edit mode with custom image', () => (
+    <Simple renderImage={(args) => <CustomImage {...args} />}
+    />
+  ))
+  .add('Read only: custom image', () => (
+    <ReadOnly
       images={[
-        { src: image1 },
-        { src: image2 },
+        { src: image1, description: 'Deep space' },
+        { src: image2, description: 'Another space view' },
+        { src: image3 },
       ]}
-      renderEditModal={(args) => <CustomEditModal {...args} />}
+      renderImage={(args) => <CustomImage {...args} />}
     />
   ));
