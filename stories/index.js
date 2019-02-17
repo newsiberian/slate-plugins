@@ -32,8 +32,8 @@ storiesOf('Slate editor gallery', module)
   .add('Read only: two images', () => (
     <ReadOnly
       images={[
-        { src: image1 },
-        { src: image2 },
+        { src: image1, description: 'Deep space' },
+        { src: image2, description: 'Another space view' },
       ]}
     />
   ))

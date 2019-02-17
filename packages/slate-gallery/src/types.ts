@@ -72,3 +72,15 @@ export interface GalleryOptions {
    */
   leftClassName?: string;
 }
+
+interface ExtendedFile extends File {
+  src?: string;
+  description?: string;
+}
+
+interface ImageInterface {
+  src: string;
+  description: string;
+}
+
+export type TypeImage = ExtendedFile | ImageInterface;

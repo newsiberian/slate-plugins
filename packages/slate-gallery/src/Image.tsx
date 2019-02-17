@@ -2,18 +2,7 @@ import React, { useState } from 'react';
 
 import Controls from './Controls';
 import Left from './Left';
-import { RenderControlsArgs } from './types';
-
-interface ExtendedFile extends File {
-  src?: string;
-}
-
-interface ImageInterface {
-  src: string;
-  name: string;
-}
-
-export type TypeImage = ExtendedFile | ImageInterface;
+import { RenderControlsArgs, TypeImage } from './types';
 
 interface ImageProps {
   /**
@@ -22,7 +11,6 @@ interface ImageProps {
    */
   index: number;
   image: TypeImage;
-  imageComponent?: ({}) => React.ReactNode;
   renderControls?: (args: RenderControlsArgs) => React.ReactNode;
   wrapperStyle: React.CSSProperties;
   withLeft: boolean;
@@ -47,7 +35,6 @@ const imageStyle = {
 const Image: React.FunctionComponent<ImageProps> = ({
   index,
   image,
-  imageComponent,
   renderControls,
   wrapperStyle,
   withLeft,
@@ -98,7 +85,7 @@ const Image: React.FunctionComponent<ImageProps> = ({
       {!readOnly && renderControlsComponent()}
       <img
         src={image.src}
-        alt={image.name}
+        alt={image.description}
         onLoad={handleLoad}
         {...imageProps}
       />

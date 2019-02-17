@@ -104,7 +104,14 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   };
 
   const handleEdit = (index: number, text: string): void => {
-    console.log(text);
+    const modifiedImages = images.map((image, i) => {
+      if (i === index) {
+        image.description = text;
+        return image;
+      }
+      return image;
+    });
+    setImages(modifiedImages);
   };
 
   const handleRemove = (
