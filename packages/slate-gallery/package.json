@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "react-dropzone": "^8.1.0",
-    "react-uid": "^2.2.0"
+    "react-uid": "^2.2.0",
+    "use-onclickoutside": "^0.3.0"
   },
   "peerDependencies": {
     "react": "^16.8.1",
