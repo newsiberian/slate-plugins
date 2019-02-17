@@ -14,6 +14,19 @@ export interface RenderEditModalArgs {
   setOpen: (open: boolean) => void;
 }
 
+export interface RenderImageArgs {
+  image: TypeImage;
+  /**
+   * This function is required. It is uses internally
+   */
+  onLoad: () => void;
+  /**
+   * Slate readOnly state
+   * Could be handy when you need to use different logic for those two states
+   */
+  readOnly: boolean;
+}
+
 export interface GalleryOptions {
   /**
    * Grid size - number of images that will be visible for "readOnly: false" mode
@@ -46,7 +59,19 @@ export interface GalleryOptions {
    * </div>
    */
   renderControls?: (args: RenderControlsArgs) => React.ReactNode;
+  /**
+   * A render function which allows you to use whatever modal you wish
+   * @param {RenderEditModalArgs} args
+   * @return {React.ReactNode}
+   */
   renderEditModal?: (args: RenderEditModalArgs) => React.ReactNode;
+  /**
+   * A render function which should return a custom image component, for example
+   * it could be wrapped into tooltip which shows image description
+   * @param {RenderImageArgs} args
+   * @return {React.ReactNode}
+   */
+  renderImage?: (args: RenderImageArgs) => React.ReactNode;
   /**
    * Image custom className
    * We have a restriction here: if you will implement this property, then you
@@ -79,8 +104,14 @@ interface ExtendedFile extends File {
 }
 
 interface ImageInterface {
+  /**
+   * A link to image location
+   */
   src: string;
-  description: string;
+  /**
+   * Image description
+   */
+  description?: string;
 }
 
 export type TypeImage = ExtendedFile | ImageInterface;

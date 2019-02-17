@@ -64,6 +64,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   dropzoneProps,
   renderControls,
   renderEditModal,
+  renderImage,
   imageClassName,
   imageWrapperClassName,
   leftClassName,
@@ -200,6 +201,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
                 images={images}
                 size={size}
                 renderControls={renderControls}
+                renderImage={renderImage}
                 readOnly={readOnly}
                 onOpenEditModal={handleOpenEditModal}
                 onRemove={handleRemove}
@@ -221,6 +223,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
       <Grid
         images={images}
         size={size}
+        renderImage={renderImage}
         readOnly={readOnly}
         imageClassName={imageClassName}
         imageWrapperClassName={imageWrapperClassName}

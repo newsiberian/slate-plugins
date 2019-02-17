@@ -22,6 +22,7 @@ const EditModal: React.FunctionComponent<RenderEditModalArgs> = ({
   }
 
   function handleClose() {
+    setValue('');
     setOpen(false);
   }
 

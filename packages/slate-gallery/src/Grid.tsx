@@ -1,12 +1,14 @@
 import React from 'react';
 import { useUIDSeed } from 'react-uid';
 
-import Image, { TypeImage } from './Image';
+import Image from './Image';
+import { RenderControlsArgs, RenderImageArgs, TypeImage } from './types';
 
 interface GridProps {
   images?: TypeImage[];
   size: number;
-  renderControls?: (args) => React.ReactNode;
+  renderControls?: (args: RenderControlsArgs) => React.ReactNode;
+  renderImage?: (args: RenderImageArgs) => React.ReactNode;
   readOnly: boolean;
   onOpenEditModal?: (
     e: React.MouseEvent<HTMLButtonElement>,

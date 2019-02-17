@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import Controls from './Controls';
 import Left from './Left';
-import { RenderControlsArgs, TypeImage } from './types';
+import { RenderControlsArgs, RenderImageArgs, TypeImage } from './types';
 
 interface ImageProps {
   /**
@@ -12,6 +12,7 @@ interface ImageProps {
   index: number;
   image: TypeImage;
   renderControls?: (args: RenderControlsArgs) => React.ReactNode;
+  renderImage?: (args: RenderImageArgs) => React.ReactNode;
   wrapperStyle: React.CSSProperties;
   withLeft: boolean;
   left?: number;
@@ -36,6 +37,7 @@ const Image: React.FunctionComponent<ImageProps> = ({
   index,
   image,
   renderControls,
+  renderImage,
   wrapperStyle,
   withLeft,
   left,
@@ -80,15 +82,24 @@ const Image: React.FunctionComponent<ImageProps> = ({
     );
   };
 
-  return (
-    <div style={wrapperStyle} {...imageWrapperProps}>
-      {!readOnly && renderControlsComponent()}
+  const renderImageComponent = (): React.ReactNode => {
+    if (typeof renderImage === 'function') {
+      return renderImage({ image, onLoad: handleLoad, readOnly });
+    }
+    return (
       <img
         src={image.src}
         alt={image.description}
         onLoad={handleLoad}
         {...imageProps}
       />
+    );
+  };
+
+  return (
+    <div style={wrapperStyle} {...imageWrapperProps}>
+      {!readOnly && renderControlsComponent()}
+      {renderImageComponent()}
       {readOnly && loaded && <Left left={left} leftClassName={leftClassName} />}
     </div>
   );
