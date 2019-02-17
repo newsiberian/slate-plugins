@@ -1,17 +1,8 @@
 import React from 'react';
-import { DropzoneProps } from 'react-dropzone';
 
 import Gallery from './Gallery';
+import { GalleryOptions } from './types';
 import { handleChange } from './utils';
-
-interface GalleryOptions {
-  size?: number;
-  dropzoneProps?: DropzoneProps;
-  controlsComponent?: (args) => React.ReactNode;
-  imageClassName?: string;
-  imageWrapperClassName?: string;
-  leftClassName?: string;
-}
 
 const galleryPlugin = (options: GalleryOptions = {}) => ({
   onChange(editor, next) {

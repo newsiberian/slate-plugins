@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Dropzone, { DropzoneProps } from 'react-dropzone';
+import Dropzone from 'react-dropzone';
 import Slate from 'slate';
 
+import EditModal from './EditModal';
 import Grid from './Grid';
 // import { changeData, insertImage } from './utils';
+import { GalleryOptions } from './types';
 
 const root = {
   borderWidth: 2,
@@ -32,21 +34,11 @@ const rejected = {
   borderColor: '#f55a4e',
 } as React.CSSProperties;
 
-interface GalleryProps {
+interface GalleryProps extends GalleryOptions {
   attributes: object;
   editor: Slate.Editor;
   node: Slate.Block;
   readOnly: boolean;
-  /**
-   * Grid size - number of images that will be visible for "readOnly: false" mode
-   * All other images will be hidden, but user will have an ability to find them
-   * by opening full screen slider
-   *
-   * min value: 1
-   * max value: 9
-   * default: 9
-   */
-  size?: number;
   /**
    * Placeholder text
    */
@@ -55,55 +47,6 @@ interface GalleryProps {
    * Placeholder that appears on image drop
    */
   droppingPlaceholder?: string | React.ReactNode;
-  /**
-   * Props which goes to react-dropzone
-   */
-  dropzoneProps?: DropzoneProps;
-  /**
-   * Custom controls component. It is uses only for "readOnly: true" mode
-   * Handlers must be added to each child-button accordingly
-   * @param {number} args.index - index of image. It is required to handlers
-   * @param {(index: number) => (e: React.MouseEvent<HTMLInputElement>) => void} args.onEdit -
-   * edit image description handler.
-   * @param {(index: number) => (e: React.MouseEvent<HTMLInputElement>) => void} args.onRemove -
-   * remove image
-   * @return {React.ReactNode}
-   *
-   * Example:
-   * <div style={root}>
-   *   <button onClick={onEdit(index)} title="Edit image description">
-   *     Edit
-   *   </button>
-   *   <button onClick={onRemove(index)} title="Remove image">
-   *     Remove
-   *   </button>
-   * </div>
-   */
-  controlsComponent?: (args) => React.ReactNode;
-  /**
-   * Image custom className
-   * We have a restriction here: if you will implement this property, then you
-   * will have add all css rules from default style, since, they will be skipped
-   *
-   * Example:
-   * .custom-image-class {
-   *   width: 100%;
-   *   height: 100%;
-   *   objectFit: cover;
-   *   ...rest
-   * }
-   */
-  imageClassName?: string;
-  /**
-   * Image wrapper custom className
-   */
-  imageWrapperClassName?: string;
-  /**
-   * Number of left images (+x) custom className
-   * We have a restriction here: if you will implement this property, then you
-   * will have create all rules from scratch, since, they default styles be skipped
-   */
-  leftClassName?: string;
 }
 
 const defaultProps = {
@@ -119,13 +62,17 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   droppingPlaceholder,
   readOnly,
   dropzoneProps,
-  controlsComponent,
+  renderControls,
+  renderEditModal,
   imageClassName,
   imageWrapperClassName,
   leftClassName,
 }) => {
   // TODO: do separate previews state
   const [images, setImages] = useState([]);
+  const [open, setOpen] = useState<boolean>(false);
+  // currently editable image index
+  const [imageIndex, setImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (readOnly) {
@@ -147,6 +94,27 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     };
   });
 
+  const handleOpenEditModal = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    event.stopPropagation();
+    setOpen(true);
+    setImageIndex(index);
+  };
+
+  const handleEdit = (index: number, text: string): void => {
+    console.log(text);
+  };
+
+  const handleRemove = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    event.stopPropagation();
+    setImages(images.filter((image, i) => i !== index));
+  };
+
   const handleDrop = (acceptedFiles: File[]): void => {
     const sources = acceptedFiles.map(file => {
       Object.assign(file, {
@@ -159,18 +127,24 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     setImages([...images, ...sources]);
   };
 
-  const handleEdit = (index: number) => (
-    event: React.MouseEvent<HTMLInputElement>,
-  ) => {
-    event.stopPropagation();
-  };
-
-  const handleRemove = (index: number) => (
-    event: React.MouseEvent<HTMLInputElement>,
-  ) => {
-    event.stopPropagation();
-    setImages(images.filter((image, i) => i !== index));
-  };
+  function renderEditModalComponent() {
+    if (typeof renderEditModal === 'function') {
+      return renderEditModal({
+        index: imageIndex,
+        onEdit: handleEdit,
+        open,
+        setOpen,
+      });
+    }
+    return (
+      <EditModal
+        index={imageIndex}
+        onEdit={handleEdit}
+        open={open}
+        setOpen={setOpen}
+      />
+    );
+  }
 
   if (!readOnly) {
     const placeholderNode = placeholder ? (
@@ -218,14 +192,16 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
               <Grid
                 images={images}
                 size={size}
-                controlsComponent={controlsComponent}
+                renderControls={renderControls}
                 readOnly={readOnly}
-                onEdit={handleEdit}
+                onOpenEditModal={handleOpenEditModal}
                 onRemove={handleRemove}
                 imageClassName={imageClassName}
                 imageWrapperClassName={imageWrapperClassName}
                 leftClassName={leftClassName}
               />
+
+              {renderEditModalComponent()}
             </div>
           );
         }}

@@ -6,10 +6,13 @@ import Image, { TypeImage } from './Image';
 interface GridProps {
   images?: TypeImage[];
   size: number;
-  controlsComponent?: (args) => React.ReactNode;
+  renderControls?: (args) => React.ReactNode;
   readOnly: boolean;
-  onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
-  onRemove?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  onOpenEditModal?: (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => void;
+  onRemove?: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
   imageWrapperClassName?: string;
   imageClassName?: string;
   leftClassName?: string;
@@ -22,7 +25,6 @@ const buildGridContainer = (
   gridTemplateColumns: `repeat(${columns}, 1fr)`,
   gridTemplateRows: `repeat(${rows}, auto)`,
   gridAutoRows: '1fr',
-  // gridAutoColumns: 'auto',
 });
 
 const buildGridItem = (
@@ -250,7 +252,8 @@ const Grid: React.FunctionComponent<GridProps> = props => {
 
   const { images, size, ...rest } = props;
   const length = images.length || 1;
-  const fixedSize = +size > 0 && +size <= 9 ? +size : 9;
+  const fixedSize =
+    typeof size === 'number' && size > 0 && size <= 9 ? size : 9;
   const maxLength = length > fixedSize ? fixedSize : length;
   // show all images for editable mode to give an ability to manage them
   const allowedImages = props.readOnly ? images.slice(0, maxLength) : images;

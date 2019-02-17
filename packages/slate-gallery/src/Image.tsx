@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Controls from './Controls';
 import Left from './Left';
+import { RenderControlsArgs } from './types';
 
 interface ExtendedFile extends File {
   src?: string;
@@ -22,22 +23,19 @@ interface ImageProps {
   index: number;
   image: TypeImage;
   imageComponent?: ({}) => React.ReactNode;
-  controlsComponent?: (args: ControlsComponentArgs) => React.ReactNode;
+  renderControls?: (args: RenderControlsArgs) => React.ReactNode;
   wrapperStyle: React.CSSProperties;
   withLeft: boolean;
   left?: number;
   readOnly: boolean;
-  onEdit?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
-  onRemove?: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
+  onOpenEditModal?: (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => void;
+  onRemove?: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
   imageClassName?: string;
   imageWrapperClassName?: string;
   leftClassName?: string;
-}
-
-interface ControlsComponentArgs {
-  index: number;
-  onEdit: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
-  onRemove: (index: number) => (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 const imageStyle = {
@@ -50,12 +48,12 @@ const Image: React.FunctionComponent<ImageProps> = ({
   index,
   image,
   imageComponent,
-  controlsComponent,
+  renderControls,
   wrapperStyle,
   withLeft,
   left,
   readOnly,
-  onEdit,
+  onOpenEditModal,
   onRemove,
   imageClassName,
   imageWrapperClassName,
@@ -82,16 +80,22 @@ const Image: React.FunctionComponent<ImageProps> = ({
     }
   };
 
-  const renderControls = (): React.ReactNode => {
-    if (typeof controlsComponent === 'function') {
-      return controlsComponent({ index, onEdit, onRemove });
+  const renderControlsComponent = (): React.ReactNode => {
+    if (typeof renderControls === 'function') {
+      return renderControls({ index, onOpenEditModal, onRemove });
     }
-    return <Controls index={index} onEdit={onEdit} onRemove={onRemove} />;
+    return (
+      <Controls
+        index={index}
+        onOpenEditModal={onOpenEditModal}
+        onRemove={onRemove}
+      />
+    );
   };
 
   return (
     <div style={wrapperStyle} {...imageWrapperProps}>
-      {!readOnly && renderControls()}
+      {!readOnly && renderControlsComponent()}
       <img
         src={image.src}
         alt={image.name}
