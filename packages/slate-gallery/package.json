@@ -19,6 +19,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "array-move": "^1.0.0",
     "react-dropzone": "^8.1.0",
     "react-sortable-hoc": "^1.6.1",
     "react-uid": "^2.2.0",

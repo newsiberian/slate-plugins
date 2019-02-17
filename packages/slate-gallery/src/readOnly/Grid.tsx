@@ -20,9 +20,7 @@ const Grid: React.FunctionComponent<GridProps> = props => {
 
   const { images, size, ...rest } = props;
   const length = images.length || 1;
-  const fixedSize =
-    typeof size === 'number' && size > 0 && size <= 9 ? size : 9;
-  const maxLength = length > fixedSize ? fixedSize : length;
+  const maxLength = length > size ? size : length;
   const allowedImages = images.slice(0, maxLength);
   // number of images that was left
   const left = length - maxLength;

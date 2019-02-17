@@ -179,6 +179,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
             <Grid
               images={images}
+              setImages={setImages}
               size={size}
               renderControls={renderControls}
               renderImage={renderImage}
