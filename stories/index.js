@@ -4,6 +4,7 @@ import { storiesOf } from '@storybook/react';
 import './styles.css'
 
 import CustomControls from './slate-gallery/customControls';
+import CustomEditModal from './slate-gallery/customEditModal';
 
 import image1 from '../public/image-1-1280x720.jpg';
 import image2 from '../public/image-2-1280x720.jpg';
@@ -188,6 +189,15 @@ storiesOf('Slate editor gallery', module)
         { src: image9 },
         { src: image10 },
       ]}
-      controlsComponent={(args) => <CustomControls {...args} />}
+      renderControls={(args) => <CustomControls {...args} />}
+    />
+  ))
+  .add('Edit modal custom component', () => (
+    <Simple
+      images={[
+        { src: image1 },
+        { src: image2 },
+      ]}
+      renderEditModal={(args) => <CustomEditModal {...args} />}
     />
   ));
