@@ -1,5 +1,5 @@
 {
-  "name": "slate-sidebar",
+  "name": "@mercuriya/slate-sidebar",
   "version": "0.1.0",
   "description": "A sidebar for slate-js",
   "main": "index.js",

@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "module": "es6",
+    "module": "es2015",
     "target": "es5",
     "lib": ["es7", "dom"],
     "jsx": "react",
     "moduleResolution": "node",
-    "baseUrl": ".",
+    "baseUrl": "./packages",
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -14,6 +14,7 @@
     "noUnusedLocals": true,
     "removeComments": true,
     "skipLibCheck": true,
+    "importHelpers":true,
     "rootDirs": ["src"],
     "outDir": "lib"
   }

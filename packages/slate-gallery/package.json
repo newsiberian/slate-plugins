@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "An image gallery for slate-js",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib/bundle.umd.js",
+  "module": "lib/index.js",
   "typings": "lib/index.d.ts",
   "directories": {
     "lib": "lib"
@@ -16,13 +17,20 @@
   },
   "private": false,
   "scripts": {
-    "build": "tsc"
+    "build": "yarn build:tsc",
+    "build:tsc": "../../node_modules/.bin/tsc",
+    "bundle": "../../node_modules/.bin/rollup -c",
+    "clean": "../../node_modules/.bin/rimraf lib/*",
+    "postbuild": "yarn bundle",
+    "prebuild": "yarn clean",
+    "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
     "array-move": "^1.0.0",
     "react-dropzone": "^8.1.0",
     "react-sortable-hoc": "^1.6.1",
     "react-uid": "^2.2.0",
+    "tslib": "^1.9.3",
     "use-onclickoutside": "^0.3.0"
   },
   "peerDependencies": {
