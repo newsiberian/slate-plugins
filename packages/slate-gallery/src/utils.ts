@@ -229,6 +229,6 @@ export const container = size =>
   ({
     display: 'grid',
     ...buildGrid(size),
-    gridGap: 2.5,
+    gridGap: 2.5, // 0 4px??
     marginTop: 16,
   } as React.CSSProperties);

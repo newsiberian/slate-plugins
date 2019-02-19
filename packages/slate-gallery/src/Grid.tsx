@@ -40,6 +40,7 @@ interface SortableListProps extends SortableContainerProps {
 
 interface SortableItemProps extends SortableElementProps {
   image: TypeImage;
+  imageIndex: number;
   left?: number;
   withLeft: boolean;
   wrapperStyle: React.CSSProperties;
@@ -49,14 +50,14 @@ interface SortableItemProps extends SortableElementProps {
 const SortableItem = SortableElement(
   ({
     image,
-    index,
+    imageIndex,
     wrapperStyle,
     withLeft,
     left,
     ...rest
   }: SortableItemProps) => (
     <Image
-      index={index}
+      index={imageIndex}
       image={image}
       wrapperStyle={wrapperStyle}
       withLeft={withLeft}
@@ -81,7 +82,9 @@ const SortableList = SortableContainer((props: SortableListProps) => {
         return (
           <SortableItem
             key={key}
+            // internally used index prop
             index={index}
+            imageIndex={index}
             image={image}
             wrapperStyle={wrapperStyle}
             withLeft={withLeft}
