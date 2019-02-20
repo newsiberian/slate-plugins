@@ -5,6 +5,7 @@ import Slate from 'slate';
 import EditModal from './EditModal';
 import Grid from './Grid';
 import { GalleryOptions } from './types';
+import { changeData, extractData } from './utils';
 
 const root = {
   borderWidth: 2,
@@ -64,7 +65,6 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   imageWrapperClassName,
   leftClassName,
 }) => {
-  const [images, setImages] = useState([]);
   const [open, setOpen] = useState<boolean>(false);
   // currently editable image index
   const [imageIndex, setImageIndex] = useState<number | null>(null);
@@ -75,6 +75,8 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
       images.forEach(file => URL.revokeObjectURL(file.src));
     };
   });
+
+  const images = extractData(node, 'images') || [];
 
   const handleOpenEditModal = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -93,7 +95,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
       }
       return image;
     });
-    setImages(modifiedImages);
+    changeData(editor, { images: modifiedImages });
   };
 
   const handleRemove = (
@@ -101,20 +103,32 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     index: number,
   ) => {
     event.stopPropagation();
-    setImages(images.filter((image, i) => i !== index));
+    changeData(editor, { images: images.filter((image, i) => i !== index) });
   };
 
   const handleDrop = (acceptedFiles: File[]): void => {
-    const sources = acceptedFiles.map(file => {
-      Object.assign(file, {
-        src: URL.createObjectURL(file),
-      });
+    insertImage(
+      // TODO: make it custom
+      acceptedFiles.map(file => {
+        Object.assign(file, {
+          src: URL.createObjectURL(file),
+        });
 
-      return file;
-    });
-
-    setImages([...images, ...sources]);
+        return file;
+      }),
+    );
   };
+
+  /**
+   * Insert images File objects into gallery's data
+   * @param {File[]} files
+   */
+  function insertImage(files: File[]): void {
+    const oldImages = extractData(node, 'images');
+    const newImages = oldImages ? [...oldImages, ...files] : files;
+
+    changeData(editor, { images: newImages });
+  }
 
   function renderEditModalComponent() {
     if (typeof renderEditModal === 'function') {
@@ -178,8 +192,8 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
             {info()}
 
             <Grid
+              editor={editor}
               images={images}
-              setImages={setImages}
               size={size}
               renderControls={renderControls}
               renderImage={renderImage}

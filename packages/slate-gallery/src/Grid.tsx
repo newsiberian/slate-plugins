@@ -8,14 +8,15 @@ import {
   SortableElementProps,
 } from 'react-sortable-hoc';
 import { useUIDSeed } from 'react-uid';
+import { Editor } from 'slate';
 
 import Image from './Image';
 import { RenderControlsArgs, RenderImageArgs, TypeImage } from './types';
-import { container, getItemStyle } from './utils';
+import { changeData, container, getItemStyle } from './utils';
 
 interface GridProps {
+  editor: Editor;
   images?: TypeImage[];
-  setImages: (images: TypeImage[]) => void;
   size: number;
   renderControls?: (args: RenderControlsArgs) => React.ReactNode;
   renderImage?: (args: RenderImageArgs) => React.ReactNode;
@@ -100,10 +101,10 @@ const SortableList = SortableContainer((props: SortableListProps) => {
 const Grid: React.FunctionComponent<GridProps> = props => {
   const seed = useUIDSeed();
 
-  const { images, setImages, size, ...rest } = props;
+  const { editor, images, size, ...rest } = props;
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    setImages(arrayMove(images, oldIndex, newIndex));
+    changeData(editor, { images: arrayMove(images, oldIndex, newIndex) });
   };
 
   const length = images.length || 1;
