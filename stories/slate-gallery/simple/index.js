@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Value } from 'slate';
 import { Editor } from 'slate-react';
 
@@ -83,7 +83,7 @@ export default function Gallery(props) {
   const [value, setValue] = useState(initialValue);
   const [size, setSize] = useState(9);
 
-  const plugins = [galleryPlugin({ ...props, size })];
+  const plugins = useMemo(() => [galleryPlugin({ ...props, size })], []);
 
   function onChange(editor) {
     setValue(editor.value);
