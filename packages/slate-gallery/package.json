@@ -1,6 +1,6 @@
 {
   "name": "@mercuriya/slate-gallery",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An image gallery for slate-js",
   "license": "MIT",
   "main": "lib/bundle.umd.js",

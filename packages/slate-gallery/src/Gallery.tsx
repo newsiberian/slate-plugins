@@ -5,7 +5,7 @@ import Slate from 'slate';
 import EditModal from './EditModal';
 import Grid from './Grid';
 import { GalleryOptions } from './types';
-import { changeData, extractData } from './utils';
+import { changeNodeData, extractData } from './utils';
 
 const root = {
   borderWidth: 2,
@@ -95,7 +95,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
       }
       return image;
     });
-    changeData(editor, { images: modifiedImages });
+    changeNodeData(editor, node, { images: modifiedImages });
   };
 
   const handleRemove = (
@@ -103,7 +103,9 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     index: number,
   ) => {
     event.stopPropagation();
-    changeData(editor, { images: images.filter((image, i) => i !== index) });
+    changeNodeData(editor, node, {
+      images: images.filter((image, i) => i !== index),
+    });
   };
 
   const handleDrop = (acceptedFiles: File[]): void => {
@@ -127,7 +129,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     const oldImages = extractData(node, 'images');
     const newImages = oldImages ? [...oldImages, ...files] : files;
 
-    changeData(editor, { images: newImages });
+    changeNodeData(editor, node, { images: newImages });
   }
 
   function renderEditModalComponent() {
@@ -193,6 +195,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
 
             <Grid
               editor={editor}
+              node={node}
               images={images}
               size={size}
               renderControls={renderControls}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Block, Data } from 'slate';
+import { Block, BlockProperties, Data } from 'slate';
 
 /**
  * Extract data from block
@@ -19,18 +19,14 @@ export const handleChange = (editor, next) => {
 /**
  * Set additional data to current block
  * @param {Editor} editor
+ * @param {Node} node
  * @param {object} payload - additional data
  * @return {Editor}
  */
-export const changeData = (editor, payload) => {
-  const { value } = editor;
-
-  const block = value.blocks.first();
-  const prev = block.get('data');
-  // mergeDeep required to merge internal collections
+export const changeNodeData = (editor, node, payload) => {
+  const prev = node.get('data');
   const modifiedData = prev.mergeDeep(Data.create(payload));
-  const modifiedBlock = block.set('data', modifiedData);
-  editor.setBlocks(modifiedBlock);
+  editor.setNodeByKey(node.key, { data: modifiedData } as BlockProperties);
 
   return editor;
 };
