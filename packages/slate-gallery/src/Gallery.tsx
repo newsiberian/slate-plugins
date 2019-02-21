@@ -82,6 +82,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     event: React.MouseEvent<HTMLButtonElement>,
     index: number,
   ) => {
+    event.preventDefault();
     event.stopPropagation();
     setOpen(true);
     setImageIndex(index);
@@ -102,6 +103,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     event: React.MouseEvent<HTMLButtonElement>,
     index: number,
   ) => {
+    event.preventDefault();
     event.stopPropagation();
     changeNodeData(editor, node, {
       images: images.filter((image, i) => i !== index),
