@@ -50,6 +50,7 @@ const EditModal: React.FunctionComponent<RenderEditModalArgs> = ({
           cursor: 'initial',
           display: 'flex',
           flexDirection: 'column',
+          zIndex: 1,
         }}
       >
         <p>Modify image description</p>

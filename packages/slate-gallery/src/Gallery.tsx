@@ -89,20 +89,42 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   };
 
   const handleEdit = (index: number, text: string): void => {
-    const modifiedImages = images.map((image, i) => {
-      if (i === index) {
-        image.description = text;
-        return image;
-      }
-      return image;
+    const image = images[index];
+
+    // We can have two cases here: new images as Files or previously saved
+    // images as simple objects. In first case we can't put description within
+    // File because in some scenarios all unrelated data will be lost in process,
+    // i.e. when you use `graphql-upload`. In second case it is obvious that you
+    // want to put all image props together, so src, description, etc will be
+    // located within image object, that's why we cover two cases here
+
+    if (!(image instanceof File)) {
+      changeNodeData(editor, node, {
+        images: images.map((img, i) => {
+          if (i === index) {
+            img.description = text;
+            return img;
+          }
+          return img;
+        }),
+      });
+    }
+
+    const data = node.get('data');
+    const descriptions = data.get('descriptions') || {};
+
+    // use name as id. This will help you to identify it while processing
+    descriptions[image.name] = text;
+
+    changeNodeData(editor, node, {
+      descriptions,
     });
-    changeNodeData(editor, node, { images: modifiedImages });
   };
 
   const handleRemove = (
     event: React.MouseEvent<HTMLButtonElement>,
     index: number,
-  ) => {
+  ): void => {
     event.preventDefault();
     event.stopPropagation();
     changeNodeData(editor, node, {

@@ -5,7 +5,7 @@ import ReadOnlyGallery from './readOnly/Gallery';
 import { GalleryOptions } from './types';
 import { handleChange } from './utils';
 
-const galleryPlugin = (options: GalleryOptions = {}) => ({
+const galleryPlugin = (options = {} as GalleryOptions) => ({
   onChange(editor, next) {
     return handleChange(editor, next);
   },
