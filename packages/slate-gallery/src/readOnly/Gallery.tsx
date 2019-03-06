@@ -34,6 +34,7 @@ const ReadOnlyGallery: React.FunctionComponent<GalleryProps> = ({
   imageClassName,
   imageWrapperClassName,
   leftClassName,
+  gridClassName,
 }) => {
   const [images, setImages] = useState([]);
 
@@ -60,6 +61,7 @@ const ReadOnlyGallery: React.FunctionComponent<GalleryProps> = ({
         imageClassName={imageClassName}
         imageWrapperClassName={imageWrapperClassName}
         leftClassName={leftClassName}
+        gridClassName={gridClassName}
       />
     </div>
   );

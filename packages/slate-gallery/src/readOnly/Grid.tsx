@@ -13,12 +13,13 @@ interface GridProps {
   imageWrapperClassName?: string;
   imageClassName?: string;
   leftClassName?: string;
+  gridClassName?: string;
 }
 
 const Grid: React.FunctionComponent<GridProps> = props => {
   const seed = useUIDSeed();
 
-  const { images, size, ...rest } = props;
+  const { gridClassName, images, size, ...rest } = props;
   const length = images.length || 1;
   const maxLength = length > size ? size : length;
   const allowedImages = images.slice(0, maxLength);
@@ -26,30 +27,28 @@ const Grid: React.FunctionComponent<GridProps> = props => {
   const left = length - maxLength;
 
   return (
-    <>
-      <div style={container(maxLength)}>
-        {allowedImages.map((image, index) => {
-          const key = seed(image) as string;
-          const withLeft = Boolean(index === maxLength - 1 && left > 0);
-          const wrapperStyle = {
-            ...getItemStyle(index, maxLength),
-            position: 'relative',
-          } as React.CSSProperties;
+    <div style={container(maxLength)} className={gridClassName}>
+      {allowedImages.map((image, index) => {
+        const key = seed(image) as string;
+        const withLeft = Boolean(index === maxLength - 1 && left > 0);
+        const wrapperStyle = {
+          ...getItemStyle(index, maxLength),
+          position: 'relative',
+        } as React.CSSProperties;
 
-          return (
-            <Image
-              key={key}
-              index={index}
-              image={image}
-              wrapperStyle={wrapperStyle}
-              withLeft={withLeft}
-              left={left}
-              {...rest}
-            />
-          );
-        })}
-      </div>
-    </>
+        return (
+          <Image
+            key={key}
+            index={index}
+            image={image}
+            wrapperStyle={wrapperStyle}
+            withLeft={withLeft}
+            left={left}
+            {...rest}
+          />
+        );
+      })}
+    </div>
   );
 };
 

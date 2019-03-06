@@ -72,6 +72,7 @@ export interface GalleryOptions {
    * @return {React.ReactNode}
    */
   renderImage?: (args: RenderImageArgs) => React.ReactNode;
+  gridClassName?: string;
   /**
    * Image custom className
    * We have a restriction here: if you will implement this property, then you
