@@ -176,6 +176,23 @@ storiesOf('Slate editor gallery', module)
       leftClassName="custom-left"
     />
   ))
+  .add('Read only: custom grid className', () => (
+    <ReadOnly
+      images={[
+        { src: image1 },
+        { src: image2 },
+        { src: image3 },
+        { src: image4 },
+        { src: image5 },
+        { src: image6 },
+        { src: image7 },
+        { src: image8 },
+        { src: image9 },
+        { src: image10 },
+      ]}
+      gridClassName="grid"
+    />
+  ))
   .add('Controls custom component', () => (
     <Simple renderControls={(args) => <CustomControls {...args} />}
     />
