@@ -14,12 +14,27 @@ export interface RenderEditModalArgs {
   setOpen: (open: boolean) => void;
 }
 
+export interface RenderExtraArgs {
+  images: ImageInterface[];
+  /**
+   * Selected image index
+   */
+  index?: number;
+}
+
 export interface RenderImageArgs {
   image: TypeImage;
   /**
    * This function is required. It is uses internally
    */
   onLoad: () => void;
+  /**
+   * This is optional function which is available within readOnly: true mode.
+   * It will send selected image index to an renderExtra function. It is handy
+   * for building lightbox components
+   * @param {number} index
+   */
+  onSelect?: (index: number) => void;
   /**
    * Slate readOnly state
    * Could be handy when you need to use different logic for those two states
@@ -66,6 +81,13 @@ export interface GalleryOptions {
    */
   renderEditModal?: (args: RenderEditModalArgs) => React.ReactNode;
   /**
+   * A render function that allows you to place something like lightbox near your
+   * images grid. It can be rendered in `readOnly: true` mode only
+   * @param args
+   * @return {React.ReactNode}
+   */
+  renderExtra?: (args: RenderExtraArgs) => React.ReactNode;
+  /**
    * A render function which should return a custom image component, for example
    * it could be wrapped into tooltip which shows image description
    * @param {RenderImageArgs} args
@@ -104,7 +126,7 @@ interface ExtendedFile extends File {
   description?: string;
 }
 
-interface ImageInterface {
+export interface ImageInterface {
   /**
    * A link to image location
    */

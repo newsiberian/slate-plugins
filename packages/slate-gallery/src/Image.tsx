@@ -17,6 +17,7 @@ interface ImageProps {
   withLeft: boolean;
   left?: number;
   readOnly: boolean;
+  setSelected?: (index: number) => void;
   onOpenEditModal?: (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number,
@@ -42,6 +43,7 @@ const Image: React.FunctionComponent<ImageProps> = ({
   withLeft,
   left,
   readOnly,
+  setSelected,
   onOpenEditModal,
   onRemove,
   imageClassName,
@@ -69,6 +71,12 @@ const Image: React.FunctionComponent<ImageProps> = ({
     }
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (typeof setSelected === 'function') {
+      setSelected(index);
+    }
+  };
+
   const renderControlsComponent = (): React.ReactNode => {
     if (typeof renderControls === 'function') {
       return renderControls({ index, onOpenEditModal, onRemove });
@@ -84,13 +92,19 @@ const Image: React.FunctionComponent<ImageProps> = ({
 
   const renderImageComponent = (): React.ReactNode => {
     if (typeof renderImage === 'function') {
-      return renderImage({ image, onLoad: handleLoad, readOnly });
+      return renderImage({
+        image,
+        onLoad: handleLoad,
+        onSelect: setSelected,
+        readOnly,
+      });
     }
     return (
       <img
         src={image.src}
         alt={image.description}
         onLoad={handleLoad}
+        onClick={handleClick}
         {...imageProps}
       />
     );

@@ -31,6 +31,7 @@ const ReadOnlyGallery: React.FunctionComponent<GalleryProps> = ({
   renderControls,
   renderEditModal,
   renderImage,
+  renderExtra,
   imageClassName,
   imageWrapperClassName,
   leftClassName,
@@ -57,6 +58,7 @@ const ReadOnlyGallery: React.FunctionComponent<GalleryProps> = ({
         images={images}
         size={size}
         renderImage={renderImage}
+        renderExtra={renderExtra}
         readOnly={readOnly}
         imageClassName={imageClassName}
         imageWrapperClassName={imageWrapperClassName}

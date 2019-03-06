@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUIDSeed } from 'react-uid';
 
 import Image from '../Image';
-import { RenderImageArgs, TypeImage } from '../types';
+import { ImageInterface, RenderExtraArgs, RenderImageArgs } from '../types';
 import { container, getItemStyle } from '../utils';
 
 interface GridProps {
-  images?: TypeImage[];
+  images?: ImageInterface[];
   size: number;
   readOnly: boolean;
   renderImage?: (args: RenderImageArgs) => React.ReactNode;
+  renderExtra?: (args: RenderExtraArgs) => React.ReactNode;
   imageWrapperClassName?: string;
   imageClassName?: string;
   leftClassName?: string;
@@ -17,38 +18,56 @@ interface GridProps {
 }
 
 const Grid: React.FunctionComponent<GridProps> = props => {
+  const [selected, setSelected] = useState<number | null>(null);
   const seed = useUIDSeed();
 
-  const { gridClassName, images, size, ...rest } = props;
+  useEffect(() => {
+    // We need to flush selected index right after renderExtra will receive it
+    if (typeof selected === 'number') {
+      setSelected(null);
+    }
+  });
+
+  const { gridClassName, images, size, renderExtra, ...rest } = props;
   const length = images.length || 1;
   const maxLength = length > size ? size : length;
   const allowedImages = images.slice(0, maxLength);
   // number of images that was left
   const left = length - maxLength;
 
-  return (
-    <div style={container(maxLength)} className={gridClassName}>
-      {allowedImages.map((image, index) => {
-        const key = seed(image) as string;
-        const withLeft = Boolean(index === maxLength - 1 && left > 0);
-        const wrapperStyle = {
-          ...getItemStyle(index, maxLength),
-          position: 'relative',
-        } as React.CSSProperties;
+  const renderExtraBlock = () => {
+    if (typeof renderExtra === 'function') {
+      return renderExtra({ images, index: selected });
+    }
+  };
 
-        return (
-          <Image
-            key={key}
-            index={index}
-            image={image}
-            wrapperStyle={wrapperStyle}
-            withLeft={withLeft}
-            left={left}
-            {...rest}
-          />
-        );
-      })}
-    </div>
+  return (
+    <>
+      <div style={container(maxLength)} className={gridClassName}>
+        {allowedImages.map((image, index) => {
+          const key = seed(image) as string;
+          const withLeft = Boolean(index === maxLength - 1 && left > 0);
+          const wrapperStyle = {
+            ...getItemStyle(index, maxLength),
+            position: 'relative',
+          } as React.CSSProperties;
+
+          return (
+            <Image
+              key={key}
+              index={index}
+              image={image}
+              wrapperStyle={wrapperStyle}
+              withLeft={withLeft}
+              left={left}
+              setSelected={setSelected}
+              {...rest}
+            />
+          );
+        })}
+      </div>
+      {renderExtraBlock()}
+    </>
   );
 };
 
