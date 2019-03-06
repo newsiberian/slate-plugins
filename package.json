@@ -11,7 +11,8 @@
   "dependencies": {
     "react": "16.8.4",
     "react-dom": "16.8.4",
-    "react-dropzone": "10.0.0",
+    "react-dropzone": "9.0.0",
+    "react-image-lightbox": "5.1.0",
     "react-sortable-hoc": "1.7.1"
   },
   "devDependencies": {
