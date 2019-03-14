@@ -94,6 +94,7 @@ const Image: React.FunctionComponent<ImageProps> = ({
     if (typeof renderImage === 'function') {
       return renderImage({
         image,
+        index,
         onLoad: handleLoad,
         onSelect: setSelected,
         readOnly,

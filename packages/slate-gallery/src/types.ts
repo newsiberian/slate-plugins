@@ -1,5 +1,5 @@
-import React from "react";
-import { DropzoneProps } from "react-dropzone";
+import React from 'react';
+import { DropzoneProps } from 'react-dropzone';
 
 export interface RenderControlsArgs {
   index: number;
@@ -24,6 +24,7 @@ export interface RenderExtraArgs {
 
 export interface RenderImageArgs {
   image: TypeImage;
+  index: number;
   /**
    * This function is required. It is uses internally
    */
