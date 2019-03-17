@@ -1,5 +1,9 @@
 # Change Log
 
+# [0.4.0] - 2019-03-06
+
+- added new option `renderExtra` which allows to place additional component near image grid
+
 # [0.3.0] - 2019-03-06
 
 - added new prop `gridClassName`

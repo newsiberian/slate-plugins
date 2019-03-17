@@ -46,7 +46,7 @@ export interface RenderImageArgs {
 export interface GalleryOptions {
   /**
    * Grid size - number of images that will be visible for "readOnly: false" mode
-   * All other images will be hidden, but user will have an ability to find them
+   * The remaining images will be hidden, but user will have an ability to find them
    * by opening full screen slider
    *
    * min value: 1
