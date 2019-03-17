@@ -20,9 +20,13 @@ This plugin adds a `void` block which can show images as an image grid. It allow
 
 Each image can have a description, which is not related with image tag `alt` props. It is stored as data of this gallery block.
 
-![readOnly: false](./image.png)
+`readOnly: false` mode:
 
-![readOnly: true](./image.jpg)
+![readOnly: false](https://github.com/newsiberian/slate-plugins/blob/master/packages/slate-gallery/image.png?raw=true)
+
+`readOnly: true` mode:
+
+![readOnly: true](https://github.com/newsiberian/slate-plugins/blob/master/packages/slate-gallery/image.jpg?raw=true)
 
 #### Options
 |name|type|description|
