@@ -1,5 +1,10 @@
 # Change Log
 
+# [0.4.3] - 2019-03-17
+
+- moved some dependencies to peerDependencies
+- improved README
+
 # [0.4.0] - 2019-03-06
 
 - added new option `renderExtra` which allows to place additional component near image grid
