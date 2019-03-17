@@ -48,7 +48,7 @@ export default function Editor(props) {
 }
 ```
 
-If you need to pass props to plugin settings it is possible to do like so:
+If you need to pass props to plugin settings, it is possible to do like so:
 ```js
 import React, { useMemo } from 'react';
 import { Editor } from 'slate-react';
