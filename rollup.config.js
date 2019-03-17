@@ -1,4 +1,5 @@
 import sourcemaps from 'rollup-plugin-sourcemaps';
+import { terser } from 'rollup-plugin-terser';
 
 function onwarn(message) {
   const suppressed = ['UNRESOLVED_IMPORT', 'THIS_IS_UNDEFINED'];
@@ -22,5 +23,6 @@ export default (name, dependencies) => ({
   external: dependencies,
   plugins: [
     sourcemaps(),
+    terser(),
   ],
 });

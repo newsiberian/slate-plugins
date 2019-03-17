@@ -9,6 +9,7 @@
     "deploy-storybook": "storybook-to-ghpages"
   },
   "dependencies": {
+    "array-move": "^1.0.0",
     "react": "16.8.4",
     "react-dom": "16.8.4",
     "react-dropzone": "9.0.0",
@@ -31,6 +32,7 @@
     "rimraf": "2.6.3",
     "rollup": "1.4.1",
     "rollup-plugin-sourcemaps": "0.4.2",
+    "rollup-plugin-terser": "4.0.4",
     "slate": "0.44.10",
     "slate-react": "0.21.16",
     "style-loader": "0.23.1",
