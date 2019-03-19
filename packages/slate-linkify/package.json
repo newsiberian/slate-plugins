@@ -1,0 +1,51 @@
+{
+  "name": "@mercuriya/slate-linkify",
+  "version": "0.1.0",
+  "description": "A Slate plugin that replaces pasted URLs with an anchor tags.",
+  "license": "MIT",
+  "main": "lib/bundle.umd.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newsiberian/slate-plugins.git"
+  },
+  "bugs": {
+    "url": "https://github.com/newsiberian/slate-plugins/issues"
+  },
+  "homepage": "https://github.com/newsiberian/slate-plugins/tree/master/packages/slate-linkify#readme",
+  "keywords": [
+    "slate"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "scripts": {
+    "build": "yarn build:tsc",
+    "build:tsc": "../../node_modules/.bin/tsc",
+    "bundle": "../../node_modules/.bin/rollup -c",
+    "clean": "../../node_modules/.bin/rimraf lib/*",
+    "postbuild": "yarn bundle",
+    "prebuild": "yarn clean",
+    "prepublishOnly": "yarn clean && yarn build"
+  },
+  "dependencies": {
+    "linkify-it": "^2.1.0",
+    "tlds": "^1.203.1"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "slate": "*",
+    "slate-react": "*"
+  },
+  "devDependencies": {
+    "@types/linkify-it": "^2.1.0"
+  }
+}
