@@ -1,5 +1,9 @@
 # Change Log
 
+# [0.4.4] - 2019-03-19
+
+- added license
+
 # [0.4.3] - 2019-03-17
 
 - moved some dependencies to peerDependencies
