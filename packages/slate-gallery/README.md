@@ -27,14 +27,14 @@ npm install react-dropzone react-sortable-hoc array-move --save
 In your file with `Slate` component:
 
 ```js
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Editor } from 'slate-react';
 import { galleryPlugin } from '@mercuriya/slate-gallery';
 
 const initialValue = Value.fromJSON({ ... });
 const plugins = [galleryPlugin({ ...options })];
 
-export default function Editor(props) {
+export default function EditorComponent(props) {
   const [value, setValue] = useState(initialValue);
 
   return (
@@ -57,7 +57,7 @@ import { galleryPlugin } from '@mercuriya/slate-gallery';
 const initialValue = Value.fromJSON({ ... });
 
 // This is not recommented to initialize plugins within component
-export default function Editor(props) {
+export default function EditorComponent(props) {
   const [value, setValue] = useState(initialValue);
   const plugins = useMemo(() => [galleryPlugin({ ...props })], []);
 
