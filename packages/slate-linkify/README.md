@@ -40,9 +40,9 @@ export default function EditorComponent(props) {
 ## Description
 
 This plugin inspired by amazing `draft-js-linkify-plugin`. It allows user to create
-links right on typing or pasting without any additional manipulations. It has an issues,
-like: it doesn't know if remote site should use https or not in case of something.
-For example in cases like: `typing...typing... google.com continue typing...`.
+links right on typing or pasting without any additional manipulations. It has issues,
+like: it doesn't know if remote site should use https or not. For example in cases
+like: `typing...typing... google.com continue typing...`.
 
 ### Options
 |Name|Type|Description|
