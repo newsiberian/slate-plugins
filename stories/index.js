@@ -21,8 +21,10 @@ import image10 from '../public/image-10-1280x720.jpg';
 
 import Simple from './slate-gallery/simple';
 import ReadOnly from './slate-gallery/readOnly';
+import LinkifyDefault from './slate-linkify/default';
+import LinkifyCustomComponent from './slate-linkify/customComponent'
 
-storiesOf('Slate editor gallery', module)
+storiesOf('Gallery plugin', module)
   .add('Simple', () => <Simple />)
   .add('Read only: one image', () => (
     <ReadOnly
@@ -233,3 +235,7 @@ storiesOf('Slate editor gallery', module)
       renderImage={(args) => <CustomImage {...args} />}
     />
   ));
+
+storiesOf('Linkify plugin', module)
+  .add('Default', () => <LinkifyDefault />)
+  .add('Custom component', () => <LinkifyCustomComponent />);
