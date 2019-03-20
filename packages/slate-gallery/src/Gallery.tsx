@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import Slate from 'slate';
 
-import EditModal from './EditModal';
 import Grid from './Grid';
 import { GalleryOptions } from './types';
 import { changeNodeData, extractData } from './utils';
@@ -65,6 +64,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   imageWrapperClassName,
   leftClassName,
 }) => {
+  // This is used by renderEditModal function only
   const [open, setOpen] = useState<boolean>(false);
   // currently editable image index
   const [imageIndex, setImageIndex] = useState<number | null>(null);
@@ -84,8 +84,23 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   ) => {
     event.preventDefault();
     event.stopPropagation();
-    setOpen(true);
+
     setImageIndex(index);
+
+    // when user uses custom modal, he must implement all logic manually. See
+    // storybook 'Edit modal custom component'
+    if (typeof renderEditModal === 'function') {
+      setOpen(true);
+    } else {
+      const descr = window.prompt(
+        'Modify image description',
+        getDescription(index) || '',
+      );
+      // skip on `cancel`
+      if (typeof descr === 'string' && descr.length) {
+        handleEdit(index, descr);
+      }
+    }
   };
 
   const handleEdit = (index: number, text: string): void => {
@@ -145,6 +160,10 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     );
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   /**
    * Insert images File objects into gallery's data
    * @param {File[]} files
@@ -156,23 +175,30 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     changeNodeData(editor, node, { images: newImages });
   }
 
+  function getDescription(index) {
+    const image = images[index];
+
+    if (!image) {
+      return;
+    }
+
+    if (image instanceof File) {
+      const data = node.get('data');
+      const descriptions = data.get('descriptions') || {};
+      return descriptions[image.name];
+    }
+    return image.description;
+  }
+
   function renderEditModalComponent() {
     if (typeof renderEditModal === 'function') {
       return renderEditModal({
         index: imageIndex,
         onEdit: handleEdit,
-        open,
-        setOpen,
+        onClose: handleClose,
+        description: getDescription(imageIndex),
       });
     }
-    return (
-      <EditModal
-        index={imageIndex}
-        onEdit={handleEdit}
-        open={open}
-        setOpen={setOpen}
-      />
-    );
   }
 
   const placeholderNode = placeholder ? (
@@ -232,7 +258,8 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
               leftClassName={leftClassName}
             />
 
-            {renderEditModalComponent()}
+            {/*{renderEditModalComponent()}*/}
+            {open && renderEditModalComponent()}
           </div>
         );
       }}

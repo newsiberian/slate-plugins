@@ -3,15 +3,24 @@ import { DropzoneProps } from 'react-dropzone';
 
 export interface RenderControlsArgs {
   index: number;
-  onOpenEditModal: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+  onOpenEditModal: (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => void;
   onRemove: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
 }
 
 export interface RenderEditModalArgs {
   index: number;
   onEdit: (index: number, text: string) => void;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  /**
+   * Must be called to close modal
+   */
+  onClose: () => void;
+  /**
+   * Image description
+   */
+  description?: string;
 }
 
 export interface RenderExtraArgs {
@@ -66,10 +75,10 @@ export interface GalleryOptions {
    *
    * Example:
    * <div style={root}>
-   *   <button onClick={onOpenEditModal(index)} title="Edit image description">
+   *   <button onClick={e => onOpenEditModal(e, index)} title="Edit image description">
    *     Edit
    *   </button>
-   *   <button onClick={onRemove(index)} title="Remove image">
+   *   <button onClick={e => onRemove(e, index)} title="Remove image">
    *     Remove
    *   </button>
    * </div>

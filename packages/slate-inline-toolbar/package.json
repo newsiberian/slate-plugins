@@ -1,7 +1,7 @@
 {
-  "name": "@mercuriya/slate-gallery",
-  "version": "0.4.4",
-  "description": "An image gallery for slate-js",
+  "name": "@mercuriya/slate-inline-toolbar",
+  "version": "0.1.0",
+  "description": "An inline toolbar for slate-js",
   "license": "MIT",
   "main": "lib/bundle.umd.js",
   "module": "lib/index.js",
@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/newsiberian/slate-plugins/issues"
   },
-  "homepage": "https://github.com/newsiberian/slate-plugins/tree/master/packages/slate-gallery#readme",
+  "homepage": "https://github.com/newsiberian/slate-plugins/tree/master/packages/slate-inline-toolbar#readme",
   "keywords": [
     "slate",
     "images",
@@ -38,16 +38,10 @@
     "prebuild": "yarn clean",
     "prepublishOnly": "yarn clean && yarn build"
   },
-  "dependencies": {
-    "react-uid": "^2.2.0",
-    "tslib": "^1.9.3"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": "^16.8.1",
     "slate": "*",
-    "slate-react": "*",
-    "array-move": "*",
-    "react-dropzone": "*",
-    "react-sortable-hoc": "*"
+    "slate-react": "*"
   }
 }

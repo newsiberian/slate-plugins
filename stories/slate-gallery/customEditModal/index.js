@@ -7,10 +7,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function CustomEditModal({ index, onEdit, open, setOpen }) {
-  const [value, setValue] = useState('');
+export default function CustomEditModal({ description, index, onEdit, open, onClose }) {
+  const [value, setValue] = useState(description || '');
+
   function handleClose() {
-    setOpen(false);
+    onClose();
   }
 
   function handleModify() {
@@ -21,7 +22,7 @@ export default function CustomEditModal({ index, onEdit, open, setOpen }) {
 
   return (
     <div onClick={e => e.stopPropagation()}>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={true} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Edit image description</DialogTitle>
         <DialogContent>
           <DialogContentText>
