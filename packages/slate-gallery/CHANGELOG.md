@@ -1,5 +1,12 @@
 # Change Log
 
+# [0.5.0] - 2019-03-20
+
+- [BREAKING CHANGES]: renderEditModal function now has another set of arguments. It is no
+more used `open` prop, so for your custom modal, please, set `open={true}`. `setOpen` changed
+to `onClose` and it is not required any arguments now. Build-in modal changed to `window.prompt`
+for reducing bundle size and make plugin simpler.
+
 # [0.4.4] - 2019-03-19
 
 - added license

@@ -2,7 +2,15 @@ import React from 'react';
 import { DropzoneProps } from 'react-dropzone';
 
 export interface RenderControlsArgs {
+  /**
+   * An index of selected image
+   */
   index: number;
+  /**
+   * A function that will open modal or prompt
+   * @param {React.MouseEvent<HTMLButtonElement>} e
+   * @param {number} index
+   */
   onOpenEditModal: (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number,
