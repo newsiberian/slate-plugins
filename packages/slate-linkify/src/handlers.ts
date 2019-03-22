@@ -76,6 +76,18 @@ export const handlePaste = (command, editor: slate.Editor, next, options) => {
   }
 };
 
+export const handleWrap = (editor, url, options) => {
+  const { value } = editor;
+  // If there is already a link active, unwrap it so that we don't end up
+  // with a confusing overlapping inline situation.
+  if (editor.query(options.isActiveQuery, value)) {
+    // TODO: still it can be better if we will select all inline here to place new inline right at the same place
+    editor.command(options.unwrapCommand);
+  }
+
+  editor.wrapInline({ data: { url }, type: 'link' });
+};
+
 /**
  * Find the underlying word under selection
  * @param {string} text

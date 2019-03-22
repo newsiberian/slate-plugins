@@ -1,6 +1,6 @@
 {
   "name": "@mercuriya/slate-linkify",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Slate plugin that replaces pasted URLs with an anchor tags.",
   "license": "MIT",
   "main": "lib/bundle.umd.js",

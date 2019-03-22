@@ -1,7 +1,7 @@
 import React from 'react';
 import slate from 'slate';
 
-import { handleKeyDown, handlePaste } from './handlers';
+import { handleKeyDown, handlePaste, handleWrap } from './handlers';
 
 export interface RenderComponentArgs {
   href: string;
@@ -34,9 +34,9 @@ export interface LinkifyOptions {
 
 const linkifyPlugin = (options = {} as LinkifyOptions) => {
   const {
-    // isActiveQuery = 'isLinkActive',
+    isActiveQuery = 'isLinkActive',
     wrapCommand = 'wrapLink',
-    // unwrapCommand = 'unwrapLink',
+    unwrapCommand = 'unwrapLink',
     target = '_blank',
     rel = 'noreferrer noopener',
   } = options;
@@ -57,7 +57,10 @@ const linkifyPlugin = (options = {} as LinkifyOptions) => {
        * @param {string} url - href
        */
       wrapLink(editor: slate.Editor, url: string) {
-        editor.wrapInline({ data: { url }, type: 'link' });
+        return handleWrap(editor, url, {
+          isActiveQuery,
+          unwrapCommand,
+        });
       },
       /**
        * Remove `link` inline block from current caret position
