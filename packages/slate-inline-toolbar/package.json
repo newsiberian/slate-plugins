@@ -40,7 +40,7 @@
   },
   "dependencies": {},
   "peerDependencies": {
-    "react": "^16.8.1",
+    "react": "*",
     "slate": "*",
     "slate-react": "*"
   }

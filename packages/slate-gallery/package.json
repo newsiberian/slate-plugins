@@ -43,7 +43,7 @@
     "tslib": "^1.9.3"
   },
   "peerDependencies": {
-    "react": "^16.8.1",
+    "react": "*",
     "slate": "*",
     "slate-react": "*",
     "array-move": "*",

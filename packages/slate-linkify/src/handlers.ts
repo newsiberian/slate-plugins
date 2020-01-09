@@ -1,8 +1,8 @@
-import linkifyIt from 'linkify-it';
+import LinkifyIt from 'linkify-it';
 import slate from 'slate';
 import tlds from 'tlds';
 
-const linkify = linkifyIt();
+const linkify = LinkifyIt();
 linkify.tlds(tlds);
 
 export const handleKeyDown = (
