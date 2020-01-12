@@ -73,7 +73,7 @@ const withLinkify = (editor: Editor, options = {} as LinkifyOptions) => {
    * @param children
    * @param element
    */
-  editor.linkElementType = (attributes, children, element) => {
+  editor.linkElementType = ({ attributes, children, element }) => {
     const className = options.className ? { className: options.className } : {};
     const anchorProps = {
       ...attributes,

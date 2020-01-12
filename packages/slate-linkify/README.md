@@ -49,7 +49,7 @@ const Element = ({ attributes, children, element }) => {
   switch (element.type) {
     case 'link':
       // ❗️ this part is required
-      return editor.linkElementType(attributes, children, element);
+      return editor.linkElementType({ attributes, children, element });
     default:
       return <p {...attributes}>{children}</p>;
   }
