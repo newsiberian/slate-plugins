@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 // tslint:disable-next-line
 export const Button = styled('button')`

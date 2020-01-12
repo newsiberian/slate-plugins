@@ -1,89 +1,94 @@
-import React, { useState } from 'react';
-import { Value } from 'slate';
-import { Editor } from 'slate-react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { createEditor, Editor } from 'slate';
+import { Slate, Editable, withReact, useSlate } from 'slate-react';
 
 import { Button, Toolbar } from '../../components';
-import { linkifyPlugin } from '../../../packages/slate-linkify/lib';
+import {
+  insertLink,
+  isLinkActive,
+  onKeyDown as linkifyOnKeyDown,
+  withLinkify,
+} from '../../../packages/slate-linkify/lib';
 
-const plugins = [linkifyPlugin()];
-
-const initialValue = Value.fromJSON({
-  document: {
-    nodes: [
-      {
-        object: 'block',
-        type: 'paragraph',
-        nodes: [
-          {
-            object: 'text',
-            leaves: [
-              {
-                text: 'A line of text in a paragraph.',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-});
-
-const getUrl = (editor) => {
-  const link = editor.value.inlines.filter(inline => inline.type === 'link').first();
-  return link.data.get('url');
+const getUrl = editor => {
+  const [link] = Editor.nodes(editor, { match: n => n.type === 'link' });
+  return link[0].url;
 };
 
-const renderEditor = (props, editor, next) => {
-  const children = next();
-
-  /**
-   * Check if the any of the currently selected inlines are of `type`.
-   * @param {String} type
-   * @return {Boolean}
-   */
-  const hasInline = (type) => {
-    return editor.value.inlines.some(node => node.type === type);
-  };
+const ToolbarComponent = () => {
+  const editor = useSlate();
+  const isActive = isLinkActive(editor);
 
   function onAddEditLink(event) {
     event.preventDefault();
 
-    const type = 'link';
-    const isActive = hasInline(type);
     const oldUrl = isActive ? getUrl(editor) : undefined;
-    const url = window.prompt(isActive ? 'Edit link' : 'Create a link', oldUrl)
-    editor.command('wrapLink', url);
+    const url = window.prompt(isActive ? 'Edit link' : 'Create a link', oldUrl);
+
+    if (url) {
+      insertLink(editor, url);
+    }
   }
 
   return (
-    <>
-      <Toolbar>
-        <Button onMouseDown={onAddEditLink}>
-          Add/Edit link
-        </Button>
-      </Toolbar>
-
-      {children}
-    </>
+    <Toolbar>
+      <Button onMouseDown={onAddEditLink}>
+        {isActive ? 'Edit link' : 'Add link'}
+      </Button>
+    </Toolbar>
   );
 };
 
 export default function LinkifyDefault({ readOnly = false }) {
-  const [value, setValue] = useState(initialValue);
+  const editor = useMemo(() => withLinkify(withReact(createEditor())), []);
+  const [value, setValue] = useState([
+    {
+      children: [
+        {
+          text:
+            'In addition to block nodes, you can create inline nodes, like ',
+        },
+        {
+          type: 'link',
+          url: 'https://en.wikipedia.org/wiki/Hypertext',
+          children: [{ text: 'hyperlinks' }],
+        },
+        {
+          text: '!',
+        },
+      ],
+    },
+    {
+      children: [
+        {
+          text:
+            'This example shows hyperlinks in action. It features two ways to add links. You can either add a link via the toolbar icon above, or if you want in on a little secret, copy a URL to your keyboard and paste it while a range of text is selected.',
+        },
+      ],
+    },
+  ]);
+  const renderElement = useCallback(props => <Element {...props} />, []);
 
-  function onChange(editor) {
-    setValue(editor.value);
-  }
+
+
+  const onKeyDown = useCallback(function handleKeyDown(event) {
+    linkifyOnKeyDown(event, editor);
+  }, []);
 
   return (
-    <section>
-      <Editor
-        value={value}
-        onChange={onChange}
-        plugins={plugins}
-        readOnly={readOnly}
-        renderEditor={renderEditor}
-      />
-    </section>
+    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+      <ToolbarComponent />
+      <Editable renderElement={renderElement} readOnly={readOnly} onKeyDown={onKeyDown} />
+    </Slate>
   );
 }
+
+const Element = ({ attributes, children, element }) => {
+  const editor = useSlate();
+  switch (element.type) {
+    case 'link':
+      return editor.linkElementType(attributes, children, element);
+    default:
+      return <p {...attributes}>{children}</p>;
+  }
+};
