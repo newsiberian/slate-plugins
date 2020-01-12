@@ -1,7 +1,14 @@
 import React from 'react';
-import slate from 'slate';
+import { Editor } from 'slate';
 
-import { handleKeyDown, handlePaste, handleWrap } from './handlers';
+import {
+  insertLink,
+  insertPastedLinks,
+  isLink,
+  isLinkActive,
+  onKeyDown,
+  wrapLink,
+} from './utils';
 
 export interface RenderComponentArgs {
   href: string;
@@ -15,9 +22,6 @@ export interface RenderComponentArgs {
 }
 
 export interface LinkifyOptions {
-  isActiveQuery?: string;
-  wrapCommand?: string;
-  unwrapCommand?: string;
   /**
    * A render function that can render a custom anchor component
    * @param {RenderComponentArgs} args
@@ -26,83 +30,66 @@ export interface LinkifyOptions {
   renderComponent?: (args: RenderComponentArgs) => React.ReactElement;
   /**
    * Anchor custom class name
+   * @type {string}
    */
   className?: string;
   target?: '_self' | '_blank' | '_parent' | '_top';
   rel?: string;
 }
 
-const linkifyPlugin = (options = {} as LinkifyOptions) => {
-  const {
-    isActiveQuery = 'isLinkActive',
-    wrapCommand = 'wrapLink',
-    unwrapCommand = 'unwrapLink',
-    target = '_blank',
-    rel = 'noreferrer noopener',
-  } = options;
+const withLinkify = (editor: Editor, options = {} as LinkifyOptions) => {
+  const { target = '_blank', rel = 'noreferrer noopener' } = options;
+  const { insertData, insertText, isInline } = editor;
 
-  return {
-    onKeyDown(event: KeyboardEvent, editor: slate.Editor, next) {
-      return handleKeyDown(event, editor, next, { wrapCommand });
-    },
-
-    onCommand(command, editor: slate.Editor, next) {
-      return handlePaste(command, editor, next, { wrapCommand });
-    },
-
-    commands: {
-      /**
-       * Wrap underlying text into `link` inline block
-       * @param {Editor} editor
-       * @param {string} url - href
-       */
-      wrapLink(editor: slate.Editor, url: string) {
-        return handleWrap(editor, url, {
-          isActiveQuery,
-          unwrapCommand,
-        });
-      },
-      /**
-       * Remove `link` inline block from current caret position
-       * @param {Editor} editor
-       */
-      unwrapLink(editor: slate.Editor) {
-        editor.unwrapInline('link');
-      },
-    },
-
-    queries: {
-      isLinkActive(editor, value) {
-        const { inlines } = value;
-        return inlines.some(i => i.type === 'link');
-      },
-    },
-
-    renderNode(props, editor, next) {
-      const { node, attributes, children } = props;
-      switch (props.node.type) {
-        case 'link': {
-          const className = options.className
-            ? { className: options.className }
-            : {};
-          const anchorProps = {
-            ...attributes,
-            ...className,
-            target,
-            rel,
-            href: node.data.get('url'),
-          };
-          return typeof options.renderComponent === 'function' ? (
-            options.renderComponent({ ...anchorProps, children })
-          ) : (
-            <a {...anchorProps}>{children}</a>
-          );
-        }
-        default:
-          return next();
-      }
-    },
+  editor.isInline = element => {
+    return element.type === 'link' ? true : isInline(element);
   };
+
+  editor.insertText = text => {
+    if (text && isLink(text)) {
+      wrapLink(editor, text);
+    } else {
+      insertText(text);
+    }
+  };
+
+  editor.insertData = data => {
+    const text = data.getData('text/plain');
+
+    // this is for pasting links, but we ignore it if snippet contains html.
+    // that's the work for the other plugin that must deserialize `html` by other
+    // way and both plugins must work in conjunction to cover all pasting cases
+    if (!data.types.includes('text/html') && text && isLink(text)) {
+      insertPastedLinks(data, insertData);
+    } else {
+      insertData(data);
+    }
+  };
+
+  /**
+   * This function must be provided to  `renderElement` prop
+   * @param attributes
+   * @param children
+   * @param element
+   */
+  editor.linkElementType = (attributes, children, element) => {
+    const className = options.className ? { className: options.className } : {};
+    const anchorProps = {
+      ...attributes,
+      ...className,
+      target,
+      rel,
+      href: element.url,
+    };
+
+    return typeof options.renderComponent === 'function' ? (
+      options.renderComponent({ ...anchorProps, children })
+    ) : (
+      <a {...anchorProps}>{children}</a>
+    );
+  };
+
+  return editor;
 };
 
-export { linkifyPlugin };
+export { insertLink, isLinkActive, onKeyDown, withLinkify };

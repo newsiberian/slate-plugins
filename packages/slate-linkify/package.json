@@ -42,8 +42,8 @@
   },
   "peerDependencies": {
     "react": "*",
-    "slate": "*",
-    "slate-react": "*"
+    "slate": "^0.50.0",
+    "slate-react": "^0.50.0"
   },
   "devDependencies": {
     "@types/linkify-it": "^2.1.0"
