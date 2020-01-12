@@ -5,6 +5,8 @@ import tlds from 'tlds';
 const linkify = LinkifyIt();
 linkify.tlds(tlds);
 
+export const LINK = 'link';
+
 /**
  * If text contains something similar to link `true` will be returned
  * @param {string} text
@@ -12,7 +14,7 @@ linkify.tlds(tlds);
 export const isLink = (text: string): boolean => linkify.test(text);
 
 export const isLinkActive = (editor: Editor): boolean => {
-  const [link] = Editor.nodes(editor, { match: n => n.type === 'link' });
+  const [link] = Editor.nodes(editor, { match: n => n.type === LINK });
   return !!link;
 };
 
@@ -33,11 +35,11 @@ const isEditLink = (editor: Editor): boolean => {
  * @param {Editor} editor
  */
 const unwrapLink = (editor: Editor): void => {
-  const [link] = Editor.nodes(editor, { match: n => n.type === 'link' });
+  const [link] = Editor.nodes(editor, { match: n => n.type === LINK });
   // we need to select all link text for case when selection is collapsed. In
   // that case we re-create new link for the same text
   Transforms.select(editor, link[1]);
-  Transforms.unwrapNodes(editor, { match: n => n.type === 'link' });
+  Transforms.unwrapNodes(editor, { match: n => n.type === LINK });
 };
 
 /**
@@ -51,7 +53,7 @@ export const wrapLink = (editor: Editor, url: string): void => {
   const { selection } = editor;
   const isExpanded = selection && Range.isExpanded(selection);
   const link = {
-    type: 'link',
+    type: LINK,
     url,
     children: isExpanded || isEdit ? [] : [{ text: url }],
   };
@@ -86,15 +88,8 @@ export const onKeyDown = (event: KeyboardEvent, editor: Editor): void => {
   const { selection } = editor;
   if (selection && Range.isCollapsed(selection)) {
     const [start] = Range.edges(selection);
-    const currentChildren =
-      editor.children[start.path[0]].children[start.path[1]];
-
-    if (!currentChildren || !currentChildren.text) {
-      return;
-    }
-
     const [word, wordAnchorOffset] = getWordUnderCaret(
-      currentChildren.text,
+      Editor.string(editor, start.path),
       selection,
     );
     const links = linkify.match(word);
@@ -174,7 +169,7 @@ const toTextFragment = text => ({
 });
 
 const toLinkFragment = link => ({
-  type: 'link',
+  type: LINK,
   url: link.url,
   children: [{ text: link.text }],
 });

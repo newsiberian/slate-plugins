@@ -6,6 +6,7 @@ import {
   insertPastedLinks,
   isLink,
   isLinkActive,
+  LINK,
   onKeyDown,
   wrapLink,
 } from './utils';
@@ -42,7 +43,7 @@ const withLinkify = (editor: Editor, options = {} as LinkifyOptions) => {
   const { insertData, insertText, isInline } = editor;
 
   editor.isInline = element => {
-    return element.type === 'link' ? true : isInline(element);
+    return element.type === LINK ? true : isInline(element);
   };
 
   editor.insertText = text => {
