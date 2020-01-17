@@ -1,48 +1,48 @@
-import React from 'react';
-import { Value } from 'slate';
-import { Editor } from 'slate-react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { createEditor } from 'slate';
+import { Slate, Editable, withReact } from 'slate-react';
 
-import { galleryPlugin } from '../../../packages/slate-gallery/lib';
+import { withGallery } from '../../../packages/slate-gallery/lib';
+import { GALLERY } from '../../../packages/slate-gallery/lib/utils';
 
 export default function Gallery(props) {
   const { images, ...rest } = props;
-  // I know, this is bad practise, but we need to reuse this component in many
-  // stories, so we initiate plugins here
-  const plugins = [galleryPlugin(rest)];
+  const editor = useMemo(
+    () => withGallery(withReact(createEditor()), rest),
+    [],
+  );
+  const [value, setValue] = useState([
+    {
+      type: 'paragraph',
+      children: [
+        { text: 'This is editable plain text, just like a <textarea>!' },
+      ],
+    },
+    {
+      type: GALLERY,
+      images,
+      descriptions: {},
+      children: [{ text: '' }],
+    },
+  ]);
+  const renderElement = useCallback(({ attributes, children, element }) => {
+    switch (element.type) {
+      case 'gallery':
+        return editor.galleryElementType({
+          attributes,
+          children,
+          element,
+          // ❗️ we use this prop internally, so you must provide it here
+          readOnly: true,
+        });
+      default:
+        return <p {...attributes}>{children}</p>;
+    }
+  }, []);
 
   return (
-    <section>
-      <Editor
-        value={Value.fromJSON({
-          document: {
-            nodes: [
-              {
-                object: 'block',
-                type: 'paragraph',
-                nodes: [
-                  {
-                    object: 'text',
-                    leaves: [
-                      {
-                        text: 'A line of text in a paragraph.',
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                object: 'block',
-                type: 'gallery',
-                data: {
-                  images,
-                },
-              },
-            ],
-          },
-        })}
-        plugins={plugins}
-        readOnly
-      />
-    </section>
+    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+      <Editable readOnly renderElement={renderElement} />
+    </Slate>
   );
 }

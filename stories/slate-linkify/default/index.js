@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { createEditor, Editor } from 'slate';
-import { Slate, Editable, withReact, useSlate } from 'slate-react';
+import { Slate, Editable, withReact, useEditor, useSlate } from 'slate-react';
 
 import { Button, Toolbar } from '../../components';
 import {
@@ -84,7 +84,7 @@ export default function LinkifyDefault({ readOnly = false }) {
 }
 
 const Element = ({ attributes, children, element }) => {
-  const editor = useSlate();
+  const editor = useEditor();
   switch (element.type) {
     case 'link':
       return editor.linkElementType({ attributes, children, element });
