@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import Dropzone from 'react-dropzone';
-import Slate from 'slate';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { Element } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 import Grid from './Grid';
 import { GalleryOptions } from './types';
-import { changeNodeData, extractData } from './utils';
+import { changeNodeData } from './utils';
 
 const root = {
   borderWidth: 2,
@@ -35,8 +36,9 @@ const rejected = {
 
 interface GalleryProps extends GalleryOptions {
   attributes: object;
-  editor: Slate.Editor;
-  node: Slate.Block;
+  children: React.ReactNode;
+  editor: ReactEditor;
+  element: Element;
   readOnly: boolean;
   /**
    * Placeholder text
@@ -50,13 +52,14 @@ interface GalleryProps extends GalleryOptions {
 
 const Gallery: React.FunctionComponent<GalleryProps> = ({
   attributes,
+  children,
   editor,
-  node,
+  element,
   size = 9,
   placeholder,
   droppingPlaceholder,
   readOnly,
-  dropzoneProps,
+  dropzoneProps = {},
   renderControls,
   renderEditModal,
   renderImage,
@@ -68,15 +71,40 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   // currently editable image index
   const [imageIndex, setImageIndex] = useState<number | null>(null);
+  const onDrop = useCallback(
+    acceptedFiles => {
+      insertImage(
+        // TODO: make it custom
+        acceptedFiles.map(file => {
+          Object.assign(file, {
+            src: URL.createObjectURL(file),
+          });
+
+          return file;
+        }),
+      );
+    },
+    [element],
+  );
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    multiple: true,
+    onDrop,
+    ...dropzoneProps,
+  });
+  const { images = [] } = element;
 
   useEffect(() => {
     return () => {
       // Make sure to revoke the data uris to avoid memory leaks
       images.forEach(file => URL.revokeObjectURL(file.src));
     };
-  });
-
-  const images = extractData(node, 'images') || [];
+  }, []);
 
   const handleOpenEditModal = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -92,103 +120,93 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     if (typeof renderEditModal === 'function') {
       setOpen(true);
     } else {
-      const descr = window.prompt(
+      const description = window.prompt(
         'Modify image description',
         getDescription(index) || '',
       );
       // skip on `cancel`
-      if (typeof descr === 'string' && descr.length) {
-        handleEdit(index, descr);
+      if (typeof description === 'string' && description.length) {
+        handleEdit(index, description);
       }
     }
   };
 
-  const handleEdit = (index: number, text: string): void => {
-    const image = images[index];
+  const handleEdit = useCallback(
+    (index: number, text: string): void => {
+      const image = images[index];
 
-    // We can have two cases here: new images as Files or previously saved
-    // images as simple objects. In first case we can't put description within
-    // File because in some scenarios all unrelated data will be lost in process,
-    // i.e. when you use `graphql-upload`. In second case it is obvious that you
-    // want to put all image props together, so src, description, etc will be
-    // located within image object, that's why we cover two cases here
+      // We can have two cases here: new images as Files or previously saved
+      // images as simple objects. In first case we can't put description within
+      // File because in some scenarios all unrelated data will be lost in process,
+      // i.e. when you use `graphql-upload`. In second case it is obvious that you
+      // want to put all image props together, so src, description, etc will be
+      // located within image object, that's why we cover two cases here
 
-    if (!(image instanceof File)) {
-      changeNodeData(editor, node, {
-        images: images.map((img, i) => {
-          if (i === index) {
-            img.description = text;
+      if (!(image instanceof File)) {
+        changeNodeData(editor, element, {
+          images: images.map((img, i) => {
+            if (i === index) {
+              img.description = text;
+              return img;
+            }
             return img;
-          }
-          return img;
-        }),
-      });
-    }
-
-    const data = node.get('data');
-    const descriptions = data.get('descriptions') || {};
-
-    // use name as id. This will help you to identify it while processing
-    descriptions[image.name] = text;
-
-    changeNodeData(editor, node, {
-      descriptions,
-    });
-  };
-
-  const handleRemove = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    index: number,
-  ): void => {
-    event.preventDefault();
-    event.stopPropagation();
-    changeNodeData(editor, node, {
-      images: images.filter((image, i) => i !== index),
-    });
-  };
-
-  const handleDrop = (acceptedFiles: File[]): void => {
-    insertImage(
-      // TODO: make it custom
-      acceptedFiles.map(file => {
-        Object.assign(file, {
-          src: URL.createObjectURL(file),
+          }),
         });
+      }
 
-        return file;
-      }),
-    );
-  };
+      changeNodeData(editor, element, {
+        descriptions: {
+          ...element.descriptions,
+          // use name as id. This will help you to identify it while processing
+          [image.name]: text,
+        },
+      });
+    },
+    [element],
+  );
 
-  const handleClose = () => {
+  const handleRemove = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>, index: number): void => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      changeNodeData(editor, element, {
+        images: images.filter((image, i) => i !== index),
+      });
+    },
+    [element],
+  );
+
+  const handleClose = useCallback((): void => {
     setOpen(false);
-  };
+  }, []);
 
   /**
    * Insert images File objects into gallery's data
    * @param {File[]} files
    */
   function insertImage(files: File[]): void {
-    const oldImages = extractData(node, 'images');
-    const newImages = oldImages ? [...oldImages, ...files] : files;
-
-    changeNodeData(editor, node, { images: newImages });
+    changeNodeData(editor, element, { images: element.images.concat(files) });
   }
 
-  function getDescription(index) {
-    const image = images[index];
+  const getDescription = useCallback(
+    index => {
+      const image = images[index];
 
-    if (!image) {
-      return;
-    }
+      if (!image) {
+        return;
+      }
 
-    if (image instanceof File) {
-      const data = node.get('data');
-      const descriptions = data.get('descriptions') || {};
-      return descriptions[image.name];
-    }
-    return image.description;
-  }
+      if (image instanceof File) {
+        if (element.descriptions) {
+          return element.descriptions[image.name];
+        }
+        return '';
+      }
+      return image.description;
+    },
+    [element],
+  );
 
   function renderEditModalComponent() {
     if (typeof renderEditModal === 'function') {
@@ -201,69 +219,67 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     }
   }
 
-  const placeholderNode = placeholder ? (
-    placeholder
-  ) : (
-    <p>Drop images here, or click to select images to upload</p>
+  const placeholderNode = useMemo(
+    () =>
+      placeholder ? (
+        placeholder
+      ) : (
+        <p>Drop images here, or click to select images to upload</p>
+      ),
+    [placeholder],
   );
 
-  const droppingPlaceholderNode = droppingPlaceholder ? (
-    droppingPlaceholder
-  ) : (
-    <p>Drop images here...</p>
+  const droppingPlaceholderNode = useMemo(
+    () =>
+      droppingPlaceholder ? droppingPlaceholder : <p>Drop images here...</p>,
+    [droppingPlaceholder],
   );
+
+  const style = useMemo(
+    () => ({
+      ...root,
+      ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
+      ...(isDragActive ? active : {}),
+      ...(isDragAccept ? accepted : {}),
+      ...(isDragReject ? rejected : {}),
+    }),
+    [isDragActive, isDragAccept, isDragReject],
+  );
+
+  const info = useCallback((): React.ReactNode | string | null => {
+    if (!images.length) {
+      return isDragActive ? droppingPlaceholderNode : placeholderNode;
+    }
+    return null;
+  }, [images.length, isDragActive]);
 
   return (
-    <Dropzone multiple onDrop={handleDrop} {...dropzoneProps}>
-      {({
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        isDragAccept,
-        isDragReject,
-      }) => {
-        const style = {
-          ...root,
-          ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
-          ...(isDragActive ? active : {}),
-          ...(isDragAccept ? accepted : {}),
-          ...(isDragReject ? rejected : {}),
-        };
+    <div {...attributes}>
+      <div {...getRootProps()} style={style} contentEditable={false}>
+        <input {...getInputProps()} />
 
-        const info = (): React.ReactNode | string | null => {
-          if (!images.length) {
-            return isDragActive ? droppingPlaceholderNode : placeholderNode;
-          }
-          return null;
-        };
+        {info()}
 
-        return (
-          <div {...attributes} {...getRootProps()} style={style}>
-            <input {...getInputProps()} />
+        <Grid
+          editor={editor}
+          element={element}
+          images={images}
+          size={size}
+          renderControls={renderControls}
+          renderImage={renderImage}
+          readOnly={readOnly}
+          onOpenEditModal={handleOpenEditModal}
+          onRemove={handleRemove}
+          imageClassName={imageClassName}
+          imageWrapperClassName={imageWrapperClassName}
+          leftClassName={leftClassName}
+        />
 
-            {info()}
+        {open && renderEditModalComponent()}
+      </div>
 
-            <Grid
-              editor={editor}
-              node={node}
-              images={images}
-              size={size}
-              renderControls={renderControls}
-              renderImage={renderImage}
-              readOnly={readOnly}
-              onOpenEditModal={handleOpenEditModal}
-              onRemove={handleRemove}
-              imageClassName={imageClassName}
-              imageWrapperClassName={imageWrapperClassName}
-              leftClassName={leftClassName}
-            />
-
-            {/*{renderEditModalComponent()}*/}
-            {open && renderEditModalComponent()}
-          </div>
-        );
-      }}
-    </Dropzone>
+      {children}
+    </div>
   );
 };
 

@@ -38,12 +38,10 @@ export default React.memo(function Left({ left, leftClassName }: LeftProps) {
     overlay.style.left = `${parentRect.width / 2 - overlayRect.width / 2}px`;
   };
 
-  React.useEffect(
-    (): void => {
-      // center position on first load
-      updatePosition();
-    },
-  );
+  React.useEffect((): void => {
+    // center position on first load
+    updatePosition();
+  });
 
   const spanProps = {} as SpanProps;
 

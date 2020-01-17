@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import arrayMove from 'array-move';
 import {
@@ -8,15 +8,16 @@ import {
   SortableElementProps,
 } from 'react-sortable-hoc';
 import { useUIDSeed } from 'react-uid';
-import { Editor, Node } from 'slate';
+import { Element } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 import Image from './Image';
 import { RenderControlsArgs, RenderImageArgs, TypeImage } from './types';
 import { changeNodeData, container, getItemStyle } from './utils';
 
 interface GridProps {
-  editor: Editor;
-  node: Node;
+  editor: ReactEditor;
+  element: Element;
   images?: TypeImage[];
   size: number;
   renderControls?: (args: RenderControlsArgs) => React.ReactNode;
@@ -102,27 +103,36 @@ const SortableList = SortableContainer((props: SortableListProps) => {
 const Grid: React.FunctionComponent<GridProps> = props => {
   const seed = useUIDSeed();
 
-  const { editor, node, images, size, ...rest } = props;
+  const { editor, element, images, size, ...rest } = props;
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    changeNodeData(editor, node, {
-      images: arrayMove(images, oldIndex, newIndex),
-    });
-  };
+  const onSortEnd = useCallback(
+    ({ oldIndex, newIndex }) => {
+      changeNodeData(editor, element, {
+        images: arrayMove(images, oldIndex, newIndex),
+      });
+    },
+    [element, images],
+  );
+
+  const shouldCancelStart = useCallback(() => false, []);
 
   const length = images.length || 1;
-  const fixedSize =
-    typeof size === 'number' && size > 0 && size <= 9 ? size : 9;
+  const fixedSize = useMemo(
+    () => (typeof size === 'number' && size > 0 && size <= 9 ? size : 9),
+    [size],
+  );
   const maxLength = length > fixedSize ? fixedSize : length;
   // number of images that was left
   const left = length - maxLength;
 
   return (
     <SortableList
+      axis="xy"
       images={images}
       left={left}
       maxLength={maxLength}
       onSortEnd={onSortEnd}
+      shouldCancelStart={shouldCancelStart}
       seed={seed}
       {...rest}
     />

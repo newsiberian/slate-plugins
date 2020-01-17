@@ -1,35 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import Slate from 'slate';
+import React from 'react';
+import { Element } from 'slate';
 
 import { GalleryOptions } from '../types';
 import Grid from './Grid';
 
 interface GalleryProps extends GalleryOptions {
   attributes: object;
-  editor: Slate.Editor;
-  node: Slate.Block;
+  children: React.ReactNode;
+  element: Element;
   readOnly: boolean;
-  /**
-   * Placeholder text
-   */
-  placeholder?: string | React.ReactNode;
-  /**
-   * Placeholder that appears on image drop
-   */
-  droppingPlaceholder?: string | React.ReactNode;
 }
 
 const ReadOnlyGallery: React.FunctionComponent<GalleryProps> = ({
   attributes,
-  editor,
-  node,
+  children,
+  element,
   size = 9,
-  placeholder,
-  droppingPlaceholder,
   readOnly,
-  dropzoneProps,
-  renderControls,
-  renderEditModal,
   renderImage,
   renderExtra,
   imageClassName,
@@ -37,34 +24,23 @@ const ReadOnlyGallery: React.FunctionComponent<GalleryProps> = ({
   leftClassName,
   gridClassName,
 }) => {
-  const [images, setImages] = useState([]);
-
-  useEffect(() => {
-    if (!images.length) {
-      const data = node.get('data');
-      if (data.has('images')) {
-        const savedImages = data.get('images');
-
-        if (Array.isArray(savedImages)) {
-          setImages(savedImages);
-        }
-      }
-    }
-  });
-
   return (
     <div {...attributes}>
-      <Grid
-        images={images}
-        size={size}
-        renderImage={renderImage}
-        renderExtra={renderExtra}
-        readOnly={readOnly}
-        imageClassName={imageClassName}
-        imageWrapperClassName={imageWrapperClassName}
-        leftClassName={leftClassName}
-        gridClassName={gridClassName}
-      />
+      <div contentEditable={false}>
+        <Grid
+          images={element.images}
+          size={size}
+          renderImage={renderImage}
+          renderExtra={renderExtra}
+          readOnly={readOnly}
+          imageClassName={imageClassName}
+          imageWrapperClassName={imageWrapperClassName}
+          leftClassName={leftClassName}
+          gridClassName={gridClassName}
+        />
+      </div>
+
+      {children}
     </div>
   );
 };

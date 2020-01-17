@@ -1,5 +1,9 @@
 # Change Log
 
+# [0.6.0] - 2019-01-17
+
+- [BREAKING CHANGES]: refactored to fit slate@0.50.0
+
 # [0.5.0] - 2019-03-20
 
 - [BREAKING CHANGES]: renderEditModal function now has another set of arguments. It is no

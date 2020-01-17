@@ -1,34 +1,43 @@
 import React from 'react';
-import { Block, BlockProperties, Data } from 'slate';
+import { Editor, Element, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
 
-/**
- * Extract data from block
- * @param {Block} block
- * @param {string} key
- * @return {any}
- */
-export const extractData = (block: Block, key: string): any => {
-  const data = block.get('data');
-  return data.get(key);
+export const GALLERY = 'gallery';
+
+export const isGalleryActive = (editor: Editor): boolean => {
+  const [gallery] = Editor.nodes(editor, { match: n => n.type === 'gallery' });
+  return !!gallery;
 };
 
-export const handleChange = (editor, next) => {
-  return next();
+export const insertGallery = (editor: Editor) => {
+  Transforms.insertNodes(
+    editor,
+    { type: GALLERY, images: [], descriptions: {}, children: [{ text: '' }] },
+    { voids: true },
+  );
+  // we additionally insert new line to prevent case when we can't type text after
+  // the gallery, when we insert it at the bottom
+  Transforms.insertNodes(editor, {
+    type: 'paragraph',
+    children: [{ text: '' }],
+  });
 };
 
 /**
  * Set additional data to current block
  * @param {Editor} editor
- * @param {Node} node
+ * @param {Element} element
  * @param {object} payload - additional data
  * @return {Editor}
  */
-export const changeNodeData = (editor, node, payload) => {
-  const prev = node.get('data');
-  const modifiedData = prev.mergeDeep(Data.create(payload));
-  editor.setNodeByKey(node.key, { data: modifiedData } as BlockProperties);
-
-  return editor;
+export const changeNodeData = (
+  editor: ReactEditor,
+  element: Element,
+  payload,
+): void => {
+  Transforms.setNodes(editor, payload, {
+    at: ReactEditor.findPath(editor, element),
+  });
 };
 
 const buildGridContainer = (
