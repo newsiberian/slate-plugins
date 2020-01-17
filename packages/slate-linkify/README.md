@@ -18,7 +18,7 @@ In your file with `Slate` component:
 ```js
 import React from 'react';
 import { createEditor } from 'slate';
-import { Slate, Editable, withReact } from 'slate-react';
+import { Slate, Editable, useEditor, withReact } from 'slate-react';
 import { onKeyDown as linkifyOnKeyDown, withLinkify } from '@mercuriya/slate-linkify';
 import Link from '@material-ui/core/Link';
 
@@ -45,7 +45,7 @@ export default function EditorComponent(props) {
 }
 
 const Element = ({ attributes, children, element }) => {
-  const editor = useSlate();
+  const editor = useEditor();
   switch (element.type) {
     case 'link':
       // ❗️ this part is required
@@ -59,8 +59,8 @@ const Element = ({ attributes, children, element }) => {
 
 ## Description
 
-This plugin inspired by amazing `draft-js-linkify-plugin` and slate plugins examples.
-It allows user to create links while typing or pasting without any additional
+This plugin inspired by amazing `draft-js-linkify-plugin` and slate plugins official
+examples. It allows user to create links while typing or pasting without any additional
 manipulations.
 
 It has issues, like: it doesn't know if remote site should use https

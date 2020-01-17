@@ -1,5 +1,6 @@
 import LinkifyIt from 'linkify-it';
 import { Editor, Range, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
 import tlds from 'tlds';
 
 const linkify = LinkifyIt();
@@ -13,16 +14,16 @@ export const LINK = 'link';
  */
 export const isLink = (text: string): boolean => linkify.test(text);
 
-export const isLinkActive = (editor: Editor): boolean => {
+export const isLinkActive = (editor: ReactEditor): boolean => {
   const [link] = Editor.nodes(editor, { match: n => n.type === LINK });
   return !!link;
 };
 
 /**
  * We additionally want to return isEdit flag to upper function
- * @param {Editor} editor
+ * @param {ReactEditor} editor
  */
-const isEditLink = (editor: Editor): boolean => {
+const isEditLink = (editor: ReactEditor): boolean => {
   if (isLinkActive(editor)) {
     unwrapLink(editor);
     return true;
@@ -32,9 +33,9 @@ const isEditLink = (editor: Editor): boolean => {
 
 /**
  * Remove `link` inline from the current caret position
- * @param {Editor} editor
+ * @param {ReactEditor} editor
  */
-const unwrapLink = (editor: Editor): void => {
+const unwrapLink = (editor: ReactEditor): void => {
   const [link] = Editor.nodes(editor, { match: n => n.type === LINK });
   // we need to select all link text for case when selection is collapsed. In
   // that case we re-create new link for the same text
@@ -44,10 +45,10 @@ const unwrapLink = (editor: Editor): void => {
 
 /**
  * Wrap underlying text into `link` inline
- * @param {Editor} editor
+ * @param {ReactEditor} editor
  * @param {string} url - href
  */
-export const wrapLink = (editor: Editor, url: string): void => {
+export const wrapLink = (editor: ReactEditor, url: string): void => {
   const isEdit = isEditLink(editor);
 
   const { selection } = editor;
@@ -67,7 +68,7 @@ export const wrapLink = (editor: Editor, url: string): void => {
   }
 };
 
-export const insertLink = (editor: Editor, url: string): void => {
+export const insertLink = (editor: ReactEditor, url: string): void => {
   if (editor.selection) {
     wrapLink(editor, url);
   }
@@ -76,9 +77,9 @@ export const insertLink = (editor: Editor, url: string): void => {
 /**
  * We are trying to detect links while user typing
  * @param {KeyboardEvent} event
- * @param {Editor} editor
+ * @param {ReactEditor} editor
  */
-export const onKeyDown = (event: KeyboardEvent, editor: Editor): void => {
+export const onKeyDown = (event: KeyboardEvent, editor: ReactEditor): void => {
   // It will be better if we will try to detect links only after "word" will be
   // finished. We will check links possibilities at current word near the caret
   if (event.key !== 'Enter' && event.key !== ' ' && event.key !== ',') {

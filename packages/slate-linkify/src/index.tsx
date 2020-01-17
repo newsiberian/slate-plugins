@@ -1,5 +1,5 @@
 import React from 'react';
-import { Editor } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 import {
   insertLink,
@@ -38,7 +38,7 @@ export interface LinkifyOptions {
   rel?: string;
 }
 
-const withLinkify = (editor: Editor, options = {} as LinkifyOptions) => {
+const withLinkify = (editor: ReactEditor, options = {} as LinkifyOptions) => {
   const { target = '_blank', rel = 'noreferrer noopener' } = options;
   const { insertData, insertText, isInline } = editor;
 
