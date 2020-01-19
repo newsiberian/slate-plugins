@@ -1,5 +1,9 @@
 # Change Log
 
+# [0.3.0] - 2020-01-19
+
+- `linkElementType` now accept one object argument
+
 # [0.2.0] - 2020-01-12
 
 - [BREAKING CHANGES]: refactored to fit slate@0.50.0 and above
