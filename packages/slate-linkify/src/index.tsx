@@ -8,6 +8,7 @@ import {
   isLinkActive,
   LINK,
   onKeyDown,
+  unwrapLink,
   wrapLink,
 } from './utils';
 
@@ -93,4 +94,4 @@ const withLinkify = (editor: ReactEditor, options = {} as LinkifyOptions) => {
   return editor;
 };
 
-export { insertLink, isLinkActive, onKeyDown, withLinkify };
+export { insertLink, isLinkActive, onKeyDown, unwrapLink, withLinkify };

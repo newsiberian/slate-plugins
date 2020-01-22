@@ -35,7 +35,7 @@ const isEditLink = (editor: ReactEditor): boolean => {
  * Remove `link` inline from the current caret position
  * @param {ReactEditor} editor
  */
-const unwrapLink = (editor: ReactEditor): void => {
+export const unwrapLink = (editor: ReactEditor): void => {
   const [link] = Editor.nodes(editor, { match: n => n.type === LINK });
   // we need to select all link text for case when selection is collapsed. In
   // that case we re-create new link for the same text

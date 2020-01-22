@@ -1,5 +1,9 @@
 # Change Log
 
+# [0.3.1] - 2020-01-19
+
+- exposed `unwrapLink` function
+
 # [0.3.0] - 2020-01-19
 
 - `linkElementType` now accept one object argument
