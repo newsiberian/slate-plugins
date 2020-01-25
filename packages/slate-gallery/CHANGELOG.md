@@ -1,6 +1,10 @@
 # Change Log
 
-# [0.6.0] - 2019-01-17
+# [0.6.1] - 2020-01-25
+
+- fixed bug in `insertImage` function
+
+# [0.6.0] - 2020-01-17
 
 - [BREAKING CHANGES]: refactored to fit slate@0.50.0
 

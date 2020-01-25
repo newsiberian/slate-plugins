@@ -186,7 +186,11 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
    * @param {File[]} files
    */
   function insertImage(files: File[]): void {
-    changeNodeData(editor, element, { images: element.images.concat(files) });
+    changeNodeData(editor, element, {
+      images: Array.isArray(element.images)
+        ? element.images.concat(files)
+        : files,
+    });
   }
 
   const getDescription = useCallback(
