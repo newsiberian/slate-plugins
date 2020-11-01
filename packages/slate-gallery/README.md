@@ -87,6 +87,7 @@ Please, see stories for more usage examples.
 |---|---|---|
 |**size**? (default: 9)|number|Min: 1, max: 9. It represents a grid size. A number of images which will be visible within `readOnly: true` mode. The remaining images will be hidden, but user will see them in the images lightbox if you will implement this.| 
 |**dropzoneProps**?|object|An object of `react-dropzone` props which is applies to `Dropzone` component|
+|**sortableContainerProps**?|object|An object of `react-sortable-hoc` props which is applies to `SortableContainer`'s component|
 |**renderControls**?|args => React.ReactNode|A render function that allows you to customize controls block. See types definitions for more example|
 |**renderEditModal**?|args => React.ReactNode|A render function that allows you to use custom modal while editing images descriptions|
 |**renderExtra**?|args => React.ReactNode|A render function that allows you to place additional component near image gallery. It could be handy to build image-lightbox functionality|

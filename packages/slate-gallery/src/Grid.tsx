@@ -31,6 +31,7 @@ interface GridProps {
   imageWrapperClassName?: string;
   imageClassName?: string;
   leftClassName?: string;
+  sortableContainerProps: SortableContainerProps;
 }
 
 interface SortableListProps extends SortableContainerProps {
@@ -100,10 +101,15 @@ const SortableList = SortableContainer((props: SortableListProps) => {
   );
 });
 
-const Grid: React.FunctionComponent<GridProps> = props => {
+const Grid: React.FunctionComponent<GridProps> = ({
+  editor,
+  element,
+  images,
+  size,
+  sortableContainerProps,
+  ...rest
+}) => {
   const seed = useUIDSeed();
-
-  const { editor, element, images, size, ...rest } = props;
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) => {
@@ -135,6 +141,7 @@ const Grid: React.FunctionComponent<GridProps> = props => {
       shouldCancelStart={shouldCancelStart}
       seed={seed}
       {...rest}
+      {...sortableContainerProps}
     />
   );
 };

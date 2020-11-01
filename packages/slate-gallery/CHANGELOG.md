@@ -1,5 +1,9 @@
 # Change Log
 
+# [0.6.2] - 2020-01-25
+
+- added `sortableContainerProps` prop;
+
 # [0.6.1] - 2020-01-25
 
 - fixed bug in `insertImage` function

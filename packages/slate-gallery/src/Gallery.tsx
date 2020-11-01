@@ -60,6 +60,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   droppingPlaceholder,
   readOnly,
   dropzoneProps = {},
+  sortableContainerProps = {},
   renderControls,
   renderEditModal,
   renderImage,
@@ -277,6 +278,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
           imageClassName={imageClassName}
           imageWrapperClassName={imageWrapperClassName}
           leftClassName={leftClassName}
+          sortableContainerProps={sortableContainerProps}
         />
 
         {open && renderEditModalComponent()}

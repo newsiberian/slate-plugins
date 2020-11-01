@@ -1,5 +1,6 @@
 import React from 'react';
 import { DropzoneProps } from 'react-dropzone';
+import { SortableContainerProps } from 'react-sortable-hoc';
 
 export interface RenderControlsArgs {
   /**
@@ -75,6 +76,10 @@ export interface GalleryOptions {
    * Props which goes to react-dropzone
    */
   dropzoneProps?: DropzoneProps;
+  /**
+   * React-sortable-hoc container props
+   */
+  sortableContainerProps?: SortableContainerProps;
   /**
    * Custom controls component. It is uses only for "readOnly: true" mode
    * Handlers must be added to each child-button accordingly

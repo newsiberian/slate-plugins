@@ -30,11 +30,7 @@ const ToolbarComponent = ({ setSize }) => {
 
   function onAddGallery(event) {
     event.preventDefault();
-
-    // const type = 'gallery';
-    // const isActive = hasBlock(type);
     insertGallery(editor);
-    // editor.setBlocks(isActive ? DEFAULT_NODE : type);
   }
 
   return (
