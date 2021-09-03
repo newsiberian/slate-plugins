@@ -28,7 +28,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "private": false,
+  "private": true,
   "scripts": {
     "build": "yarn build:tsc",
     "build:tsc": "../../node_modules/.bin/tsc",
