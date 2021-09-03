@@ -24,8 +24,8 @@ const ToolbarComponent = ({ setSize }) => {
    * @param {String} type
    * @return {Boolean}
    */
-  const hasBlock = type => {
-    return editor.value.blocks.some(node => node.type === type);
+  const hasBlock = (type) => {
+    return editor.value.blocks.some((node) => node.type === type);
   };
 
   function onAddGallery(event) {
@@ -41,9 +41,9 @@ const ToolbarComponent = ({ setSize }) => {
         defaultValue={9}
         name="size"
         id="size"
-        onChange={e => setSize(e.target.value)}
+        onChange={(e) => setSize(e.target.value)}
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(op => {
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((op) => {
           return (
             <option value={op} key={op}>
               {op}
@@ -84,7 +84,7 @@ export default function Gallery(props) {
   }, []);
 
   return (
-    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+    <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
       <ToolbarComponent setSize={setSize} />
       <Editable renderElement={renderElement} />
     </Slate>

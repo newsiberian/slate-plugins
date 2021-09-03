@@ -22,8 +22,12 @@ export default function ImageLightbox({ images, index }) {
         nextSrc={images[(photoIndex + 1) % images.length].src}
         prevSrc={images[(photoIndex + images.length - 1) % images.length].src}
         onCloseRequest={() => setOpen(false)}
-        onMovePrevRequest={() => setProtoIndex((photoIndex + images.length - 1) % images.length)}
-        onMoveNextRequest={() => setProtoIndex((photoIndex + 1) % images.length)}
+        onMovePrevRequest={() =>
+          setProtoIndex((photoIndex + images.length - 1) % images.length)
+        }
+        onMoveNextRequest={() =>
+          setProtoIndex((photoIndex + 1) % images.length)
+        }
       />
     );
   }

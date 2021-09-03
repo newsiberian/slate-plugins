@@ -7,7 +7,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function CustomEditModal({ description, index, onEdit, open, onClose }) {
+export default function CustomEditModal({
+  description,
+  index,
+  onEdit,
+  open,
+  onClose,
+}) {
   const [value, setValue] = useState(description || '');
 
   function handleClose() {
@@ -21,13 +27,17 @@ export default function CustomEditModal({ description, index, onEdit, open, onCl
   }
 
   return (
-    <div onClick={e => e.stopPropagation()}>
-      <Dialog open={true} onClose={handleClose} aria-labelledby="form-dialog-title">
+    <div onClick={(e) => e.stopPropagation()}>
+      <Dialog
+        open={true}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Edit image description</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You can set an image description here. It will be tied not with image
-            itself but with this document only
+            You can set an image description here. It will be tied not with
+            image itself but with this document only
           </DialogContentText>
           <TextField
             autoFocus
@@ -36,7 +46,7 @@ export default function CustomEditModal({ description, index, onEdit, open, onCl
             label="Image description"
             type="text"
             value={value}
-            onChange={e => setValue(e.target.value)}
+            onChange={(e) => setValue(e.target.value)}
             fullWidth
           />
         </DialogContent>

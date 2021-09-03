@@ -7,11 +7,20 @@ const styles = {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-  }
+  },
 };
 
-export default withStyles(styles)(function CustomImage({ classes, image, onLoad, readOnly }) {
-  if (readOnly && typeof image.description === 'string' && image.description.length) {
+export default withStyles(styles)(function CustomImage({
+  classes,
+  image,
+  onLoad,
+  readOnly,
+}) {
+  if (
+    readOnly &&
+    typeof image.description === 'string' &&
+    image.description.length
+  ) {
     return (
       <Tooltip title={image.description}>
         <img
@@ -31,4 +40,4 @@ export default withStyles(styles)(function CustomImage({ classes, image, onLoad,
       onLoad={onLoad}
     />
   );
-})
+});
