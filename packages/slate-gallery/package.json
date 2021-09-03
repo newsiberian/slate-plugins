@@ -1,6 +1,6 @@
 {
   "name": "@mercuriya/slate-gallery",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "An image gallery for slate-js",
   "license": "MIT",
   "main": "lib/bundle.umd.js",
@@ -43,11 +43,11 @@
     "tslib": "^2.3.1"
   },
   "peerDependencies": {
-    "react": "*",
-    "slate": "^0.65.0",
-    "slate-react": "^0.65.0",
     "array-move": "*",
+    "react": "*",
     "react-dropzone": "*",
-    "react-sortable-hoc": "*"
+    "react-sortable-hoc": "*",
+    "slate": "^0.65.0",
+    "slate-react": "^0.65.0"
   }
 }
