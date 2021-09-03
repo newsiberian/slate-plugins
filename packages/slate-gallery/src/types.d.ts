@@ -1,6 +1,17 @@
-import React from 'react';
-import { DropzoneProps } from 'react-dropzone';
-import { SortableContainerProps } from 'react-sortable-hoc';
+import * as React from 'react';
+import type { DropzoneProps } from 'react-dropzone';
+import type { SortableContainerProps } from 'react-sortable-hoc';
+import type { ReactEditor } from 'slate-react';
+import type { Element } from 'slate';
+
+export interface ReactEditorExtended extends ReactEditor {
+  galleryElementType: ({
+    attributes,
+    children,
+    element,
+    readOnly,
+  }) => React.ReactElement;
+}
 
 export interface RenderControlsArgs {
   /**
@@ -33,7 +44,7 @@ export interface RenderEditModalArgs {
 }
 
 export interface RenderExtraArgs {
-  images: ImageInterface[];
+  images: Image[];
   /**
    * Selected image index
    */
@@ -149,7 +160,7 @@ interface ExtendedFile extends File {
   description?: string;
 }
 
-export interface ImageInterface {
+export interface Image {
   /**
    * A link to image location
    */
@@ -160,4 +171,13 @@ export interface ImageInterface {
   description?: string;
 }
 
-export type TypeImage = ExtendedFile | ImageInterface;
+export type TypeImage = ExtendedFile | Image;
+
+export interface GalleryElement extends Element {
+  descriptions: Record<string, string>;
+  images: TypeImage[];
+}
+
+export interface ReadOnlyGalleryElement extends GalleryElement {
+  images: Image[];
+}

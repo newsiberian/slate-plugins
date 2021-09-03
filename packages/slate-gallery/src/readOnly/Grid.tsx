@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useUIDSeed } from 'react-uid';
 
 import Image from '../Image';
-import { ImageInterface, RenderExtraArgs, RenderImageArgs } from '../types';
+import {
+  Image as ImageInterface,
+  RenderExtraArgs,
+  RenderImageArgs,
+} from '../types';
 import { container, getItemStyle } from '../utils';
 
 interface GridProps {
@@ -17,7 +21,7 @@ interface GridProps {
   gridClassName?: string;
 }
 
-const Grid: React.FunctionComponent<GridProps> = props => {
+const Grid: React.FunctionComponent<GridProps> = (props) => {
   const [selected, setSelected] = useState<number | null>(null);
   const seed = useUIDSeed();
 

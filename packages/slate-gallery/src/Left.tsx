@@ -21,7 +21,7 @@ interface LeftProps {
 
 interface SpanProps {
   className?: string;
-  style?: object;
+  style?: React.CSSProperties;
 }
 
 export default React.memo(function Left({ left, leftClassName }: LeftProps) {

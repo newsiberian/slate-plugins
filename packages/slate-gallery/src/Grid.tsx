@@ -9,14 +9,18 @@ import {
 } from 'react-sortable-hoc';
 import { useUIDSeed } from 'react-uid';
 import { Element } from 'slate';
-import { ReactEditor } from 'slate-react';
 
 import Image from './Image';
-import { RenderControlsArgs, RenderImageArgs, TypeImage } from './types';
+import {
+  ReactEditorExtended,
+  RenderControlsArgs,
+  RenderImageArgs,
+  TypeImage,
+} from './types';
 import { changeNodeData, container, getItemStyle } from './utils';
 
 interface GridProps {
-  editor: ReactEditor;
+  editor: ReactEditorExtended;
   element: Element;
   images?: TypeImage[];
   size: number;

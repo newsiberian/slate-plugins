@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Element } from 'slate';
-import { ReactEditor } from 'slate-react';
 
 import Grid from './Grid';
-import { GalleryOptions } from './types';
+import { ReactEditorExtended, GalleryElement, GalleryOptions } from './types';
 import { changeNodeData } from './utils';
 
 const root = {
@@ -35,10 +33,10 @@ const rejected = {
 } as React.CSSProperties;
 
 interface GalleryProps extends GalleryOptions {
-  attributes: object;
+  attributes: Record<string, unknown>;
   children: React.ReactNode;
-  editor: ReactEditor;
-  element: Element;
+  editor: ReactEditorExtended;
+  element: GalleryElement;
   readOnly: boolean;
   /**
    * Placeholder text
@@ -73,10 +71,10 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   // currently editable image index
   const [imageIndex, setImageIndex] = useState<number | null>(null);
   const onDrop = useCallback(
-    acceptedFiles => {
+    (acceptedFiles) => {
       insertImage(
         // TODO: make it custom
-        acceptedFiles.map(file => {
+        acceptedFiles.map((file) => {
           Object.assign(file, {
             src: URL.createObjectURL(file),
           });
@@ -103,7 +101,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   useEffect(() => {
     return () => {
       // Make sure to revoke the data uris to avoid memory leaks
-      images.forEach(file => URL.revokeObjectURL(file.src));
+      images.forEach((file) => URL.revokeObjectURL(file.src));
     };
   }, []);
 
@@ -159,7 +157,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
         descriptions: {
           ...element.descriptions,
           // use name as id. This will help you to identify it while processing
-          [image.name]: text,
+          [(image as File).name]: text,
         },
       });
     },
@@ -195,7 +193,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   }
 
   const getDescription = useCallback(
-    index => {
+    (index): string => {
       const image = images[index];
 
       if (!image) {

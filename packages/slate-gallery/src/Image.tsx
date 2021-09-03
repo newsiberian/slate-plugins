@@ -53,7 +53,10 @@ const Image: React.FunctionComponent<ImageProps> = ({
   const [loaded, setLoaded] = useState<boolean>(false);
 
   const imageWrapperProps = {} as { className?: string };
-  const imageProps = {} as { className?: string; style?: object };
+  const imageProps = {} as {
+    className?: string;
+    style?: React.CSSProperties;
+  };
 
   if (imageWrapperClassName) {
     imageWrapperProps.className = imageWrapperClassName;

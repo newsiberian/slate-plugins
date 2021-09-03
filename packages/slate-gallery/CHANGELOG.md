@@ -1,5 +1,14 @@
 # Change Log
 
+# [0.7.0] - 2021-09-03
+
+## BREAKING CHANGE
+- `slate`/`slate-react` dependencies version up to 0.65.x
+
+### Misc
+- check element type by `Element.isElementType`
+- improve typings
+
 # [0.6.2] - 2020-01-25
 
 - added `sortableContainerProps` prop;

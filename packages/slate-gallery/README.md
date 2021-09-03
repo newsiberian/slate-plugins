@@ -12,7 +12,7 @@ npm install @mercuriya/slate-gallery --save
 ```
 
 ## Peer dependencies
-It uses `react-dropzone`, `react-sortable-hoc`, `array-move` so, please, install them, if you doesn't have them yet:
+It uses `react-dropzone`, `react-sortable-hoc`, `array-move` so, please, install them, if you don't have them yet:
 
 ```bash
 yarn add react-dropzone react-sortable-hoc array-move
@@ -96,4 +96,3 @@ Please, see stories for more usage examples.
 |**imageClassName**?|string|Image component custom class name|
 |**imageWrapperClassName**?|string|Image wrapper custom class name|
 |**leftClassName**?|string|Number of left images (+x) custom className|
- 

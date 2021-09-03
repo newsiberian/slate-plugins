@@ -25,12 +25,12 @@ const Controls: React.FunctionComponent<ControlsProps> = ({
   return (
     <div style={root}>
       <button
-        onClick={event => onOpenEditModal(event, index)}
+        onClick={(event) => onOpenEditModal(event, index)}
         title="Edit image description"
       >
         &#x270e;
       </button>
-      <button onClick={event => onRemove(event, index)} title="Remove image">
+      <button onClick={(event) => onRemove(event, index)} title="Remove image">
         &#xd7;
       </button>
     </div>

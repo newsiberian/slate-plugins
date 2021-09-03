@@ -1,18 +1,29 @@
-import React from 'react';
+import * as React from 'react';
 import { Editor, Element, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+
+import type { Node } from 'slate';
+
+import type { GalleryElement, ReactEditorExtended } from './types';
 
 export const GALLERY = 'gallery';
 
 export const isGalleryActive = (editor: Editor): boolean => {
-  const [gallery] = Editor.nodes(editor, { match: n => n.type === 'gallery' });
+  const [gallery] = Editor.nodes(editor, {
+    match: (n) => Element.isElementType(n, GALLERY),
+  });
   return !!gallery;
 };
 
-export const insertGallery = (editor: Editor) => {
+export const insertGallery = (editor: Editor): void => {
   Transforms.insertNodes(
     editor,
-    { type: GALLERY, images: [], descriptions: {}, children: [{ text: '' }] },
+    {
+      type: GALLERY,
+      images: [],
+      descriptions: {},
+      children: [{ text: '' }],
+    } as Node,
     { voids: true },
   );
   // we additionally insert new line to prevent case when we can't type text after
@@ -20,7 +31,7 @@ export const insertGallery = (editor: Editor) => {
   Transforms.insertNodes(editor, {
     type: 'paragraph',
     children: [{ text: '' }],
-  });
+  } as Node);
 };
 
 /**
@@ -31,9 +42,9 @@ export const insertGallery = (editor: Editor) => {
  * @return {Editor}
  */
 export const changeNodeData = (
-  editor: ReactEditor,
+  editor: ReactEditorExtended,
   element: Element,
-  payload,
+  payload: Partial<GalleryElement>,
 ): void => {
   Transforms.setNodes(editor, payload, {
     at: ReactEditor.findPath(editor, element),
@@ -261,7 +272,7 @@ export const getItemStyle = (index: number, size: number) => {
   }
 };
 
-export const container = size =>
+export const container = (size) =>
   ({
     display: 'grid',
     ...buildGrid(size),

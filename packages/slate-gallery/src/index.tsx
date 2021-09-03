@@ -1,23 +1,34 @@
-import React from 'react';
-import { Editor } from 'slate';
+import * as React from 'react';
+import { Element } from 'slate';
 
 import Gallery from './Gallery';
 import ReadOnlyGallery from './readOnly/Gallery';
-import { GalleryOptions } from './types';
+import { ReactEditorExtended, GalleryOptions } from './types';
 import { GALLERY, insertGallery, isGalleryActive } from './utils';
 
-const withGallery = (editor: Editor, options = {} as GalleryOptions) => {
+const withGallery = (
+  editor: ReactEditorExtended,
+  options = {} as GalleryOptions,
+): ReactEditorExtended => {
   const { isVoid } = editor;
 
-  editor.isVoid = element => {
-    return element.type === GALLERY ? true : isVoid(element);
+  editor.isVoid = (element) => {
+    return Element.isElementType(element, GALLERY) || isVoid(element);
   };
 
-  editor.galleryElementType = props => {
+  editor.galleryElementType = ({ children, ...props }) => {
     if (props.readOnly) {
-      return <ReadOnlyGallery editor={editor} {...props} {...options} />;
+      return (
+        <ReadOnlyGallery {...props} {...options}>
+          {children}
+        </ReadOnlyGallery>
+      );
     }
-    return <Gallery editor={editor} {...props} {...options} />;
+    return (
+      <Gallery editor={editor} {...props} {...options}>
+        {children}
+      </Gallery>
+    );
   };
 
   return editor;

@@ -1,13 +1,12 @@
-import React from 'react';
-import { Element } from 'slate';
+import * as React from 'react';
 
-import { GalleryOptions } from '../types';
+import { ReadOnlyGalleryElement, GalleryOptions } from '../types';
 import Grid from './Grid';
 
 interface GalleryProps extends GalleryOptions {
-  attributes: object;
+  attributes: Record<string, unknown>;
   children: React.ReactNode;
-  element: Element;
+  element: ReadOnlyGalleryElement;
   readOnly: boolean;
 }
 
