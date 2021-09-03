@@ -25,9 +25,6 @@
   "files": [
     "lib"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "private": true,
   "scripts": {
     "build": "yarn build:tsc",
