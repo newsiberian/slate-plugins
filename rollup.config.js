@@ -21,8 +21,5 @@ export default (name, dependencies) => ({
   },
   onwarn,
   external: dependencies,
-  plugins: [
-    sourcemaps(),
-    terser(),
-  ],
+  plugins: [sourcemaps(), terser()],
 });
