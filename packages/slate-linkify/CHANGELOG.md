@@ -1,5 +1,14 @@
 # Change Log
 
+# [0.4.0] - 2021-09-03
+
+## BREAKING CHANGE
+- `slate`/`slate-react` dependencies version up to 0.65.x
+
+### Misc
+
+- check element type by `Element.isElementType`
+
 # [0.3.1] - 2020-01-19
 
 - exposed `unwrapLink` function

@@ -1,5 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 import { ReactEditor } from 'slate-react';
+import { Element } from 'slate';
 
 import {
   insertLink,
@@ -11,6 +12,10 @@ import {
   unwrapLink,
   wrapLink,
 } from './utils';
+
+export interface ReactEditorExtended extends ReactEditor {
+  linkElementType: ({ attributes, children, element }) => React.ReactElement;
+}
 
 export interface RenderComponentArgs {
   href: string;
@@ -39,15 +44,17 @@ export interface LinkifyOptions {
   rel?: string;
 }
 
-const withLinkify = (editor: ReactEditor, options = {} as LinkifyOptions) => {
+const withLinkify = (
+  editor: ReactEditorExtended,
+  options = {} as LinkifyOptions,
+): ReactEditorExtended => {
   const { target = '_blank', rel = 'noreferrer noopener' } = options;
   const { insertData, insertText, isInline } = editor;
 
-  editor.isInline = element => {
-    return element.type === LINK ? true : isInline(element);
-  };
+  editor.isInline = (element) =>
+    Element.isElementType(element, LINK) || isInline(element);
 
-  editor.insertText = text => {
+  editor.insertText = (text) => {
     if (text && isLink(text)) {
       wrapLink(editor, text);
     } else {
@@ -55,7 +62,7 @@ const withLinkify = (editor: ReactEditor, options = {} as LinkifyOptions) => {
     }
   };
 
-  editor.insertData = data => {
+  editor.insertData = (data) => {
     const text = data.getData('text/plain');
 
     // this is for pasting links, but we ignore it if snippet contains html.

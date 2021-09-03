@@ -1,5 +1,5 @@
 import LinkifyIt from 'linkify-it';
-import { Editor, Range, Transforms } from 'slate';
+import { Editor, Element, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import tlds from 'tlds';
 
@@ -15,7 +15,9 @@ export const LINK = 'link';
 export const isLink = (text: string): boolean => linkify.test(text);
 
 export const isLinkActive = (editor: ReactEditor): boolean => {
-  const [link] = Editor.nodes(editor, { match: n => n.type === LINK });
+  const [link] = Editor.nodes(editor, {
+    match: (n) => Element.isElementType(n, LINK),
+  });
   return !!link;
 };
 
@@ -36,11 +38,15 @@ const isEditLink = (editor: ReactEditor): boolean => {
  * @param {ReactEditor} editor
  */
 export const unwrapLink = (editor: ReactEditor): void => {
-  const [link] = Editor.nodes(editor, { match: n => n.type === LINK });
+  const [link] = Editor.nodes(editor, {
+    match: (n) => Element.isElementType(n, LINK),
+  });
   // we need to select all link text for case when selection is collapsed. In
   // that case we re-create new link for the same text
   Transforms.select(editor, link[1]);
-  Transforms.unwrapNodes(editor, { match: n => n.type === LINK });
+  Transforms.unwrapNodes(editor, {
+    match: (n) => Element.isElementType(n, LINK),
+  });
 };
 
 /**
@@ -99,7 +105,7 @@ export const onKeyDown = (event: KeyboardEvent, editor: ReactEditor): void => {
       return;
     }
 
-    links.forEach(link => {
+    links.forEach((link) => {
       Transforms.select(editor, {
         anchor: {
           path: start.path,
@@ -136,7 +142,7 @@ export const insertPastedLinks = (data: DataTransfer, insertData): void => {
 
   const children = [];
 
-  links.forEach(link => {
+  links.forEach((link) => {
     const prevText = text.slice(prevLineStart, link.index);
     if (prevText.length) {
       children.push(toTextFragment(prevText));
@@ -165,11 +171,11 @@ export const insertPastedLinks = (data: DataTransfer, insertData): void => {
   insertData(dataTrans);
 };
 
-const toTextFragment = text => ({
+const toTextFragment = (text) => ({
   text,
 });
 
-const toLinkFragment = link => ({
+const toLinkFragment = (link) => ({
   type: LINK,
   url: link.url,
   children: [{ text: link.text }],
@@ -184,7 +190,7 @@ const getWordUnderCaret = (
   text: string,
   selection: Range,
 ): [string, number] => {
-  const start = selection.isForward ? selection.anchor : selection.focus;
+  const start = Range.isForward(selection) ? selection.anchor : selection.focus;
   const wordBeginningOffset = traverseBehind(start.offset, text);
   return [text.slice(wordBeginningOffset, start.offset), wordBeginningOffset];
 };
