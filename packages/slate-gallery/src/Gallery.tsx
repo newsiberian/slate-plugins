@@ -1,5 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+
+import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 
 import Grid from './Grid';
 import { ReactEditorExtended, GalleryElement, GalleryOptions } from './types';
@@ -11,44 +13,44 @@ const root = {
   padding: 8,
   outline: 'none',
   cursor: 'pointer',
-} as React.CSSProperties;
+} as CSSProperties;
 
 const normal = {
   borderColor: '#666',
   borderStyle: 'dashed',
-} as React.CSSProperties;
+} as CSSProperties;
 
 const active = {
   borderStyle: 'solid',
-} as React.CSSProperties;
+} as CSSProperties;
 
 const accepted = {
   borderStyle: 'solid',
   borderColor: '#5cb860',
-} as React.CSSProperties;
+} as CSSProperties;
 
 const rejected = {
   borderStyle: 'solid',
   borderColor: '#f55a4e',
-} as React.CSSProperties;
+} as CSSProperties;
 
 interface GalleryProps extends GalleryOptions {
   attributes: Record<string, unknown>;
-  children: React.ReactNode;
+  children: ReactNode;
   editor: ReactEditorExtended;
   element: GalleryElement;
   readOnly: boolean;
   /**
    * Placeholder text
    */
-  placeholder?: string | React.ReactNode;
+  placeholder?: string | ReactNode;
   /**
    * Placeholder that appears on image drop
    */
-  droppingPlaceholder?: string | React.ReactNode;
+  droppingPlaceholder?: string | ReactNode;
 }
 
-const Gallery: React.FunctionComponent<GalleryProps> = ({
+const Gallery = ({
   attributes,
   children,
   editor,
@@ -65,7 +67,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   imageClassName,
   imageWrapperClassName,
   leftClassName,
-}) => {
+}: GalleryProps) => {
   // This is used by renderEditModal function only
   const [open, setOpen] = useState<boolean>(false);
   // currently editable image index
@@ -106,7 +108,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   }, []);
 
   const handleOpenEditModal = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    event: MouseEvent<HTMLButtonElement>,
     index: number,
   ) => {
     event.preventDefault();
@@ -165,7 +167,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
   );
 
   const handleRemove = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>, index: number): void => {
+    (event: MouseEvent<HTMLButtonElement>, index: number): void => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -249,7 +251,7 @@ const Gallery: React.FunctionComponent<GalleryProps> = ({
     [isDragActive, isDragAccept, isDragReject],
   );
 
-  const info = useCallback((): React.ReactNode | string | null => {
+  const info = useCallback((): ReactNode | string | null => {
     if (!images.length) {
       return isDragActive ? droppingPlaceholderNode : placeholderNode;
     }

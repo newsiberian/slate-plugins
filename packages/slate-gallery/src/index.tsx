@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Element } from 'slate';
 
 import Gallery from './Gallery';

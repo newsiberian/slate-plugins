@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { Editor, Element, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 
+import type { CSSProperties } from 'react';
 import type { Node } from 'slate';
 
 import type { GalleryElement, ReactEditorExtended } from './types';
@@ -51,10 +51,7 @@ export const changeNodeData = (
   });
 };
 
-const buildGridContainer = (
-  columns: number,
-  rows: number,
-): React.CSSProperties => ({
+const buildGridContainer = (columns: number, rows: number): CSSProperties => ({
   gridTemplateColumns: `repeat(${columns}, 1fr)`,
   gridTemplateRows: `repeat(${rows}, auto)`,
   gridAutoRows: '1fr',
@@ -278,4 +275,4 @@ export const container = (size) =>
     ...buildGrid(size),
     gridGap: 2.5, // 0 4px??
     marginTop: 16,
-  } as React.CSSProperties);
+  } as CSSProperties);

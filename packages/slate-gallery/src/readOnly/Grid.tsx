@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUIDSeed } from 'react-uid';
+
+import type { ReactNode } from 'react';
 
 import Image from '../Image';
 import {
@@ -13,15 +15,15 @@ interface GridProps {
   images?: ImageInterface[];
   size: number;
   readOnly: boolean;
-  renderImage?: (args: RenderImageArgs) => React.ReactNode;
-  renderExtra?: (args: RenderExtraArgs) => React.ReactNode;
+  renderImage?: (args: RenderImageArgs) => ReactNode;
+  renderExtra?: (args: RenderExtraArgs) => ReactNode;
   imageWrapperClassName?: string;
   imageClassName?: string;
   leftClassName?: string;
   gridClassName?: string;
 }
 
-const Grid: React.FunctionComponent<GridProps> = (props) => {
+const Grid = (props: GridProps) => {
   const [selected, setSelected] = useState<number | null>(null);
   const seed = useUIDSeed();
 

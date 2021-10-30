@@ -1,5 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
-
+import { useCallback, useMemo } from 'react';
 import arrayMove from 'array-move';
 import {
   SortableContainer,
@@ -9,6 +8,8 @@ import {
 } from 'react-sortable-hoc';
 import { useUIDSeed } from 'react-uid';
 import { Element } from 'slate';
+
+import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 
 import Image from './Image';
 import {
@@ -24,14 +25,11 @@ interface GridProps {
   element: Element;
   images?: TypeImage[];
   size: number;
-  renderControls?: (args: RenderControlsArgs) => React.ReactNode;
-  renderImage?: (args: RenderImageArgs) => React.ReactNode;
+  renderControls?: (args: RenderControlsArgs) => ReactNode;
+  renderImage?: (args: RenderImageArgs) => ReactNode;
   readOnly: boolean;
-  onOpenEditModal?: (
-    e: React.MouseEvent<HTMLButtonElement>,
-    index: number,
-  ) => void;
-  onRemove?: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+  onOpenEditModal?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
+  onRemove?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
   imageWrapperClassName?: string;
   imageClassName?: string;
   leftClassName?: string;
@@ -51,7 +49,7 @@ interface SortableItemProps extends SortableElementProps {
   imageIndex: number;
   left?: number;
   withLeft: boolean;
-  wrapperStyle: React.CSSProperties;
+  wrapperStyle: CSSProperties;
   readOnly: boolean;
 }
 
@@ -85,7 +83,7 @@ const SortableList = SortableContainer((props: SortableListProps) => {
         const wrapperStyle = {
           ...getItemStyle(index, maxLength),
           position: 'relative',
-        } as React.CSSProperties;
+        } as CSSProperties;
 
         return (
           <SortableItem
@@ -105,14 +103,14 @@ const SortableList = SortableContainer((props: SortableListProps) => {
   );
 });
 
-const Grid: React.FunctionComponent<GridProps> = ({
+const Grid = ({
   editor,
   element,
   images,
   size,
   sortableContainerProps,
   ...rest
-}) => {
+}: GridProps) => {
   const seed = useUIDSeed();
 
   const onSortEnd = useCallback(

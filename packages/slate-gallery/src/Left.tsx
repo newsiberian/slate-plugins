@@ -1,18 +1,20 @@
-import React from 'react';
+import { memo, useEffect, useRef } from 'react';
+
+import type { CSSProperties } from 'react';
 
 const root = {
   position: 'absolute',
   // required to correct positioning
   top: 0,
   left: 0,
-} as React.CSSProperties;
+} as CSSProperties;
 
 const span = {
   opacity: 0.9,
   color: 'grey',
   fontSize: '10vw',
   textShadow: '1px 1px 2px black, 0 0 1em white',
-} as React.CSSProperties;
+} as CSSProperties;
 
 interface LeftProps {
   left: number;
@@ -21,11 +23,11 @@ interface LeftProps {
 
 interface SpanProps {
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
-export default React.memo(function Left({ left, leftClassName }: LeftProps) {
-  const overlayEl = React.useRef(null);
+export default memo(function Left({ left, leftClassName }: LeftProps) {
+  const overlayEl = useRef(null);
 
   const updatePosition = () => {
     const overlay = overlayEl.current;
@@ -38,7 +40,7 @@ export default React.memo(function Left({ left, leftClassName }: LeftProps) {
     overlay.style.left = `${parentRect.width / 2 - overlayRect.width / 2}px`;
   };
 
-  React.useEffect((): void => {
+  useEffect((): void => {
     // center position on first load
     updatePosition();
   });

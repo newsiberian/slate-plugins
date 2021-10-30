@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 
 import Controls from './Controls';
 import Left from './Left';
@@ -11,18 +13,15 @@ interface ImageProps {
    */
   index: number;
   image: TypeImage;
-  renderControls?: (args: RenderControlsArgs) => React.ReactNode;
-  renderImage?: (args: RenderImageArgs) => React.ReactNode;
-  wrapperStyle: React.CSSProperties;
+  renderControls?: (args: RenderControlsArgs) => ReactNode;
+  renderImage?: (args: RenderImageArgs) => ReactNode;
+  wrapperStyle: CSSProperties;
   withLeft: boolean;
   left?: number;
   readOnly: boolean;
   setSelected?: (index: number) => void;
-  onOpenEditModal?: (
-    e: React.MouseEvent<HTMLButtonElement>,
-    index: number,
-  ) => void;
-  onRemove?: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+  onOpenEditModal?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
+  onRemove?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
   imageClassName?: string;
   imageWrapperClassName?: string;
   leftClassName?: string;
@@ -32,9 +31,9 @@ const imageStyle = {
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-} as React.CSSProperties;
+} as CSSProperties;
 
-const Image: React.FunctionComponent<ImageProps> = ({
+const Image = ({
   index,
   image,
   renderControls,
@@ -49,13 +48,13 @@ const Image: React.FunctionComponent<ImageProps> = ({
   imageClassName,
   imageWrapperClassName,
   leftClassName,
-}) => {
+}: ImageProps) => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
   const imageWrapperProps = {} as { className?: string };
   const imageProps = {} as {
     className?: string;
-    style?: React.CSSProperties;
+    style?: CSSProperties;
   };
 
   if (imageWrapperClassName) {
@@ -74,13 +73,13 @@ const Image: React.FunctionComponent<ImageProps> = ({
     }
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLImageElement>) => {
+  const handleClick = (e: MouseEvent<HTMLImageElement>) => {
     if (typeof setSelected === 'function') {
       setSelected(index);
     }
   };
 
-  const renderControlsComponent = (): React.ReactNode => {
+  const renderControlsComponent = (): ReactNode => {
     if (typeof renderControls === 'function') {
       return renderControls({ index, onOpenEditModal, onRemove });
     }
@@ -93,7 +92,7 @@ const Image: React.FunctionComponent<ImageProps> = ({
     );
   };
 
-  const renderImageComponent = (): React.ReactNode => {
+  const renderImageComponent = (): ReactNode => {
     if (typeof renderImage === 'function') {
       return renderImage({
         image,

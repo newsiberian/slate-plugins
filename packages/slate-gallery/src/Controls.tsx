@@ -1,12 +1,9 @@
-import React from 'react';
+import type { CSSProperties, MouseEvent } from 'react';
 
 interface ControlsProps {
   index: number;
-  onOpenEditModal: (
-    e: React.MouseEvent<HTMLButtonElement>,
-    index: number,
-  ) => void;
-  onRemove: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+  onOpenEditModal: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
+  onRemove: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
 }
 
 const root = {
@@ -15,13 +12,9 @@ const root = {
   right: 0,
   marginTop: 8,
   marginRight: 8,
-} as React.CSSProperties;
+} as CSSProperties;
 
-const Controls: React.FunctionComponent<ControlsProps> = ({
-  index,
-  onOpenEditModal,
-  onRemove,
-}) => {
+const Controls = ({ index, onOpenEditModal, onRemove }: ControlsProps) => {
   return (
     <div style={root}>
       <button

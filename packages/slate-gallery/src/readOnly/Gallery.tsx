@@ -1,16 +1,16 @@
-import * as React from 'react';
+import type { ReactNode } from 'react';
 
 import { ReadOnlyGalleryElement, GalleryOptions } from '../types';
 import Grid from './Grid';
 
 interface GalleryProps extends GalleryOptions {
   attributes: Record<string, unknown>;
-  children: React.ReactNode;
+  children: ReactNode;
   element: ReadOnlyGalleryElement;
   readOnly: boolean;
 }
 
-const ReadOnlyGallery: React.FunctionComponent<GalleryProps> = ({
+const ReadOnlyGallery = ({
   attributes,
   children,
   element,
@@ -22,7 +22,7 @@ const ReadOnlyGallery: React.FunctionComponent<GalleryProps> = ({
   imageWrapperClassName,
   leftClassName,
   gridClassName,
-}) => {
+}: GalleryProps) => {
   return (
     <div {...attributes}>
       <div contentEditable={false}>
