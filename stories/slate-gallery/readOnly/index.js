@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { createEditor } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 
-import { withGallery } from '../../../packages/slate-gallery/lib';
+import { withGallery } from '@mercuriya/slate-gallery';
 import { GALLERY } from '../../../packages/slate-gallery/lib/utils';
 
 export default function Gallery(props) {

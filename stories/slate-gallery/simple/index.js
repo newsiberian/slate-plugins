@@ -6,7 +6,7 @@ import {
   insertGallery,
   isGalleryActive,
   withGallery,
-} from '../../../packages/slate-gallery/lib';
+} from '@mercuriya/slate-gallery';
 import { Button, Toolbar } from '../../components';
 
 /**

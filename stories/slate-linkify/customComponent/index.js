@@ -3,13 +3,13 @@ import { createEditor } from 'slate';
 import { Slate, Editable, withReact, useSlate } from 'slate-react';
 import Link from '@material-ui/core/Link';
 
-import { withLinkify } from '../../../packages/slate-linkify/lib';
+import { withLinkify } from '@mercuriya/slate-linkify';
 
 export default function LinkifyCustomComponent({ readOnly = false }) {
   const editor = useMemo(
     () =>
       withLinkify(withReact(createEditor()), {
-        renderComponent: props => <Link {...props} />,
+        renderComponent: (props) => <Link {...props} />,
       }),
     [],
   );
@@ -17,8 +17,7 @@ export default function LinkifyCustomComponent({ readOnly = false }) {
     {
       children: [
         {
-          text:
-            'In addition to block nodes, you can create inline nodes, like ',
+          text: 'In addition to block nodes, you can create inline nodes, like ',
         },
         {
           type: 'link',
@@ -33,16 +32,15 @@ export default function LinkifyCustomComponent({ readOnly = false }) {
     {
       children: [
         {
-          text:
-            'This example shows hyperlinks in action. It features two ways to add links. You can either add a link via the toolbar icon above, or if you want in on a little secret, copy a URL to your keyboard and paste it while a range of text is selected.',
+          text: 'This example shows hyperlinks in action. It features two ways to add links. You can either add a link via the toolbar icon above, or if you want in on a little secret, copy a URL to your keyboard and paste it while a range of text is selected.',
         },
       ],
     },
   ]);
-  const renderElement = useCallback(props => <Element {...props} />, []);
+  const renderElement = useCallback((props) => <Element {...props} />, []);
 
   return (
-    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+    <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
       <Editable renderElement={renderElement} readOnly={readOnly} />
     </Slate>
   );

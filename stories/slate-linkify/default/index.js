@@ -8,10 +8,10 @@ import {
   isLinkActive,
   onKeyDown as linkifyOnKeyDown,
   withLinkify,
-} from '../../../packages/slate-linkify/lib';
+} from '@mercuriya/slate-linkify';
 
-const getUrl = editor => {
-  const [link] = Editor.nodes(editor, { match: n => n.type === 'link' });
+const getUrl = (editor) => {
+  const [link] = Editor.nodes(editor, { match: (n) => n.type === 'link' });
   return link[0].url;
 };
 
@@ -45,8 +45,7 @@ export default function LinkifyDefault({ readOnly = false }) {
     {
       children: [
         {
-          text:
-            'In addition to block nodes, you can create inline nodes, like ',
+          text: 'In addition to block nodes, you can create inline nodes, like ',
         },
         {
           type: 'link',
@@ -61,24 +60,25 @@ export default function LinkifyDefault({ readOnly = false }) {
     {
       children: [
         {
-          text:
-            'This example shows hyperlinks in action. It features two ways to add links. You can either add a link via the toolbar icon above, or if you want in on a little secret, copy a URL to your keyboard and paste it while a range of text is selected.',
+          text: 'This example shows hyperlinks in action. It features two ways to add links. You can either add a link via the toolbar icon above, or if you want in on a little secret, copy a URL to your keyboard and paste it while a range of text is selected.',
         },
       ],
     },
   ]);
-  const renderElement = useCallback(props => <Element {...props} />, []);
-
-
+  const renderElement = useCallback((props) => <Element {...props} />, []);
 
   const onKeyDown = useCallback(function handleKeyDown(event) {
     linkifyOnKeyDown(event, editor);
   }, []);
 
   return (
-    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+    <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
       <ToolbarComponent />
-      <Editable renderElement={renderElement} readOnly={readOnly} onKeyDown={onKeyDown} />
+      <Editable
+        renderElement={renderElement}
+        readOnly={readOnly}
+        onKeyDown={onKeyDown}
+      />
     </Slate>
   );
 }

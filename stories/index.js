@@ -1,12 +1,12 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import './styles.css'
+import './styles.css';
 
-import CustomControls from './slate-gallery/customControls';
-import CustomEditModal from './slate-gallery/customEditModal';
-import CustomImage from './slate-gallery/customImage';
-import ImageLightbox from './slate-gallery/imageLightbox';
+import CustomControls from './slate-gallery/CustomControls';
+import CustomEditModal from './slate-gallery/CustomEditModal';
+import CustomImage from './slate-gallery/CustomImage';
+import ImageLightbox from './slate-gallery/ImageLightbox';
 
 import image1 from '../public/image-1-1280x720.jpg';
 import image2 from '../public/image-2-1280x720.jpg';
@@ -22,17 +22,14 @@ import image10 from '../public/image-10-1280x720.jpg';
 import Simple from './slate-gallery/simple';
 import ReadOnly from './slate-gallery/readOnly';
 import LinkifyDefault from './slate-linkify/default';
-import LinkifyCustomComponent from './slate-linkify/customComponent'
+import LinkifyCustomComponent from './slate-linkify/customComponent';
+
+import VideoDefault from './slate-video/default';
+import CustomInput from './slate-video/CustomInput';
 
 storiesOf('Gallery plugin', module)
   .add('Simple', () => <Simple />)
-  .add('Read only: one image', () => (
-    <ReadOnly
-      images={[
-        { src: image1 },
-      ]}
-    />
-  ))
+  .add('Read only: one image', () => <ReadOnly images={[{ src: image1 }]} />)
   .add('Read only: two images', () => (
     <ReadOnly
       images={[
@@ -42,13 +39,7 @@ storiesOf('Gallery plugin', module)
     />
   ))
   .add('Read only: three images', () => (
-    <ReadOnly
-      images={[
-        { src: image1 },
-        { src: image2 },
-        { src: image3 },
-      ]}
-    />
+    <ReadOnly images={[{ src: image1 }, { src: image2 }, { src: image3 }]} />
   ))
   .add('Read only: four images', () => (
     <ReadOnly
@@ -160,10 +151,7 @@ storiesOf('Gallery plugin', module)
   ))
   .add('Read only: custom image className', () => (
     <ReadOnly
-      images={[
-        { src: image1 },
-        { src: image2 },
-      ]}
+      images={[{ src: image1 }, { src: image2 }]}
       imageClassName="read-only-image"
     />
   ))
@@ -214,16 +202,13 @@ storiesOf('Gallery plugin', module)
     />
   ))
   .add('Controls custom component', () => (
-    <Simple renderControls={(args) => <CustomControls {...args} />}
-    />
+    <Simple renderControls={(args) => <CustomControls {...args} />} />
   ))
   .add('Edit modal custom component', () => (
-    <Simple renderEditModal={(args) => <CustomEditModal {...args} />}
-    />
+    <Simple renderEditModal={(args) => <CustomEditModal {...args} />} />
   ))
   .add('Edit mode with custom image', () => (
-    <Simple renderImage={(args) => <CustomImage {...args} />}
-    />
+    <Simple renderImage={(args) => <CustomImage {...args} />} />
   ))
   .add('Read only: custom image', () => (
     <ReadOnly
@@ -239,3 +224,8 @@ storiesOf('Gallery plugin', module)
 storiesOf('Linkify plugin', module)
   .add('Default', () => <LinkifyDefault />)
   .add('Custom component', () => <LinkifyCustomComponent />);
+
+storiesOf('Video plugin', module)
+  .add('Default', () => <VideoDefault />)
+  .add('Read Only', () => <VideoDefault readOnly />)
+  .add('renderInput', () => <CustomInput />);
