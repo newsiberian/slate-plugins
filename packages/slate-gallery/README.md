@@ -29,7 +29,7 @@ In your file with `Slate` component:
 ```js
 import React from 'react';
 import { createEditor } from 'slate';
-import { Slate, Editable, useEditor, withReact } from 'slate-react';
+import { Slate, Editable, withReact } from 'slate-react';
 import { withGallery, } from '@mercuriya/slate-gallery';
 
 const initialValue = Value.fromJSON({ ... });

@@ -18,7 +18,7 @@ In your file with `Slate` component:
 ```js
 import React from 'react';
 import { createEditor } from 'slate';
-import { Slate, Editable, useEditor, withReact } from 'slate-react';
+import { Slate, Editable, useSlateStatic, withReact } from 'slate-react';
 import { onKeyDown as linkifyOnKeyDown, withLinkify } from '@mercuriya/slate-linkify';
 import Link from '@material-ui/core/Link';
 
@@ -45,7 +45,7 @@ export default function EditorComponent(props) {
 }
 
 const Element = ({ attributes, children, element }) => {
-  const editor = useEditor();
+  const editor = useSlateStatic();
   switch (element.type) {
     case 'link':
       // ❗️ this part is required
@@ -76,4 +76,4 @@ Please, see stories for more usage examples.
 |**target**? (default: `_blank`)|string|An anchor `target` property|
 |**rel**? (default: `noreferrer noopener`)|string|An anchor `rel` property|
 |**className**?|string|An anchor custom class name|
-|**renderComponent**?|args => React.ReactNode|A render function that allows you to use custom link component with props you need|
+|**renderComponent**?|args => React.ReactNode|A render function that allows you to use a custom link component with props you need|
