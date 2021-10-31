@@ -37,8 +37,8 @@
     "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
-    "linkify-it": "^2.2.0",
-    "tlds": "^1.221.1"
+    "linkify-it": "^3.0.3",
+    "tlds": "^1.226.0"
   },
   "peerDependencies": {
     "react": "*",
