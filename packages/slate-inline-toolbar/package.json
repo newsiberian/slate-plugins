@@ -1,6 +1,6 @@
 {
   "name": "@mercuriya/slate-inline-toolbar",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An inline toolbar for slate-js",
   "license": "MIT",
   "main": "lib/bundle.umd.js",
