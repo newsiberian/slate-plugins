@@ -3,7 +3,7 @@
     "module": "es2015",
     "target": "es5",
     "lib": ["es7", "dom"],
-    "jsx": "react",
+    "jsx": "react-jsx",
     "moduleResolution": "node",
     "baseUrl": "./packages",
     "sourceMap": true,
