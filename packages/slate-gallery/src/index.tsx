@@ -16,6 +16,7 @@ const withGallery = (
   };
 
   editor.galleryElementType = ({ children, ...props }) => {
+    // TODO: take readOnly from hook
     if (props.readOnly) {
       return (
         <ReadOnlyGallery {...props} {...options}>
