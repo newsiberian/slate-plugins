@@ -1,6 +1,7 @@
-import * as React from 'react';
-import { ReactEditor } from 'slate-react';
 import { Element } from 'slate';
+
+import type { ReactEditor } from 'slate-react';
+import type { ReactElement } from 'react';
 
 import {
   insertLink,
@@ -14,7 +15,7 @@ import {
 } from './utils';
 
 export interface ReactEditorExtended extends ReactEditor {
-  linkElementType: ({ attributes, children, element }) => React.ReactElement;
+  linkElementType: ({ attributes, children, element }) => ReactElement;
 }
 
 export interface RenderComponentArgs {
@@ -32,9 +33,9 @@ export interface LinkifyOptions {
   /**
    * A render function that can render a custom anchor component
    * @param {RenderComponentArgs} args
-   * @return {React.ReactElement}
+   * @return {ReactElement}
    */
-  renderComponent?: (args: RenderComponentArgs) => React.ReactElement;
+  renderComponent?: (args: RenderComponentArgs) => ReactElement;
   /**
    * Anchor custom class name
    * @type {string}
