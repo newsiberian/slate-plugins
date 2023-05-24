@@ -1,31 +1,58 @@
+import type { ReactElement } from 'react';
+import { BaseEditor, Editor, Element, Range, Text, Transforms } from 'slate';
+import type { ReactEditor, RenderElementProps } from 'slate-react';
 import LinkifyIt from 'linkify-it';
-import { Editor, Element, Range, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
 import tlds from 'tlds';
+
+export type LinkifyEditor = BaseEditor &
+  ReactEditor & {
+    linkElementType: ({
+      attributes,
+      children,
+      element,
+    }: RenderElementProps) => ReactElement;
+  };
+
+export type LinkifyElement = {
+  type: 'link';
+  url: string;
+  children: Text[];
+};
+
+const isLinkifyElement = (element): element is LinkifyElement =>
+  Element.isElementType(element, LINK);
 
 const linkify = LinkifyIt();
 linkify.tlds(tlds);
 
-export const LINK = 'link';
+export const LINK = <const>'link';
 
 /**
  * If text contains something similar to link `true` will be returned
- * @param {string} text
  */
 export const isLink = (text: string): boolean => linkify.test(text);
 
-export const isLinkActive = (editor: ReactEditor): boolean => {
+export const isLinkActive = (editor: LinkifyEditor) => {
   const [link] = Editor.nodes(editor, {
-    match: (n) => Element.isElementType(n, LINK),
+    match: isLinkifyElement,
   });
   return !!link;
 };
 
+export const getLinkUrl = (editor: LinkifyEditor) => {
+  const [match] = Editor.nodes(editor, {
+    match: isLinkifyElement,
+  });
+
+  const [node] = match;
+
+  return isLinkifyElement(node) ? node.url : undefined;
+};
+
 /**
  * We additionally want to return isEdit flag to upper function
- * @param {ReactEditor} editor
  */
-const isEditLink = (editor: ReactEditor): boolean => {
+const isEditLink = (editor: LinkifyEditor): boolean => {
   if (isLinkActive(editor)) {
     unwrapLink(editor);
     return true;
@@ -35,46 +62,43 @@ const isEditLink = (editor: ReactEditor): boolean => {
 
 /**
  * Remove `link` inline from the current caret position
- * @param {ReactEditor} editor
  */
-export const unwrapLink = (editor: ReactEditor): void => {
+export const unwrapLink = (editor: LinkifyEditor): void => {
   const [link] = Editor.nodes(editor, {
-    match: (n) => Element.isElementType(n, LINK),
+    match: isLinkifyElement,
   });
   // we need to select all link text for case when selection is collapsed. In
   // that case we re-create new link for the same text
   Transforms.select(editor, link[1]);
   Transforms.unwrapNodes(editor, {
-    match: (n) => Element.isElementType(n, LINK),
+    match: isLinkifyElement,
   });
 };
 
 /**
  * Wrap underlying text into `link` inline
- * @param {ReactEditor} editor
- * @param {string} url - href
  */
-export const wrapLink = (editor: ReactEditor, url: string): void => {
+export const wrapLink = (editor: LinkifyEditor, text: string): void => {
   const isEdit = isEditLink(editor);
+  const isExpanded = Range.isExpanded(editor.selection);
 
-  const { selection } = editor;
-  const isExpanded = selection && Range.isExpanded(selection);
   const link = {
     type: LINK,
-    url,
-    children: isExpanded || isEdit ? [] : [{ text: url }],
+    url: text,
+    children: isExpanded || isEdit ? [] : [{ text }],
   };
 
   // if this is a link editing, we shouldn't rename it even if it is not selected
   if (isExpanded || isEdit) {
     Transforms.wrapNodes(editor, link, { split: true });
     Transforms.collapse(editor, { edge: 'end' });
+    Transforms.move(editor, { distance: 1, unit: 'offset' });
   } else {
     Transforms.insertNodes(editor, link);
   }
 };
 
-export const insertLink = (editor: ReactEditor, url: string): void => {
+export const insertLink = (editor: LinkifyEditor, url: string): void => {
   if (editor.selection) {
     wrapLink(editor, url);
   }
@@ -82,51 +106,50 @@ export const insertLink = (editor: ReactEditor, url: string): void => {
 
 /**
  * We are trying to detect links while user typing
- * @param {KeyboardEvent} event
- * @param {ReactEditor} editor
  */
-export const onKeyDown = (event: KeyboardEvent, editor: ReactEditor): void => {
-  // It will be better if we will try to detect links only after "word" will be
-  // finished. We will check links possibilities at current word near the caret
-  if (event.key !== 'Enter' && event.key !== ' ' && event.key !== ',') {
+export const tryWrapLink = (editor: LinkifyEditor): void => {
+  const { selection } = editor;
+  const [start] = Range.edges(selection);
+  const [word, wordAnchorOffset] = getWordUnderCaret(
+    Editor.string(editor, start.path),
+    selection,
+  );
+
+  // too short word. Probably not the link
+  if (word.length < 3) {
     return;
   }
 
-  const { selection } = editor;
-  if (selection && Range.isCollapsed(selection)) {
-    const [start] = Range.edges(selection);
-    const [word, wordAnchorOffset] = getWordUnderCaret(
-      Editor.string(editor, start.path),
-      selection,
-    );
-    const links = linkify.match(word);
+  const links = linkify.match(word);
 
-    if (!links) {
-      return;
-    }
-
-    links.forEach((link) => {
-      Transforms.select(editor, {
-        anchor: {
-          path: start.path,
-          offset: wordAnchorOffset + link.index,
-        },
-        focus: {
-          path: start.path,
-          offset: wordAnchorOffset + link.lastIndex,
-        },
-      });
-      wrapLink(editor, link.url);
-    });
+  if (!links) {
+    return;
   }
+
+  // first link will be enough
+  const [link] = links;
+
+  if (!link) {
+    return;
+  }
+
+  Transforms.select(editor, {
+    anchor: {
+      path: start.path,
+      offset: wordAnchorOffset + link.index,
+    },
+    focus: {
+      path: start.path,
+      offset: wordAnchorOffset + link.lastIndex,
+    },
+  });
+  wrapLink(editor, link.url);
 };
 
 /**
  * In this function we try to detect link-like text peaces and convert them to
  * links. We assume that this pasted text is a plain text and because of that
  * we can transform it to slate-compatible fragment before inserting
- * @param {DataTransfer} data
- * @param {function} insertData
  */
 export const insertPastedLinks = (data: DataTransfer, insertData): void => {
   const text = data.getData('text/plain');
@@ -183,8 +206,6 @@ const toLinkFragment = (link) => ({
 
 /**
  * Find the underlying word under selection
- * @param {string} text
- * @param {Range} selection
  */
 const getWordUnderCaret = (
   text: string,
@@ -210,8 +231,6 @@ const traverseBehind = (index: number, text: string): number => {
 
 /**
  * Whitespace checker
- * @param {string} value
- * @return {boolean}
  */
 const isWhitespace = (value: string): boolean => {
   return /[ \f\n\r\t\v\u00A0\u2028\u2029]/.test(value);

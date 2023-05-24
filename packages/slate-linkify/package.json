@@ -37,13 +37,13 @@
     "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
-    "linkify-it": "^3.0.3",
-    "tlds": "^1.226.0"
+    "linkify-it": "^4.0.1",
+    "tlds": "^1.238.0"
   },
   "peerDependencies": {
     "react": "*",
-    "slate": "^0.65.0",
-    "slate-react": "^0.65.0"
+    "slate": "^0.94.1",
+    "slate-react": "^0.94.2"
   },
   "devDependencies": {
     "@types/linkify-it": "^3.0.2"
