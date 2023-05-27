@@ -13,7 +13,7 @@ import {
 } from './utils';
 import { LinkifyElement } from 'packages/slate-linkify/src/utils';
 
-export type RenderComponentArgs = RenderElementProps['attributes'] & {
+export type RenderComponentProps = RenderElementProps['attributes'] & {
   href: string;
   className?: string;
   target?: HTMLAttributeAnchorTarget;
@@ -24,7 +24,7 @@ export type LinkifyOptions = {
   /**
    * A render function that can render a custom anchor component
    */
-  renderComponent?: (args: RenderComponentArgs) => ReactElement;
+  renderComponent?: (args: RenderComponentProps) => ReactElement;
   /**
    * Anchor custom class name
    */
