@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { ReactElement, useCallback } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor, useReadOnly, useSlateStatic } from 'slate-react';
 import ReactPlayer, { ReactPlayerProps } from 'react-player/lazy';
@@ -22,20 +22,20 @@ type VideoElementType = Element & {
   url: string;
 };
 
-type Props = ReactPlayerProps & {
+type VideoElementProps = ReactPlayerProps & {
   attributes: Attributes;
   element: VideoElementType;
-  renderInput?: (props: ComponentProps<'input'>) => JSX.Element;
+  renderInput?: (props: ComponentProps<'input'>) => ReactElement;
 };
 
 const DefaultRenderInput = (props) => <input {...props} />;
 
-const VideoElement = ({
+export function VideoElement({
   attributes,
   element,
   renderInput = DefaultRenderInput,
   ...playerProps
-}: Props) => {
+}: VideoElementProps) {
   const editor = useSlateStatic();
   const readOnly = useReadOnly();
 
@@ -54,6 +54,4 @@ const VideoElement = ({
       {readOnly || renderInput({ value: element.url, onChange: handleChange })}
     </div>
   );
-};
-
-export default VideoElement;
+}
