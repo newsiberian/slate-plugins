@@ -37,11 +37,11 @@
     "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
-    "react-player": "^2.9.0"
+    "react-player": "^2.12.0"
   },
   "peerDependencies": {
     "react": "*",
-    "slate": "^0.65.0",
-    "slate-react": "^0.65.0"
+    "slate": "^0.94.1",
+    "slate-react": "^0.94.2"
   }
 }
