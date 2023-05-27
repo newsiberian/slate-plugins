@@ -3,7 +3,7 @@ import { createEditor } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 
 import { withGallery } from '@mercuriya/slate-gallery';
-import { GALLERY } from '@mercuriya/slate-gallery/src/utils';
+import { GALLERY } from '@mercuriya/slate-gallery/lib/utils';
 
 export default function Gallery(props) {
   const { images, ...rest } = props;
