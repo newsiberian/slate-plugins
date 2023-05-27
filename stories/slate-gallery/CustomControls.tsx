@@ -1,4 +1,4 @@
-export default function CustomControls({ index, onOpenEditModal, onRemove }) {
+export function CustomControls({ index, onOpenEditModal, onRemove }) {
   return (
     <div className="custom-controls-root">
       <button

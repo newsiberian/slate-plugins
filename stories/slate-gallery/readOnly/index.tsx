@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { createEditor } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 
 import { withGallery } from '@mercuriya/slate-gallery';
-import { GALLERY } from '../../../packages/slate-gallery/lib/utils';
+import { GALLERY } from '@mercuriya/slate-gallery/src/utils';
 
 export default function Gallery(props) {
   const { images, ...rest } = props;

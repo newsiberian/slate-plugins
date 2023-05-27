@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { createEditor } from 'slate';
 import { Slate, Editable, withReact, useSlate } from 'slate-react';
 
@@ -7,7 +7,6 @@ import {
   isGalleryActive,
   withGallery,
 } from '@mercuriya/slate-gallery';
-import { Button, Toolbar } from '../../components';
 
 /**
  * Define the default node type.
@@ -20,9 +19,7 @@ const ToolbarComponent = ({ setSize }) => {
   const isActive = isGalleryActive(editor);
 
   /**
-   * Check if the any of the currently selected blocks are of `type`.
-   * @param {String} type
-   * @return {Boolean}
+   * Check if there are any of the currently selected blocks are of `type`.
    */
   const hasBlock = (type) => {
     return editor.value.blocks.some((node) => node.type === type);
@@ -34,8 +31,8 @@ const ToolbarComponent = ({ setSize }) => {
   }
 
   return (
-    <Toolbar>
-      <Button onMouseDown={onAddGallery}>Add gallery</Button>
+    <div className="gallery-toolbar">
+      <button onMouseDown={onAddGallery}>Add gallery</button>
       <label htmlFor="size">Size:</label>
       <select
         defaultValue={9}
@@ -51,7 +48,7 @@ const ToolbarComponent = ({ setSize }) => {
           );
         })}
       </select>
-    </Toolbar>
+    </div>
   );
 };
 

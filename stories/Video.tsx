@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { createEditor } from 'slate';
 import { Slate, Editable, withReact, useSlateStatic } from 'slate-react';
 
@@ -14,7 +14,7 @@ const Element = ({ attributes, children, element }) => {
   }
 };
 
-export default function VideoDefault({ readOnly = false, ...props }) {
+export function Video({ readOnly = false, ...props }) {
   const editor = useMemo(
     () =>
       withVideos(withReact(createEditor()), {
@@ -34,7 +34,7 @@ export default function VideoDefault({ readOnly = false, ...props }) {
     },
     {
       type: 'video',
-      url: 'https://player.vimeo.com/video/26689853',
+      url: 'https://vimeo.com/90509568',
       children: [{ text: '' }],
     },
   ]);
