@@ -3,21 +3,21 @@ import type { Meta, StoryObj } from '@storybook/react';
 import './styles.css';
 
 import { CustomImage } from './slate-gallery/CustomImage';
-import Simple from './slate-gallery/simple';
+import Gallery from './Gallery';
 import { CustomControls } from './slate-gallery/CustomControls';
 import { CustomEditModal } from './slate-gallery/CustomEditModal';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-const meta: Meta<typeof Simple> = {
+const meta: Meta<typeof Gallery> = {
   title: 'Gallery plugin/Basic',
-  component: Simple,
+  component: Gallery,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
   tags: ['autodocs'],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Simple>;
+type Story = StoryObj<typeof Gallery>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 

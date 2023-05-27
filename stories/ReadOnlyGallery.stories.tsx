@@ -4,7 +4,7 @@ import './styles.css';
 
 import { CustomImage } from './slate-gallery/CustomImage';
 import ImageLightbox from './slate-gallery/ImageLightbox';
-import ReadOnly from './slate-gallery/readOnly';
+import ReadOnlyGallery from './ReadOnlyGallery';
 
 import image1 from './assets/image-1-1280x720.jpg';
 import image2 from './assets/image-2-1280x720.jpg';
@@ -18,16 +18,16 @@ import image9 from './assets/image-9-1280x720.jpg';
 import image10 from './assets/image-10-1280x720.jpg';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-const meta: Meta<typeof ReadOnly> = {
+const meta: Meta<typeof ReadOnlyGallery> = {
   title: 'Gallery plugin/Read only',
-  component: ReadOnly,
+  component: ReadOnlyGallery,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
   tags: ['autodocs'],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ReadOnly>;
+type Story = StoryObj<typeof ReadOnlyGallery>;
 
 export const One: Story = {
   name: 'One image',
