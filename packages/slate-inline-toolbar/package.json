@@ -6,6 +6,7 @@
   "main": "lib/bundle.umd.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/newsiberian/slate-plugins.git"
@@ -15,9 +16,7 @@
   },
   "homepage": "https://github.com/newsiberian/slate-plugins/tree/master/packages/slate-inline-toolbar#readme",
   "keywords": [
-    "slate",
-    "images",
-    "gallery"
+    "slate"
   ],
   "directories": {
     "lib": "lib"
@@ -28,12 +27,11 @@
   "private": true,
   "scripts": {
     "build": "",
-    "build:tsc": "../../node_modules/.bin/tsc",
-    "bundle": "../../node_modules/.bin/rollup -c",
-    "clean": "../../node_modules/.bin/rimraf lib/*",
-    "postbuild": "yarn bundle",
+    "build:tsc": "tsc",
+    "bundle": "rollup -c",
+    "clean": "rimraf lib/*",
     "prebuild": "yarn clean",
-    "prepublishOnly": "yarn clean && yarn build"
+    "prepublishOnly": "yarn clean && yarn build && yarn bundle"
   },
   "peerDependencies": {
     "react": "*",

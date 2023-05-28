@@ -1,5 +1,5 @@
-import sourcemaps from 'rollup-plugin-sourcemaps';
 import { terser } from 'rollup-plugin-terser';
+import typescript from 'rollup-plugin-typescript2';
 
 function onwarn(message) {
   const suppressed = ['UNRESOLVED_IMPORT', 'THIS_IS_UNDEFINED'];
@@ -9,17 +9,16 @@ function onwarn(message) {
   }
 }
 
-export default (name, dependencies) => ({
+export const config = (name, dependencies) => ({
   input: 'lib/index.js',
   output: {
     file: 'lib/bundle.umd.js',
     format: 'umd',
     name: `@mercuriya/slate-plugins.${name}`,
-    // globals,
     sourcemap: true,
     exports: 'named',
   },
   onwarn,
   external: dependencies,
-  plugins: [sourcemaps(), terser()],
+  plugins: [typescript(), terser()],
 });

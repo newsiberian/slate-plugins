@@ -4,6 +4,7 @@
 # Build output folders
 build/
 lib/
+packages/*/lib
 
 # Logs
 logs
@@ -46,5 +47,4 @@ flow-coverage/
 # OSX Files
 .DS_Store
 
-# Since we decided on npm over yarn this makes sense.
-yarn.lock
+tsconfig.tsbuildinfo
