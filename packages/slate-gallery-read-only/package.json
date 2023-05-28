@@ -1,0 +1,50 @@
+{
+  "name": "@mercuriya/slate-gallery-read-only",
+  "version": "0.7.1",
+  "description": "A read-only image gallery for slate-js",
+  "license": "MIT",
+  "main": "lib/bundle.umd.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newsiberian/slate-plugins.git"
+  },
+  "bugs": {
+    "url": "https://github.com/newsiberian/slate-plugins/issues"
+  },
+  "homepage": "https://github.com/newsiberian/slate-plugins/tree/master/packages/slate-gallery-read-only#readme",
+  "keywords": [
+    "slate",
+    "images",
+    "gallery"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "scripts": {
+    "build": "yarn build:tsc",
+    "build:tsc": "tsc --build",
+    "bundle": "rollup -c",
+    "clean": "rimraf lib tsconfig.tsbuildinfo",
+    "prebuild": "yarn clean",
+    "prepublishOnly": "yarn clean && yarn build && yarn bundle"
+  },
+  "dependencies": {
+    "@mercuriya/slate-gallery-common": "0.7.1",
+    "tslib": "^2.5.2"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "slate": "^0.94.1",
+    "slate-react": "^0.94.2"
+  }
+}

@@ -1,21 +1,29 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, HTMLAttributes } from 'react';
+import type {
+  GalleryElement,
+  ImageParams,
+} from '@mercuriya/slate-gallery-common';
 
-import { ReadOnlyGalleryElement, GalleryOptions } from '../types';
-import Grid from './Grid';
+import { Grid, GridProps } from './Grid';
 
-interface GalleryProps extends GalleryOptions {
-  attributes: Record<string, unknown>;
+export type GalleryReadOnlyOptions = Omit<GridProps, 'size'> &
+  Partial<Pick<GridProps, 'size'>>;
+
+export type GalleryProps = GalleryReadOnlyOptions & {
+  attributes: HTMLAttributes<HTMLDivElement>;
   children: ReactNode;
   element: ReadOnlyGalleryElement;
-  readOnly: boolean;
-}
+};
 
-const ReadOnlyGallery = ({
+type ReadOnlyGalleryElement = GalleryElement & {
+  images: ImageParams[];
+};
+
+export const ReadOnlyGallery = ({
   attributes,
   children,
   element,
   size = 9,
-  readOnly,
   renderImage,
   renderExtra,
   imageClassName,
@@ -31,7 +39,6 @@ const ReadOnlyGallery = ({
           size={size}
           renderImage={renderImage}
           renderExtra={renderExtra}
-          readOnly={readOnly}
           imageClassName={imageClassName}
           imageWrapperClassName={imageWrapperClassName}
           leftClassName={leftClassName}
@@ -43,5 +50,3 @@ const ReadOnlyGallery = ({
     </div>
   );
 };
-
-export default ReadOnlyGallery;

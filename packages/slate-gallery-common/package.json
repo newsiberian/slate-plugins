@@ -1,0 +1,45 @@
+{
+  "name": "@mercuriya/slate-gallery-common",
+  "version": "0.7.1",
+  "description": "Common utilities for slate-js image gallery",
+  "license": "MIT",
+  "main": "lib/bundle.umd.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newsiberian/slate-plugins.git"
+  },
+  "bugs": {
+    "url": "https://github.com/newsiberian/slate-plugins/issues"
+  },
+  "homepage": "https://github.com/newsiberian/slate-plugins/tree/master/packages/slate-gallery-commmon#readme",
+  "keywords": [
+    "slate"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "scripts": {
+    "build": "yarn build:tsc",
+    "build:tsc": "tsc --build",
+    "bundle": "rollup -c",
+    "clean": "rimraf lib tsconfig.tsbuildinfo",
+    "prebuild": "yarn clean",
+    "prepublishOnly": "yarn clean && yarn build && yarn bundle"
+  },
+  "dependencies": {
+    "tslib": "^2.5.2"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}

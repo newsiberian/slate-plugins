@@ -2,34 +2,38 @@ import { memo, useEffect, useRef } from 'react';
 
 import type { CSSProperties } from 'react';
 
-const root = {
+const root: CSSProperties = {
   position: 'absolute',
   // required to correct positioning
   top: 0,
   left: 0,
-} as CSSProperties;
+};
 
-const span = {
+const span: CSSProperties = {
   opacity: 0.9,
   color: 'grey',
   fontSize: '10vw',
   textShadow: '1px 1px 2px black, 0 0 1em white',
-} as CSSProperties;
+};
 
-interface LeftProps {
+type LeftProps = {
   left: number;
   leftClassName?: string;
-}
+};
 
-interface SpanProps {
+type SpanProps = {
   className?: string;
   style?: CSSProperties;
-}
+};
 
-export default memo(function Left({ left, leftClassName }: LeftProps) {
-  const overlayEl = useRef(null);
+export const LeftCount = memo(function LeftCount({
+  left,
+  leftClassName,
+}: LeftProps) {
+  const overlayEl = useRef<HTMLDivElement | null>(null);
 
-  const updatePosition = () => {
+  useEffect(() => {
+    // center position on first load
     const overlay = overlayEl.current;
     const parent = overlay.parentElement as HTMLElement;
 
@@ -38,12 +42,7 @@ export default memo(function Left({ left, leftClassName }: LeftProps) {
 
     overlay.style.top = `${parentRect.height / 2 - overlayRect.height / 2}px`;
     overlay.style.left = `${parentRect.width / 2 - overlayRect.width / 2}px`;
-  };
-
-  useEffect((): void => {
-    // center position on first load
-    updatePosition();
-  });
+  }, []);
 
   const spanProps = {} as SpanProps;
 
