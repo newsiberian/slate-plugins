@@ -1,14 +1,11 @@
 import type { CSSProperties, MouseEvent, ReactNode } from 'react';
-import {
+import type {
   RenderImageFn,
   RenderImageProps,
 } from '@mercuriya/slate-gallery-common';
 
-import Controls from 'packages/slate-gallery/src/Controls';
-import {
-  RenderControlsArgs,
-  TypeImage,
-} from 'packages/slate-gallery/src/types';
+import Controls from './Controls';
+import type { RenderControlsArgs, TypeImage } from './types';
 
 export type ImageProps = {
   /**

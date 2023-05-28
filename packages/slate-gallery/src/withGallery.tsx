@@ -1,11 +1,11 @@
 import { Element } from 'slate';
+import { ReadOnlyGallery } from '@mercuriya/slate-gallery-read-only';
 
 import { Gallery } from './Gallery';
-import { ReadOnlyGallery } from '@mercuriya/slate-gallery-read-only';
+import { GALLERY } from './utils';
 import type { ReactEditorExtended, GalleryOptions } from './types';
-import { GALLERY, insertGallery, isGalleryActive } from './utils';
 
-const withGallery = (
+export const withGallery = (
   editor: ReactEditorExtended,
   options = {} as GalleryOptions,
 ): ReactEditorExtended => {
@@ -33,5 +33,3 @@ const withGallery = (
 
   return editor;
 };
-
-export { Gallery, insertGallery, isGalleryActive, withGallery, GALLERY };

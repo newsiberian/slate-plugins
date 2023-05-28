@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { MouseEvent, ReactElement, ReactNode } from 'react';
 import type { DropzoneProps } from 'react-dropzone';
 import type { SortableContainerProps } from 'react-sortable-hoc';
 import type { ReactEditor } from 'slate-react';
@@ -11,7 +11,7 @@ export interface ReactEditorExtended extends ReactEditor {
     children,
     element,
     readOnly,
-  }) => React.ReactElement;
+  }) => ReactElement;
 }
 
 export interface RenderControlsArgs {
@@ -22,11 +22,8 @@ export interface RenderControlsArgs {
   /**
    * A function that will open modal or prompt
    */
-  onOpenEditModal: (
-    e: React.MouseEvent<HTMLButtonElement>,
-    index: number,
-  ) => void;
-  onRemove: (e: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+  onOpenEditModal: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
+  onRemove: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
 }
 
 export interface RenderEditModalArgs {
@@ -55,7 +52,7 @@ export type GalleryOptions = GalleryReadOnlyOptions & {
    * Custom controls component. It is uses only for "readOnly: true" mode
    * Handlers must be added to each child-button accordingly
    * @param {RenderControlsArgs} args
-   * @return {React.ReactNode}
+   * @return {ReactNode}
    *
    * Example:
    * <div style={root}>
@@ -67,11 +64,11 @@ export type GalleryOptions = GalleryReadOnlyOptions & {
    *   </button>
    * </div>
    */
-  renderControls?: (args: RenderControlsArgs) => React.ReactNode;
+  renderControls?: (args: RenderControlsArgs) => ReactNode;
   /**
    * A render function which allows you to use whatever modal you wish
    */
-  renderEditModal?: (args: RenderEditModalArgs) => React.ReactNode;
+  renderEditModal?: (args: RenderEditModalArgs) => ReactNode;
 };
 
 interface ExtendedFile extends File {
