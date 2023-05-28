@@ -3,8 +3,13 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "lib",
+    // to support Generator<NodeEntry<Node>, void, undefined>
     "downlevelIteration": true
   },
+  "references": [
+    {"path": "../slate-gallery-common"},
+    {"path": "../slate-gallery-read-only"}
+  ],
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["src/**/__tests__/*.ts", "node_modules", "lib"]
+  "exclude": ["node_modules", "lib"]
 }

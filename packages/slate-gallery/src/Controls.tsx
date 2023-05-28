@@ -6,19 +6,28 @@ interface ControlsProps {
   onRemove: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
 }
 
-const root = {
+const root: CSSProperties = {
   position: 'absolute',
   top: 0,
   right: 0,
   marginTop: 8,
   marginRight: 8,
-} as CSSProperties;
+};
 
 const Controls = ({ index, onOpenEditModal, onRemove }: ControlsProps) => {
   return (
     <div style={root}>
       <button
-        onClick={(event) => onOpenEditModal(event, index)}
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          onOpenEditModal(event, index);
+        }}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
         title="Edit image description"
       >
         &#x270e;

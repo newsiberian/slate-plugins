@@ -6,6 +6,7 @@
   "main": "lib/bundle.umd.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/newsiberian/slate-plugins.git"
@@ -31,23 +32,23 @@
   "private": false,
   "scripts": {
     "build": "yarn build:tsc",
-    "build:tsc": "../../node_modules/.bin/tsc",
-    "bundle": "../../node_modules/.bin/rollup -c",
-    "clean": "../../node_modules/.bin/rimraf lib/*",
-    "postbuild": "yarn bundle",
+    "build:tsc": "tsc --build --verbose",
+    "bundle": "rollup -c",
+    "clean": "rimraf lib/*",
     "prebuild": "yarn clean",
-    "prepublishOnly": "yarn clean && yarn build"
+    "prepublishOnly": "yarn clean && yarn build && yarn bundle"
   },
   "dependencies": {
-    "react-uid": "^2.3.1",
-    "tslib": "^2.3.1"
+    "@mercuriya/slate-gallery-common": "0.7.1",
+    "@mercuriya/slate-gallery-read-only": "0.7.1",
+    "tslib": "^2.5.2"
   },
   "peerDependencies": {
     "array-move": "*",
     "react": "*",
     "react-dropzone": "*",
     "react-sortable-hoc": "*",
-    "slate": "^0.65.0",
-    "slate-react": "^0.65.0"
+    "slate": "^0.94.1",
+    "slate-react": "^0.94.2"
   }
 }

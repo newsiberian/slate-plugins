@@ -1,45 +1,50 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  CSSProperties,
+  MouseEvent,
+  ReactNode,
+} from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import type { CSSProperties, MouseEvent, ReactNode } from 'react';
-
 import Grid from './Grid';
-import { ReactEditorExtended, GalleryElement, GalleryOptions } from './types';
 import { changeNodeData } from './utils';
+import { ReactEditorExtended, GalleryElement, GalleryOptions } from './types';
 
-const root = {
+const root: CSSProperties = {
   borderWidth: 2,
   borderRadius: 5,
   padding: 8,
   outline: 'none',
   cursor: 'pointer',
-} as CSSProperties;
+};
 
-const normal = {
+const normal: CSSProperties = {
   borderColor: '#666',
   borderStyle: 'dashed',
-} as CSSProperties;
+};
 
-const active = {
+const active: CSSProperties = {
   borderStyle: 'solid',
-} as CSSProperties;
+};
 
-const accepted = {
+const accepted: CSSProperties = {
   borderStyle: 'solid',
   borderColor: '#5cb860',
-} as CSSProperties;
+};
 
-const rejected = {
+const rejected: CSSProperties = {
   borderStyle: 'solid',
   borderColor: '#f55a4e',
-} as CSSProperties;
+};
 
-interface GalleryProps extends GalleryOptions {
+type GalleryProps = GalleryOptions & {
   attributes: Record<string, unknown>;
   children: ReactNode;
   editor: ReactEditorExtended;
   element: GalleryElement;
-  readOnly: boolean;
   /**
    * Placeholder text
    */
@@ -48,9 +53,9 @@ interface GalleryProps extends GalleryOptions {
    * Placeholder that appears on image drop
    */
   droppingPlaceholder?: string | ReactNode;
-}
+};
 
-const Gallery = ({
+export function Gallery({
   attributes,
   children,
   editor,
@@ -58,7 +63,6 @@ const Gallery = ({
   size = 9,
   placeholder,
   droppingPlaceholder,
-  readOnly,
   dropzoneProps = {},
   sortableContainerProps = {},
   renderControls,
@@ -67,9 +71,8 @@ const Gallery = ({
   imageClassName,
   imageWrapperClassName,
   leftClassName,
-}: GalleryProps) => {
-  // This is used by renderEditModal function only
-  const [open, setOpen] = useState<boolean>(false);
+}: GalleryProps) {
+  const [openEditModal, serOpenEditModal] = useState<boolean>(false);
   // currently editable image index
   const [imageIndex, setImageIndex] = useState<number | null>(null);
   const onDrop = useCallback(
@@ -119,7 +122,7 @@ const Gallery = ({
     // when user uses custom modal, he must implement all logic manually. See
     // storybook 'Edit modal custom component'
     if (typeof renderEditModal === 'function') {
-      setOpen(true);
+      serOpenEditModal(true);
     } else {
       const description = window.prompt(
         'Modify image description',
@@ -179,12 +182,11 @@ const Gallery = ({
   );
 
   const handleClose = useCallback((): void => {
-    setOpen(false);
+    serOpenEditModal(false);
   }, []);
 
   /**
    * Insert images File objects into gallery's data
-   * @param {File[]} files
    */
   function insertImage(files: File[]): void {
     changeNodeData(editor, element, {
@@ -272,7 +274,6 @@ const Gallery = ({
           size={size}
           renderControls={renderControls}
           renderImage={renderImage}
-          readOnly={readOnly}
           onOpenEditModal={handleOpenEditModal}
           onRemove={handleRemove}
           imageClassName={imageClassName}
@@ -281,12 +282,10 @@ const Gallery = ({
           sortableContainerProps={sortableContainerProps}
         />
 
-        {open && renderEditModalComponent()}
+        {openEditModal && renderEditModalComponent()}
       </div>
 
       {children}
     </div>
   );
-};
-
-export default Gallery;
+}

@@ -1,8 +1,8 @@
 import { Element } from 'slate';
 
-import Gallery from './Gallery';
-import ReadOnlyGallery from './readOnly/Gallery';
-import { ReactEditorExtended, GalleryOptions } from './types';
+import { Gallery } from './Gallery';
+import { ReadOnlyGallery } from '@mercuriya/slate-gallery-read-only';
+import type { ReactEditorExtended, GalleryOptions } from './types';
 import { GALLERY, insertGallery, isGalleryActive } from './utils';
 
 const withGallery = (
@@ -15,9 +15,9 @@ const withGallery = (
     return Element.isElementType(element, GALLERY) || isVoid(element);
   };
 
-  editor.galleryElementType = ({ children, ...props }) => {
+  editor.galleryElementType = ({ children, readOnly, ...props }) => {
     // TODO: take readOnly from hook
-    if (props.readOnly) {
+    if (readOnly) {
       return (
         <ReadOnlyGallery {...props} {...options}>
           {children}
@@ -34,4 +34,4 @@ const withGallery = (
   return editor;
 };
 
-export { Gallery, insertGallery, isGalleryActive, withGallery };
+export { Gallery, insertGallery, isGalleryActive, withGallery, GALLERY };

@@ -1,12 +1,16 @@
-import { useState } from 'react';
-
 import type { CSSProperties, MouseEvent, ReactNode } from 'react';
+import {
+  RenderImageFn,
+  RenderImageProps,
+} from '@mercuriya/slate-gallery-common';
 
-import Controls from './Controls';
-import Left from './Left';
-import { RenderControlsArgs, RenderImageArgs, TypeImage } from './types';
+import Controls from 'packages/slate-gallery/src/Controls';
+import {
+  RenderControlsArgs,
+  TypeImage,
+} from 'packages/slate-gallery/src/types';
 
-interface ImageProps {
+export type ImageProps = {
   /**
    * We need to know index in cases when we need to edit or remove image, so it
    * is not used in Image component, but passed down to Controls component
@@ -14,43 +18,33 @@ interface ImageProps {
   index: number;
   image: TypeImage;
   renderControls?: (args: RenderControlsArgs) => ReactNode;
-  renderImage?: (args: RenderImageArgs) => ReactNode;
+  renderImage?: RenderImageFn;
   wrapperStyle: CSSProperties;
-  withLeft: boolean;
-  left?: number;
-  readOnly: boolean;
-  setSelected?: (index: number) => void;
+  onSelect?: RenderImageProps['onSelect'];
   onOpenEditModal?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
   onRemove?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
   imageClassName?: string;
   imageWrapperClassName?: string;
-  leftClassName?: string;
-}
+};
 
-const imageStyle = {
+const imageStyle: CSSProperties = {
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-} as CSSProperties;
+};
 
-const Image = ({
+export function Image({
   index,
   image,
   renderControls,
   renderImage,
   wrapperStyle,
-  withLeft,
-  left,
-  readOnly,
-  setSelected,
+  onSelect,
   onOpenEditModal,
   onRemove,
   imageClassName,
   imageWrapperClassName,
-  leftClassName,
-}: ImageProps) => {
-  const [loaded, setLoaded] = useState<boolean>(false);
-
+}: ImageProps) {
   const imageWrapperProps = {} as { className?: string };
   const imageProps = {} as {
     className?: string;
@@ -67,15 +61,9 @@ const Image = ({
     imageProps.style = imageStyle;
   }
 
-  const handleLoad = (): void => {
-    if (withLeft) {
-      setLoaded(true);
-    }
-  };
-
-  const handleClick = (e: MouseEvent<HTMLImageElement>) => {
-    if (typeof setSelected === 'function') {
-      setSelected(index);
+  const handleClick = (event: MouseEvent<HTMLImageElement>) => {
+    if (typeof onSelect === 'function') {
+      onSelect(index, event);
     }
   };
 
@@ -92,21 +80,19 @@ const Image = ({
     );
   };
 
-  const renderImageComponent = (): ReactNode => {
+  const renderImageComponent = () => {
     if (typeof renderImage === 'function') {
       return renderImage({
+        readOnly: false,
         image,
         index,
-        onLoad: handleLoad,
-        onSelect: setSelected,
-        readOnly,
+        onSelect,
       });
     }
     return (
       <img
         src={image.src}
         alt={image.description}
-        onLoad={handleLoad}
         onClick={handleClick}
         {...imageProps}
       />
@@ -115,11 +101,8 @@ const Image = ({
 
   return (
     <div style={wrapperStyle} {...imageWrapperProps}>
-      {!readOnly && renderControlsComponent()}
+      {renderControlsComponent()}
       {renderImageComponent()}
-      {readOnly && loaded && <Left left={left} leftClassName={leftClassName} />}
     </div>
   );
-};
-
-export default Image;
+}
