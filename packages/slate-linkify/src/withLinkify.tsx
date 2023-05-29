@@ -9,9 +9,9 @@ import {
   LINK,
   wrapLink,
   LinkifyEditor,
+  LinkifyElement,
   tryWrapLink,
 } from './utils';
-import { LinkifyElement } from 'packages/slate-linkify/src/utils';
 
 export type RenderComponentProps = RenderElementProps['attributes'] & {
   href: string;
