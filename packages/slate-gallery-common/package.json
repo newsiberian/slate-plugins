@@ -1,6 +1,6 @@
 {
   "name": "@mercuriya/slate-gallery-common",
-  "version": "0.7.1",
+  "version": "0.8.0-alpha.0",
   "description": "Common utilities for slate-js image gallery",
   "license": "MIT",
   "main": "dist/cjs/index.js",
@@ -19,7 +19,11 @@
     "slate"
   ],
   "files": [
-    "dist/esm", "dist/cjs", "CHANGELOG.md", "LICENSE.md", "package.json"
+    "dist/esm",
+    "dist/cjs",
+    "CHANGELOG.md",
+    "LICENSE.md",
+    "package.json"
   ],
   "publishConfig": {
     "access": "public"

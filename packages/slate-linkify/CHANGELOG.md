@@ -1,5 +1,23 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 0.5.0-alpha.0 (2023-06-03)
+
+### ⚠ BREAKING CHANGES
+
+`slate-linkify` logic adjusted to the latest Slate@0.94.1. It could not work as expected with earlier versions.
+
+`onKeyDown` function has been renamed to `tryWrapLink` and it is not exposed anymore.
+
+Introduced `getLinkUrl` function, which can return a URL if selected node is a link. ([e8aaff57](https://github.com/newsiberian/slate-plugins/commit/e8aaff57473197dbfa15a4986ecaa84344abce36))
+
+### Bug Fixes
+
+* **slate-linkify:** bad import ([339396c](https://github.com/newsiberian/slate-plugins/commit/339396c58859da910b1d756559bc236af6aa0fcf))
+
+
 # [0.4.0] - 2021-09-03
 
 ## BREAKING CHANGE

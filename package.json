@@ -38,6 +38,7 @@
     "@typescript-eslint/eslint-plugin": "5.2.0",
     "@typescript-eslint/parser": "5.2.0",
     "array-move": "^2.2.1",
+    "conventional-changelog-conventionalcommits": "5.0.0",
     "eslint": "8.1.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.25.2",

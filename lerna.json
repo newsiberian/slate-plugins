@@ -4,5 +4,36 @@
   ],
   "useWorkspaces": true,
   "version": "independent",
-  "npmClient": "yarn"
+  "npmClient": "yarn",
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "ignored-file",
+        "*.md"
+      ],
+      "message": "chore(release): publish"
+    },
+    "version": {
+      "allowBranch": "master",
+      "ignoreChanges": [
+        "stories/**",
+        "**/*.md"
+      ],
+      "message": "chore(release): publish %s",
+      "conventionalCommits": true,
+      "changelogPreset": {
+        "name": "conventionalcommits",
+        "types": [
+          {"type": "feat", "section": "Features"},
+          {"type": "fix", "section": "Bug Fixes"},
+          {"type": "chore", "hidden": true},
+          {"type": "docs", "hidden": true},
+          {"type": "style", "hidden": true},
+          {"type": "refactor", "hidden": "Changes"},
+          {"type": "perf", "hidden": true},
+          {"type": "test", "hidden": true}
+        ]
+      }
+    }
+  }
 }
