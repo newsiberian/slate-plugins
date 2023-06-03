@@ -4,6 +4,8 @@ import type { ReactEditor, RenderElementProps } from 'slate-react';
 import LinkifyIt from 'linkify-it';
 import tlds from 'tlds';
 
+export const LINK = <const>'link';
+
 export type LinkifyEditor = BaseEditor &
   ReactEditor & {
     linkElementType: ({
@@ -14,7 +16,7 @@ export type LinkifyEditor = BaseEditor &
   };
 
 export type LinkifyElement = {
-  type: 'link';
+  type: typeof LINK;
   url: string;
   children: Text[];
 };
@@ -24,8 +26,6 @@ const isLinkifyElement = (element): element is LinkifyElement =>
 
 const linkify = LinkifyIt();
 linkify.tlds(tlds);
-
-export const LINK = <const>'link';
 
 /**
  * If text contains something similar to link `true` will be returned

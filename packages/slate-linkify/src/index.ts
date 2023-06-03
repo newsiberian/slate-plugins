@@ -5,5 +5,6 @@ export {
   getLinkUrl,
   tryWrapLink,
   unwrapLink,
+  LINK,
 } from './utils';
-export type { LinkifyEditor } from './utils';
+export type { LinkifyEditor, LinkifyElement } from './utils';

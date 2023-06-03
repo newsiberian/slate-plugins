@@ -1,4 +1,4 @@
-import { Element, BaseText, BaseElement, Range } from 'slate';
+import { Element, Editor, Range } from 'slate';
 
 import type { RenderElementProps } from 'slate-react';
 import type { HTMLAttributeAnchorTarget, ReactElement } from 'react';
@@ -33,43 +33,39 @@ export type LinkifyOptions = {
   rel?: string;
 };
 
-declare module 'slate' {
-  interface CustomTypes {
-    Editor: LinkifyEditor;
-    Element: LinkifyElement | BaseElement;
-    Text: LinkifyElement | BaseText;
-  }
-}
-
 export const withLinkify = (
-  editor: LinkifyEditor,
+  editor: Editor,
   options = {} as LinkifyOptions,
-) => {
+): Editor => {
+  const typedEditor = editor as LinkifyEditor;
   const { target = '_blank', rel = 'noreferrer noopener' } = options;
-  const { insertData, insertBreak, insertText, isInline } = editor;
+  const { insertData, insertBreak, insertText, isInline } = typedEditor;
 
-  editor.isInline = (element) =>
+  typedEditor.isInline = (element) =>
     Element.isElementType(element, LINK) || isInline(element);
 
-  editor.insertBreak = () => {
-    if (Range.isCollapsed(editor.selection)) {
-      tryWrapLink(editor);
+  typedEditor.insertBreak = () => {
+    if (Range.isCollapsed(typedEditor.selection)) {
+      tryWrapLink(typedEditor);
     }
 
     insertBreak();
   };
 
-  editor.insertText = (text) => {
-    if ([' ', ',', '.'].includes(text) && Range.isCollapsed(editor.selection)) {
-      tryWrapLink(editor);
+  typedEditor.insertText = (text) => {
+    if (
+      [' ', ',', '.'].includes(text) &&
+      Range.isCollapsed(typedEditor.selection)
+    ) {
+      tryWrapLink(typedEditor);
     } else if (isLink(text)) {
-      wrapLink(editor, text);
+      wrapLink(typedEditor, text);
     }
 
     insertText(text);
   };
 
-  editor.insertData = (data) => {
+  typedEditor.insertData = (data) => {
     const text = data.getData('text/plain');
 
     // this is for pasting links, but we ignore it if snippet contains html.
@@ -85,7 +81,7 @@ export const withLinkify = (
   /**
    * This function must be provided to `renderElement` prop
    */
-  editor.linkElementType = ({
+  typedEditor.linkElementType = ({
     attributes,
     children,
     element,
@@ -105,5 +101,5 @@ export const withLinkify = (
     );
   };
 
-  return editor;
+  return typedEditor;
 };
