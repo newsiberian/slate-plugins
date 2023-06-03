@@ -1,8 +1,9 @@
 {
   "extends": "../../tsconfig",
   "compilerOptions": {
+    // this fixes rollup build https://github.com/ezolenko/rollup-plugin-typescript2/issues/260
+    "baseUrl": ".",
     "rootDir": "src",
-    "outDir": "lib",
     // to support Generator<NodeEntry<Node>, void, undefined>
     "downlevelIteration": true
   },
@@ -11,5 +12,5 @@
     {"path": "../slate-gallery-read-only"}
   ],
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "dist"]
 }
