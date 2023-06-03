@@ -1,8 +1,5 @@
 import type { ReactNode, HTMLAttributes } from 'react';
-import type {
-  GalleryElement,
-  ImageParams,
-} from '@mercuriya/slate-gallery-common';
+import type { ReadOnlyGalleryElement } from '@mercuriya/slate-gallery-common';
 
 import { Grid, GridProps } from './Grid';
 
@@ -15,11 +12,7 @@ export type GalleryProps = GalleryReadOnlyOptions & {
   element: ReadOnlyGalleryElement;
 };
 
-type ReadOnlyGalleryElement = GalleryElement & {
-  images: ImageParams[];
-};
-
-export const ReadOnlyGallery = ({
+export function ReadOnlyGallery({
   attributes,
   children,
   element,
@@ -30,7 +23,7 @@ export const ReadOnlyGallery = ({
   imageWrapperClassName,
   leftClassName,
   gridClassName,
-}: GalleryProps) => {
+}: GalleryProps) {
   return (
     <div {...attributes}>
       <div contentEditable={false}>
@@ -49,4 +42,4 @@ export const ReadOnlyGallery = ({
       {children}
     </div>
   );
-};
+}

@@ -45,7 +45,7 @@ export type GridProps = {
   /**
    * Image custom className
    * We have a restriction here: if you will implement this property, then you
-   * will have add all css rules from default style, since, they will be skipped
+   * will have to add all css rules from default style, since, they will be skipped
    *
    * Example:
    * .custom-image-class {
@@ -59,7 +59,7 @@ export type GridProps = {
   /**
    * Number of left images (+x) custom className
    * We have a restriction here: if you will implement this property, then you
-   * will have create all rules from scratch, since, they default styles be skipped
+   * will have to create all rules from scratch, since, they default styles be skipped
    */
   leftClassName?: string;
   gridClassName?: string;
