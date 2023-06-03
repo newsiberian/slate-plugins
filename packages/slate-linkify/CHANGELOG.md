@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.0-alpha.1](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-linkify@0.4.1...@mercuriya/slate-linkify@0.5.0-alpha.1) (2023-06-03)
+
+
+### Bug Fixes
+
+* **slate-linkify:** bad import ([339396c](https://github.com/newsiberian/slate-plugins/commit/339396c58859da910b1d756559bc236af6aa0fcf))
+
+
+
 ## 0.5.0-alpha.0 (2023-06-03)
 
 ### ⚠ BREAKING CHANGES

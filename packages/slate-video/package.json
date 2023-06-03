@@ -1,6 +1,6 @@
 {
   "name": "@mercuriya/slate-video",
-  "version": "0.2.0-alpha.0",
+  "version": "0.2.0-alpha.1",
   "description": "A Slate plugin that allows to use embedded video",
   "license": "MIT",
   "main": "dist/cjs/index.js",

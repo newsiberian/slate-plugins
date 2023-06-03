@@ -1,6 +1,6 @@
 {
   "name": "@mercuriya/slate-gallery-common",
-  "version": "0.8.0-alpha.0",
+  "version": "0.8.0-alpha.1",
   "description": "Common utilities for slate-js image gallery",
   "license": "MIT",
   "main": "dist/cjs/index.js",

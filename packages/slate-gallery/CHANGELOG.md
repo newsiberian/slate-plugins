@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.0-alpha.0](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@0.7.1...@mercuriya/slate-gallery@1.0.0-alpha.0) (2023-06-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **slate-gallery:** change function `withGallery` to hook `useGallery` in order to be able to get `readOnly` status from slate hooks. Improve typings
+
+* **slate-gallery:** change function `withGallery` to hook `useGallery` in order to be able to get `readOnly` status from slate hooks. Improve typings ([3e83739](https://github.com/newsiberian/slate-plugins/commit/3e83739425eab5b681edbeccbd56ca2275aa3142))
+
+
+
 ## 0.8.0-alpha.0 (2023-06-03)
 
 
