@@ -1,29 +1,22 @@
-import { useCallback, useMemo, useState } from 'react';
-import { createEditor } from 'slate';
+import { useCallback, useState } from 'react';
+import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact, useSlate } from 'slate-react';
-
 import {
   insertGallery,
-  isGalleryActive,
-  withGallery,
+  // isGalleryActive,
+  useGallery,
 } from '@mercuriya/slate-gallery';
-
-/**
- * Define the default node type.
- * @type {String}
- */
-const DEFAULT_NODE = 'paragraph';
 
 const ToolbarComponent = ({ setSize }) => {
   const editor = useSlate();
-  const isActive = isGalleryActive(editor);
-
-  /**
-   * Check if there are any of the currently selected blocks are of `type`.
-   */
-  const hasBlock = (type) => {
-    return editor.value.blocks.some((node) => node.type === type);
-  };
+  // const isActive = isGalleryActive(editor);
+  //
+  // /**
+  //  * Check if there are any of the currently selected blocks are of `type`.
+  //  */
+  // const hasBlock = (type) => {
+  //   return editor.value.blocks.some((node) => node.type === type);
+  // };
 
   function onAddGallery(event) {
     event.preventDefault();
@@ -53,7 +46,7 @@ const ToolbarComponent = ({ setSize }) => {
 };
 
 export default function Gallery(props) {
-  const [value, setValue] = useState([
+  const [value, setValue] = useState<Descendant[]>([
     {
       children: [
         { text: 'This is editable plain text, just like a <textarea>!' },
@@ -61,10 +54,9 @@ export default function Gallery(props) {
     },
   ]);
   const [size, setSize] = useState(9);
-  const editor = useMemo(
-    () => withGallery(withReact(createEditor()), { ...props, size }),
-    [],
-  );
+  const [baseEditor] = useState(() => withReact(createEditor()));
+  const editor = useGallery(baseEditor, { ...props, size });
+
   const renderElement = useCallback(({ attributes, children, element }) => {
     switch (element.type) {
       case 'gallery':
@@ -72,8 +64,6 @@ export default function Gallery(props) {
           attributes,
           children,
           element,
-          // ❗️ we use this prop internally, so you must provide it here
-          readOnly: false,
         });
       default:
         return <p {...attributes}>{children}</p>;

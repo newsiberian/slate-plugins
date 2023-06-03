@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { createEditor } from 'slate';
+import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact, useSlateStatic } from 'slate-react';
 
 import { withVideos } from '@mercuriya/slate-video';
@@ -24,7 +24,7 @@ export function Video({ readOnly = false, ...props }) {
       }),
     [],
   );
-  const [value, setValue] = useState([
+  const [value, setValue] = useState<Descendant[]>([
     {
       children: [
         {

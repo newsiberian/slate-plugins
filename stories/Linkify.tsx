@@ -8,7 +8,6 @@ import {
   useSlate,
   RenderElementProps,
 } from 'slate-react';
-
 import {
   insertLink,
   isLinkActive,

@@ -1,19 +1,19 @@
 import { useCallback, useMemo, useState } from 'react';
-import { createEditor } from 'slate';
+import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
-
-import { withGallery } from '@mercuriya/slate-gallery';
-import { GALLERY } from '@mercuriya/slate-gallery';
+import {
+  withReadOnlyGallery,
+  GALLERY,
+} from '@mercuriya/slate-gallery-read-only';
 
 export default function Gallery(props) {
   const { images, ...rest } = props;
   const editor = useMemo(
-    () => withGallery(withReact(createEditor()), rest),
+    () => withReadOnlyGallery(withReact(createEditor()), rest),
     [],
   );
-  const [value, setValue] = useState([
+  const [value, setValue] = useState<Descendant[]>([
     {
-      type: 'paragraph',
       children: [
         { text: 'This is editable plain text, just like a <textarea>!' },
       ],
@@ -32,8 +32,6 @@ export default function Gallery(props) {
           attributes,
           children,
           element,
-          // ❗️ we use this prop internally, so you must provide it here
-          readOnly: true,
         });
       default:
         return <p {...attributes}>{children}</p>;
