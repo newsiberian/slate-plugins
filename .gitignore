@@ -3,8 +3,8 @@
 
 # Build output folders
 build/
-lib/
-packages/*/lib
+dist/
+packages/*/dist
 
 # Logs
 logs
