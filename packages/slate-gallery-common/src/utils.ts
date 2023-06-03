@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react';
 
+export const GALLERY = <const>'gallery';
+
 const buildGridContainer = (columns: number, rows: number): CSSProperties => ({
   gridTemplateColumns: `repeat(${columns}, 1fr)`,
   gridTemplateRows: `repeat(${rows}, auto)`,

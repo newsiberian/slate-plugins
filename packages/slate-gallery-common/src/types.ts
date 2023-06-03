@@ -1,6 +1,17 @@
-import type { ReactNode } from 'react';
-import type { Element } from 'slate';
-import { MouseEvent } from 'react';
+import type { MouseEvent, ReactElement, ReactNode } from 'react';
+import type { BaseEditor, BaseElement } from 'slate';
+import type { ReactEditor, RenderElementProps } from 'slate-react';
+
+export type GalleryEditor = BaseEditor &
+  ReactEditor & {
+    galleryElementType: ({
+      attributes,
+      children,
+      element,
+    }: Omit<RenderElementProps, 'element'> & {
+      element: GalleryElement | ReadOnlyGalleryElement;
+    }) => ReactElement;
+  };
 
 export type ImageParams = {
   /**
@@ -33,6 +44,17 @@ export type RenderImageProps = {
 
 export type RenderImageFn = (props: RenderImageProps) => ReactNode;
 
-export type GalleryElement = Element & {
+export type ExtendedFile = File & {
+  src: string;
+  description?: string;
+};
+
+export type GalleryElement = BaseElement & {
+  type: 'gallery';
   descriptions: Record<string, string>;
+  images: Array<ExtendedFile | ImageParams>;
+};
+
+export type ReadOnlyGalleryElement = Omit<GalleryElement, 'images'> & {
+  images: ImageParams[];
 };
