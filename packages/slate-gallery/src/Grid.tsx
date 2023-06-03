@@ -12,21 +12,22 @@ import {
   SortableContainerProps,
   SortableElementProps,
 } from 'react-sortable-hoc';
-import { Element } from 'slate';
 import {
   containerStyle,
+  GalleryEditor,
+  GalleryElement,
   imageStyle,
   RenderImageFn,
 } from '@mercuriya/slate-gallery-common';
 
 import { Image } from './Image';
-import { ReactEditorExtended, RenderControlsArgs, TypeImage } from './types';
+import { RenderControlsArgs } from './types';
 import { changeNodeData } from './utils';
 
 type GridProps = {
-  editor: ReactEditorExtended;
-  element: Element;
-  images?: TypeImage[];
+  editor: GalleryEditor;
+  element: GalleryElement;
+  images?: GalleryElement['images'];
   size: number;
   renderControls?: (args: RenderControlsArgs) => ReactNode;
   renderImage?: RenderImageFn;
@@ -39,12 +40,12 @@ type GridProps = {
 };
 
 type SortableListProps = SortableContainerProps & {
-  images?: TypeImage[];
+  images?: GalleryElement['images'];
   maxLength: number;
 };
 
 type SortableItemProps = SortableElementProps & {
-  image: TypeImage;
+  image: GalleryElement['images'][number];
   imageIndex: number;
   wrapperStyle: CSSProperties;
 };

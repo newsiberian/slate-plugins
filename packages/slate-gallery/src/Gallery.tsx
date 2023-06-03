@@ -8,10 +8,16 @@ import {
   ReactNode,
 } from 'react';
 import { useDropzone } from 'react-dropzone';
+import type {
+  GalleryElement,
+  GalleryEditor,
+  ExtendedFile,
+} from '@mercuriya/slate-gallery-common';
 
 import Grid from './Grid';
 import { changeNodeData } from './utils';
-import { ReactEditorExtended, GalleryElement, GalleryOptions } from './types';
+import type { GalleryOptions } from './types';
+import { RenderElementProps } from 'slate-react';
 
 const root: CSSProperties = {
   borderWidth: 2,
@@ -41,9 +47,9 @@ const rejected: CSSProperties = {
 };
 
 type GalleryProps = GalleryOptions & {
-  attributes: Record<string, unknown>;
+  attributes: RenderElementProps['attributes'];
   children: ReactNode;
-  editor: ReactEditorExtended;
+  editor: GalleryEditor;
   element: GalleryElement;
   /**
    * Placeholder text
@@ -188,7 +194,7 @@ export function Gallery({
   /**
    * Insert images File objects into gallery's data
    */
-  function insertImage(files: File[]): void {
+  function insertImage(files: ExtendedFile[]): void {
     changeNodeData(editor, element, {
       images: Array.isArray(element.images)
         ? element.images.concat(files)

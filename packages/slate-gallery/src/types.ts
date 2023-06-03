@@ -1,18 +1,7 @@
-import type { MouseEvent, ReactElement, ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import type { DropzoneProps } from 'react-dropzone';
 import type { SortableContainerProps } from 'react-sortable-hoc';
-import type { ReactEditor } from 'slate-react';
-import type { Element } from 'slate';
 import type { GalleryReadOnlyOptions } from '@mercuriya/slate-gallery-read-only';
-
-export interface ReactEditorExtended extends ReactEditor {
-  galleryElementType: ({
-    attributes,
-    children,
-    element,
-    readOnly,
-  }) => ReactElement;
-}
 
 export interface RenderControlsArgs {
   /**
@@ -70,15 +59,3 @@ export type GalleryOptions = GalleryReadOnlyOptions & {
    */
   renderEditModal?: (args: RenderEditModalArgs) => ReactNode;
 };
-
-interface ExtendedFile extends File {
-  src?: string;
-  description?: string;
-}
-
-export type TypeImage = ExtendedFile | Image;
-
-export interface GalleryElement extends Element {
-  descriptions: Record<string, string>;
-  images: TypeImage[];
-}

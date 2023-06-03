@@ -1,11 +1,12 @@
 import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 import type {
+  ImageParams,
   RenderImageFn,
   RenderImageProps,
 } from '@mercuriya/slate-gallery-common';
 
 import Controls from './Controls';
-import type { RenderControlsArgs, TypeImage } from './types';
+import type { RenderControlsArgs } from './types';
 
 export type ImageProps = {
   /**
@@ -13,7 +14,7 @@ export type ImageProps = {
    * is not used in Image component, but passed down to Controls component
    */
   index: number;
-  image: TypeImage;
+  image: ImageParams;
   renderControls?: (args: RenderControlsArgs) => ReactNode;
   renderImage?: RenderImageFn;
   wrapperStyle: CSSProperties;

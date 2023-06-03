@@ -1,2 +1,7 @@
-export * from './withGallery';
-export { insertGallery, isGalleryActive, GALLERY } from './utils';
+export * from './useGallery';
+export { insertGallery, isGalleryActive } from './utils';
+export { GALLERY } from '@mercuriya/slate-gallery-common';
+export type {
+  GalleryEditor,
+  GalleryElement,
+} from '@mercuriya/slate-gallery-common';
