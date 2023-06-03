@@ -1,5 +1,6 @@
 src
-image.jpg
+tsconfig.cjs.json
+tsconfig.esm.json
 tsconfig.json
-rollup.config.js
+tsconfig.tsbuildinfo
 yarn.lock
