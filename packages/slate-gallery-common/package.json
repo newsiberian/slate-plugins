@@ -3,10 +3,10 @@
   "version": "0.7.1",
   "description": "Common utilities for slate-js image gallery",
   "license": "MIT",
-  "main": "lib/bundle.umd.js",
-  "module": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "typings": "dist/esm/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/newsiberian/slate-plugins.git"
@@ -18,11 +18,8 @@
   "keywords": [
     "slate"
   ],
-  "directories": {
-    "lib": "lib"
-  },
   "files": [
-    "lib"
+    "dist/esm", "dist/cjs", "CHANGELOG.md", "LICENSE.md", "package.json"
   ],
   "publishConfig": {
     "access": "public"
@@ -30,16 +27,17 @@
   "private": false,
   "scripts": {
     "build": "yarn build:tsc",
-    "build:tsc": "tsc --build",
-    "bundle": "rollup -c",
-    "clean": "rimraf lib tsconfig.tsbuildinfo",
+    "build:tsc": "tsc --build tsconfig.esm.json tsconfig.cjs.json",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
     "prebuild": "yarn clean",
-    "prepublishOnly": "yarn clean && yarn build && yarn bundle"
+    "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
     "tslib": "^2.5.2"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": "*",
+    "slate": "^0.94.1",
+    "slate-react": "^0.94.2"
   }
 }
