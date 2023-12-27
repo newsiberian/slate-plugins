@@ -41,7 +41,11 @@ export function Video({ readOnly = false, ...props }) {
   const renderElement = useCallback((props) => <Element {...props} />, []);
 
   return (
-    <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
+    <Slate
+      editor={editor}
+      initialValue={value}
+      onChange={(value) => setValue(value)}
+    >
       <Editable renderElement={renderElement} readOnly={readOnly} />
     </Slate>
   );

@@ -71,7 +71,11 @@ export default function Gallery(props) {
   }, []);
 
   return (
-    <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
+    <Slate
+      editor={editor}
+      initialValue={value}
+      onChange={(value) => setValue(value)}
+    >
       <ToolbarComponent setSize={setSize} />
       <Editable renderElement={renderElement} />
     </Slate>

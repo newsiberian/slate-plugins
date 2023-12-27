@@ -82,7 +82,7 @@ export function Linkify({ readOnly = false, options }: LinkifyProps) {
   >((props) => <Element {...props} />, []);
 
   return (
-    <Slate editor={editor} value={initialState}>
+    <Slate editor={editor} initialValue={initialState}>
       <ToolbarComponent />
       <Editable renderElement={renderElement} readOnly={readOnly} />
     </Slate>
@@ -92,10 +92,9 @@ export function Linkify({ readOnly = false, options }: LinkifyProps) {
 const Element = ({ attributes, children, element }: RenderElementProps) => {
   const editor = useSlateStatic();
 
-  if ('type' in element) {
-    if (element.type === 'link') {
-      return editor.linkElementType({ attributes, children, element });
-    }
+  if ('type' in element && element.type === 'link') {
+    return editor.linkElementType({ attributes, children, element });
   }
+
   return <p {...attributes}>{children}</p>;
 };
