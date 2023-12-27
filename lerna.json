@@ -2,7 +2,6 @@
   "packages": [
     "packages/*"
   ],
-  "useWorkspaces": true,
   "version": "independent",
   "npmClient": "yarn",
   "command": {
@@ -24,16 +23,41 @@
       "changelogPreset": {
         "name": "conventionalcommits",
         "types": [
-          {"type": "feat", "section": "Features"},
-          {"type": "fix", "section": "Bug Fixes"},
-          {"type": "chore", "hidden": true},
-          {"type": "docs", "hidden": true},
-          {"type": "style", "hidden": true},
-          {"type": "refactor", "hidden": "Changes"},
-          {"type": "perf", "hidden": true},
-          {"type": "test", "hidden": true}
+          {
+            "type": "feat",
+            "section": "Features"
+          },
+          {
+            "type": "fix",
+            "section": "Bug Fixes"
+          },
+          {
+            "type": "chore",
+            "hidden": true
+          },
+          {
+            "type": "docs",
+            "hidden": true
+          },
+          {
+            "type": "style",
+            "hidden": true
+          },
+          {
+            "type": "refactor",
+            "hidden": "Changes"
+          },
+          {
+            "type": "perf",
+            "hidden": true
+          },
+          {
+            "type": "test",
+            "hidden": true
+          }
         ]
       }
     }
-  }
+  },
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }

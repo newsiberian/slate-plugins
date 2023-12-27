@@ -2,7 +2,10 @@
   "compilerOptions": {
     "module": "ES2020",
     "target": "ES2018",
-    "lib": ["es7", "dom"],
+    "lib": [
+      "es7",
+      "dom"
+    ],
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -12,10 +15,12 @@
     "noEmitOnError": true,
     "noUnusedLocals": true,
     "skipLibCheck": true,
-    "importHelpers":true,
+    "importHelpers": true,
     "baseUrl": ".",
     "paths": {
-      "@mercuriya/*": ["packages/*/src"]
+      "@mercuriya/*": [
+        "packages/*/src"
+      ]
     }
   }
 }
