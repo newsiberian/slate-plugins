@@ -1,14 +1,12 @@
-import { Element, Editor, Range } from 'slate';
-
-import type { RenderElementProps } from 'slate-react';
 import type { HTMLAttributeAnchorTarget, ReactElement } from 'react';
+import { BaseEditor, Element, Range } from 'slate';
+import type { RenderElementProps, ReactEditor } from 'slate-react';
 
 import {
   insertPastedLinks,
   isLink,
   LINK,
   wrapLink,
-  LinkifyEditor,
   LinkifyElement,
   tryWrapLink,
 } from './utils';
@@ -33,55 +31,55 @@ export type LinkifyOptions = {
   rel?: string;
 };
 
-export const withLinkify = (
+export const withLinkify = <Editor extends BaseEditor & ReactEditor>(
   editor: Editor,
   options = {} as LinkifyOptions,
-): Editor => {
-  const typedEditor = editor as LinkifyEditor;
+) => {
   const { target = '_blank', rel = 'noreferrer noopener' } = options;
-  const { insertData, insertBreak, insertText, isInline } = typedEditor;
+  const {
+    isInline: isInlineOrigin,
+    insertBreak: insertBreakOrigin,
+    insertText: insertTextOrigin,
+    insertData: insertDataOrigin,
+  } = editor;
+  const isInline: typeof editor.isInline = (element) =>
+    Element.isElementType(element, LINK) || isInlineOrigin(element);
 
-  typedEditor.isInline = (element) =>
-    Element.isElementType(element, LINK) || isInline(element);
-
-  typedEditor.insertBreak = () => {
-    if (Range.isCollapsed(typedEditor.selection)) {
-      tryWrapLink(typedEditor);
+  const insertBreak: typeof editor.insertBreak = () => {
+    if (Range.isCollapsed(editor.selection)) {
+      tryWrapLink(editor);
     }
 
-    insertBreak();
+    insertBreakOrigin();
   };
 
-  typedEditor.insertText = (text) => {
-    if (
-      [' ', ',', '.'].includes(text) &&
-      Range.isCollapsed(typedEditor.selection)
-    ) {
-      tryWrapLink(typedEditor);
+  const insertText: typeof editor.insertText = (text, options) => {
+    if ([' ', ',', '.'].includes(text) && Range.isCollapsed(editor.selection)) {
+      tryWrapLink(editor);
     } else if (isLink(text)) {
-      wrapLink(typedEditor, text);
+      wrapLink(editor, text);
     }
 
-    insertText(text);
+    insertTextOrigin(text, options);
   };
 
-  typedEditor.insertData = (data) => {
+  const insertData: typeof editor.insertData = (data) => {
     const text = data.getData('text/plain');
 
     // this is for pasting links, but we ignore it if snippet contains html.
     // that's the work for the other plugin that must deserialize `html` by other
     // way and both plugins must work in conjunction to cover all pasting cases
     if (!data.types.includes('text/html') && text && isLink(text)) {
-      insertPastedLinks(data, insertData);
+      insertPastedLinks(data, insertDataOrigin);
     } else {
-      insertData(data);
+      insertDataOrigin(data);
     }
   };
 
   /**
    * This function must be provided to `renderElement` prop
    */
-  typedEditor.linkElementType = ({
+  const linkElementType = ({
     attributes,
     children,
     element,
@@ -101,5 +99,11 @@ export const withLinkify = (
     );
   };
 
-  return typedEditor;
+  return Object.assign(editor, {
+    isInline,
+    insertBreak,
+    insertText,
+    insertData,
+    linkElementType,
+  });
 };

@@ -1,19 +1,30 @@
 import type { ReactElement } from 'react';
-import { BaseEditor, Editor, Element, Range, Text, Transforms } from 'slate';
+import {
+  BaseEditor,
+  Editor as SlateEditor,
+  Element,
+  Range,
+  Text,
+  Transforms,
+} from 'slate';
 import type { ReactEditor, RenderElementProps } from 'slate-react';
 import LinkifyIt from 'linkify-it';
 import tlds from 'tlds';
 
+const linkify = LinkifyIt();
+linkify.tlds(tlds);
+
 export const LINK = <const>'link';
 
-export type LinkifyEditor = BaseEditor &
-  ReactEditor & {
-    linkElementType: ({
-      attributes,
-      children,
-      element,
-    }: RenderElementProps) => ReactElement;
-  };
+export type LinkifyEditor<Editor extends BaseEditor & ReactEditor> = Editor & {
+  linkElementType: ({
+    attributes,
+    children,
+    element,
+  }: Omit<RenderElementProps, 'element'> & {
+    element: LinkifyElement;
+  }) => ReactElement;
+};
 
 export type LinkifyElement = {
   type: typeof LINK;
@@ -21,26 +32,27 @@ export type LinkifyElement = {
   children: Text[];
 };
 
-const isLinkifyElement = (element): element is LinkifyElement =>
+const isLinkifyElement = (element: any): element is LinkifyElement =>
   Element.isElementType(element, LINK);
-
-const linkify = LinkifyIt();
-linkify.tlds(tlds);
 
 /**
  * If text contains something similar to link `true` will be returned
  */
 export const isLink = (text: string): boolean => linkify.test(text);
 
-export const isLinkActive = (editor: LinkifyEditor) => {
-  const [link] = Editor.nodes(editor, {
+export const isLinkActive = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+) => {
+  const [link] = SlateEditor.nodes(editor, {
     match: isLinkifyElement,
   });
   return !!link;
 };
 
-export const getLinkUrl = (editor: LinkifyEditor) => {
-  const [match] = Editor.nodes(editor, {
+export const getLinkUrl = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+) => {
+  const [match] = SlateEditor.nodes(editor, {
     match: isLinkifyElement,
   });
 
@@ -52,7 +64,9 @@ export const getLinkUrl = (editor: LinkifyEditor) => {
 /**
  * We additionally want to return isEdit flag to upper function
  */
-const isEditLink = (editor: LinkifyEditor): boolean => {
+const isEditLink = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+): boolean => {
   if (isLinkActive(editor)) {
     unwrapLink(editor);
     return true;
@@ -63,8 +77,10 @@ const isEditLink = (editor: LinkifyEditor): boolean => {
 /**
  * Remove `link` inline from the current caret position
  */
-export const unwrapLink = (editor: LinkifyEditor): void => {
-  const [link] = Editor.nodes(editor, {
+export const unwrapLink = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+): void => {
+  const [link] = SlateEditor.nodes(editor, {
     match: isLinkifyElement,
   });
   // we need to select all link text for case when selection is collapsed. In
@@ -78,7 +94,10 @@ export const unwrapLink = (editor: LinkifyEditor): void => {
 /**
  * Wrap underlying text into `link` inline
  */
-export const wrapLink = (editor: LinkifyEditor, text: string): void => {
+export const wrapLink = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+  text: string,
+): void => {
   const isEdit = isEditLink(editor);
   const isExpanded = Range.isExpanded(editor.selection);
 
@@ -98,7 +117,10 @@ export const wrapLink = (editor: LinkifyEditor, text: string): void => {
   }
 };
 
-export const insertLink = (editor: LinkifyEditor, url: string): void => {
+export const insertLink = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+  url: string,
+): void => {
   if (editor.selection) {
     wrapLink(editor, url);
   }
@@ -107,11 +129,13 @@ export const insertLink = (editor: LinkifyEditor, url: string): void => {
 /**
  * We are trying to detect links while user typing
  */
-export const tryWrapLink = (editor: LinkifyEditor): void => {
+export const tryWrapLink = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+): void => {
   const { selection } = editor;
   const [start] = Range.edges(selection);
   const [word, wordAnchorOffset] = getWordUnderCaret(
-    Editor.string(editor, start.path),
+    SlateEditor.string(editor, start.path),
     selection,
   );
 
