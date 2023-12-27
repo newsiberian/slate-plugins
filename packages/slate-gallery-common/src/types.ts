@@ -2,16 +2,15 @@ import type { MouseEvent, ReactElement, ReactNode } from 'react';
 import type { BaseEditor, BaseElement } from 'slate';
 import type { ReactEditor, RenderElementProps } from 'slate-react';
 
-export type GalleryEditor = BaseEditor &
-  ReactEditor & {
-    galleryElementType: ({
-      attributes,
-      children,
-      element,
-    }: Omit<RenderElementProps, 'element'> & {
-      element: GalleryElement | ReadOnlyGalleryElement;
-    }) => ReactElement;
-  };
+export type GalleryEditor<Editor extends BaseEditor & ReactEditor> = Editor & {
+  galleryElementType: ({
+    attributes,
+    children,
+    element,
+  }: Omit<RenderElementProps, 'element'> & {
+    element: GalleryElement | ReadOnlyGalleryElement;
+  }) => ReactElement;
+};
 
 export type ImageParams = {
   /**

@@ -1,20 +1,29 @@
-import { Element, Editor } from 'slate';
-import { GALLERY, GalleryEditor } from '@mercuriya/slate-gallery-common';
+import { Element, BaseEditor } from 'slate';
+import { ReactEditor, type RenderElementProps } from 'slate-react';
+import {
+  GALLERY,
+  ReadOnlyGalleryElement,
+} from '@mercuriya/slate-gallery-common';
 
 import { ReadOnlyGallery, GalleryReadOnlyOptions } from './ReadOnlyGallery';
 
-export const withReadOnlyGallery = (
+export const withReadOnlyGallery = <Editor extends BaseEditor & ReactEditor>(
   editor: Editor,
   options = {} as GalleryReadOnlyOptions,
-): Editor => {
-  const typedEditor = editor as GalleryEditor;
-  const { isVoid } = typedEditor;
+) => {
+  const { isVoid: isVoidOrigin } = editor;
 
-  typedEditor.isVoid = (element) => {
-    return Element.isElementType(element, GALLERY) || isVoid(element);
+  const isVoid: typeof editor.isVoid = (element) => {
+    return Element.isElementType(element, GALLERY) || isVoidOrigin(element);
   };
 
-  typedEditor.galleryElementType = ({ children, element, ...props }) => {
+  const galleryElementType = ({
+    children,
+    element,
+    ...props
+  }: Omit<RenderElementProps, 'element'> & {
+    element: ReadOnlyGalleryElement;
+  }) => {
     return (
       <ReadOnlyGallery element={element} {...props} {...options}>
         {children}
@@ -22,5 +31,5 @@ export const withReadOnlyGallery = (
     );
   };
 
-  return editor;
+  return Object.assign(editor, { isVoid, galleryElementType });
 };
