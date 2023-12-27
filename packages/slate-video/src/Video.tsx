@@ -26,18 +26,17 @@ export type VideoElement = BaseElement & {
   url: string;
 };
 
-export type VideoEditor = BaseEditor &
-  ReactEditor & {
-    videoElementType: ({
-      attributes,
-      children,
-      element,
-    }: Omit<RenderElementProps, 'element'> & {
-      element: VideoElement;
-    }) => ReactElement;
-  };
+export type VideoEditor<Editor extends BaseEditor & ReactEditor> = Editor & {
+  videoElementType: ({
+    attributes,
+    children,
+    element,
+  }: Omit<RenderElementProps, 'element'> & {
+    element: VideoElement;
+  }) => ReactElement;
+};
 
-type VideoElementProps = ReactPlayerProps & {
+export type VideoElementProps = ReactPlayerProps & {
   attributes: Omit<RenderElementProps['attributes'], 'ref'> & {
     ref: LegacyRef<ReactPlayer>;
   };
@@ -53,7 +52,8 @@ export function Video({
   renderInput = DefaultRenderInput,
   ...playerProps
 }: VideoElementProps) {
-  const editor = useSlateStatic() as VideoEditor;
+  // see https://github.com/ianstormtaylor/slate/issues/5404
+  const editor = useSlateStatic() as VideoEditor<ReactEditor>;
   const readOnly = useReadOnly();
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {

@@ -1,25 +1,26 @@
-import { Element, Editor } from 'slate';
-
 import type { ComponentProps, ReactElement } from 'react';
+import { Element, BaseEditor } from 'slate';
+import type { ReactEditor } from 'slate-react';
 import type { ReactPlayerProps } from 'react-player/lazy';
 
-import { Video, VIDEO, VideoEditor } from './Video';
+import { Video, VIDEO, VideoElementProps } from './Video';
 
 export type VideoOptions = ReactPlayerProps & {
   renderInput?: (props: ComponentProps<'input'>) => ReactElement;
 };
 
-export const withVideos = (
+export const withVideos = <Editor extends BaseEditor & ReactEditor>(
   editor: Editor,
   options: VideoOptions = {},
-): Editor => {
-  const typedEditor = editor as VideoEditor;
-  const { isVoid } = typedEditor;
+) => {
+  const { isVoid: isVoidOrigin } = editor;
 
-  typedEditor.isVoid = (element) =>
-    Element.isElementType(element, VIDEO) || isVoid(element);
+  const isVoid: typeof editor.isVoid = (element) =>
+    Element.isElementType(element, VIDEO) || isVoidOrigin(element);
 
-  typedEditor.videoElementType = (props) => <Video {...props} {...options} />;
+  const videoElementType = (props: VideoElementProps) => (
+    <Video {...props} {...options} />
+  );
 
-  return typedEditor;
+  return Object.assign(editor, { isVoid, videoElementType });
 };
