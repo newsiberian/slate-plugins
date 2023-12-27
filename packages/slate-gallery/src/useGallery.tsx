@@ -1,8 +1,7 @@
-import { Element, Editor } from 'slate';
-import { useReadOnly } from 'slate-react';
+import { BaseEditor, Element } from 'slate';
+import { useReadOnly, ReactEditor, type RenderElementProps } from 'slate-react';
 import { ReadOnlyGallery } from '@mercuriya/slate-gallery-read-only';
 import {
-  GalleryEditor,
   ReadOnlyGalleryElement,
   GalleryElement,
   GALLERY,
@@ -16,19 +15,24 @@ const getGalleryElementKind = (
   readOnly: boolean,
 ): galleryElement is ReadOnlyGalleryElement => readOnly;
 
-export const useGallery = (
+export const useGallery = <Editor extends BaseEditor & ReactEditor>(
   editor: Editor,
   options = {} as GalleryOptions,
 ): Editor => {
-  const typedEditor = editor as GalleryEditor;
   const readOnly = useReadOnly();
-  const { isVoid } = typedEditor;
+  const { isVoid: isVoidOrigin } = editor;
 
-  typedEditor.isVoid = (element) => {
-    return Element.isElementType(element, GALLERY) || isVoid(element);
+  const isVoid: typeof editor.isVoid = (element) => {
+    return Element.isElementType(element, GALLERY) || isVoidOrigin(element);
   };
 
-  typedEditor.galleryElementType = ({ children, element, ...props }) => {
+  const galleryElementType = ({
+    children,
+    element,
+    ...props
+  }: Omit<RenderElementProps, 'element'> & {
+    element: GalleryElement | ReadOnlyGalleryElement;
+  }) => {
     if (readOnly && getGalleryElementKind(element, readOnly)) {
       return (
         <ReadOnlyGallery element={element} {...props} {...options}>
@@ -37,11 +41,11 @@ export const useGallery = (
       );
     }
     return (
-      <Gallery editor={typedEditor} element={element} {...props} {...options}>
+      <Gallery editor={editor} element={element} {...props} {...options}>
         {children}
       </Gallery>
     );
   };
 
-  return typedEditor;
+  return Object.assign(editor, { isVoid, galleryElementType });
 };

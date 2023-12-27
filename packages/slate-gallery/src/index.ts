@@ -5,3 +5,4 @@ export type {
   GalleryEditor,
   GalleryElement,
 } from '@mercuriya/slate-gallery-common';
+export type * from './types';

@@ -8,16 +8,16 @@ import {
   ReactNode,
 } from 'react';
 import { useDropzone } from 'react-dropzone';
+import type { BaseEditor } from 'slate';
+import type { ReactEditor, RenderElementProps } from 'slate-react';
 import type {
   GalleryElement,
-  GalleryEditor,
   ExtendedFile,
 } from '@mercuriya/slate-gallery-common';
 
 import Grid from './Grid';
 import { changeNodeData } from './utils';
 import type { GalleryOptions } from './types';
-import { RenderElementProps } from 'slate-react';
 
 const root: CSSProperties = {
   borderWidth: 2,
@@ -46,10 +46,10 @@ const rejected: CSSProperties = {
   borderColor: '#f55a4e',
 };
 
-type GalleryProps = GalleryOptions & {
+type GalleryProps<Editor extends BaseEditor & ReactEditor> = GalleryOptions & {
   attributes: RenderElementProps['attributes'];
   children: ReactNode;
-  editor: GalleryEditor;
+  editor: Editor;
   element: GalleryElement;
   /**
    * Placeholder text
@@ -61,7 +61,7 @@ type GalleryProps = GalleryOptions & {
   droppingPlaceholder?: string | ReactNode;
 };
 
-export function Gallery({
+export function Gallery<Editor extends BaseEditor & ReactEditor>({
   attributes,
   children,
   editor,
@@ -77,7 +77,7 @@ export function Gallery({
   imageClassName,
   imageWrapperClassName,
   leftClassName,
-}: GalleryProps) {
+}: GalleryProps<Editor>) {
   const [openEditModal, serOpenEditModal] = useState<boolean>(false);
   // currently editable image index
   const [imageIndex, setImageIndex] = useState<number | null>(null);

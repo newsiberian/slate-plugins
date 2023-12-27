@@ -1,19 +1,19 @@
-import { Editor, Element, Transforms } from 'slate';
+import { BaseEditor, Editor, Element, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
-import {
-  GalleryElement,
-  GalleryEditor,
-  GALLERY,
-} from '@mercuriya/slate-gallery-common';
+import { GalleryElement, GALLERY } from '@mercuriya/slate-gallery-common';
 
-export const isGalleryActive = (editor: GalleryEditor): boolean => {
+export const isGalleryActive = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+): boolean => {
   const [gallery] = Editor.nodes(editor, {
     match: (n) => Element.isElementType(n, GALLERY),
   });
   return !!gallery;
 };
 
-export const insertGallery = (editor: GalleryEditor): void => {
+export const insertGallery = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
+): void => {
   const node: GalleryElement = {
     type: GALLERY,
     images: [],
@@ -31,16 +31,16 @@ export const insertGallery = (editor: GalleryEditor): void => {
 
 /**
  * Set additional data to current block
+ *
  * @param {Editor} editor
  * @param {GalleryElement} element
  * @param {object} payload - additional data
- * @return {Editor}
  */
-export const changeNodeData = (
-  editor: GalleryEditor,
+export const changeNodeData = <Editor extends BaseEditor & ReactEditor>(
+  editor: Editor,
   element: GalleryElement,
   payload: Partial<GalleryElement>,
-): void => {
+) => {
   Transforms.setNodes(editor, payload, {
     at: ReactEditor.findPath(editor, element),
   });

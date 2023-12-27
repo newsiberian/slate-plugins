@@ -12,9 +12,10 @@ import {
   SortableContainerProps,
   SortableElementProps,
 } from 'react-sortable-hoc';
+import type { BaseEditor } from 'slate';
+import type { ReactEditor } from 'slate-react';
 import {
   containerStyle,
-  GalleryEditor,
   GalleryElement,
   imageStyle,
   RenderImageFn,
@@ -24,8 +25,8 @@ import { Image } from './Image';
 import { RenderControlsArgs } from './types';
 import { changeNodeData } from './utils';
 
-type GridProps = {
-  editor: GalleryEditor;
+type GridProps<Editor extends BaseEditor & ReactEditor> = {
+  editor: Editor;
   element: GalleryElement;
   images?: GalleryElement['images'];
   size: number;
@@ -81,14 +82,14 @@ const SortableList = SortableContainer<SortableListProps>(
   },
 );
 
-const Grid = ({
+const Grid = <Editor extends BaseEditor & ReactEditor>({
   editor,
   element,
   images,
   size,
   sortableContainerProps,
   ...rest
-}: GridProps) => {
+}: GridProps<Editor>) => {
   const handleSortEnd = useCallback(
     ({ oldIndex, newIndex }) => {
       changeNodeData(editor, element, {
