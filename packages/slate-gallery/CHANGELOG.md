@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.0-alpha.2](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@1.0.0-alpha.0...@mercuriya/slate-gallery@0.8.0-alpha.2) (2023-12-27)
+
+**Note:** Version bump only for package @mercuriya/slate-gallery
+
+
+
+
+
 ## [1.0.0-alpha.0](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@0.7.1...@mercuriya/slate-gallery@1.0.0-alpha.0) (2023-06-03)
 
 
