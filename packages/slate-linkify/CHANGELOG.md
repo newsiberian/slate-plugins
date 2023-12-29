@@ -5,6 +5,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.5.0-alpha.2](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-linkify@0.5.0-alpha.1...@mercuriya/slate-linkify@0.5.0-alpha.2) (2023-12-27)
 
+### Changes
+
+use generic for `Editor` type and inject new methods via `Object.assign`, that help to extend Editor type naturally, w/o using `as`.
+
 **Note:** Version bump only for package @mercuriya/slate-linkify
 
 

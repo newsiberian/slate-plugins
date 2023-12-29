@@ -32,7 +32,7 @@ export type LinkifyElement = {
   children: Text[];
 };
 
-const isLinkifyElement = (element: any): element is LinkifyElement =>
+const isLinkifyElement = (element: Element): element is LinkifyElement =>
   Element.isElementType(element, LINK);
 
 /**
