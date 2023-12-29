@@ -3,9 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import './styles.css';
 
 import { CustomImage } from './slate-gallery/CustomImage';
-import Gallery from './Gallery';
 import { CustomControls } from './slate-gallery/CustomControls';
 import { CustomEditModal } from './slate-gallery/CustomEditModal';
+import Gallery from './Gallery';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof Gallery> = {
@@ -31,7 +31,7 @@ export const ControlsCustom: Story = {
 export const ModalCustom: Story = {
   name: 'Custom modal component',
   args: {
-    renderEditModal: (args) => <CustomEditModal {...args} />,
+    renderEditModal: (props) => <CustomEditModal {...props} />,
   },
 };
 

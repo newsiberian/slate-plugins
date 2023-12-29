@@ -18,10 +18,10 @@ const ToolbarComponent = ({ setSize }) => {
   //   return editor.value.blocks.some((node) => node.type === type);
   // };
 
-  function onAddGallery(event) {
+  const onAddGallery = (event) => {
     event.preventDefault();
     insertGallery(editor);
-  }
+  };
 
   return (
     <div className="gallery-toolbar">
@@ -31,7 +31,7 @@ const ToolbarComponent = ({ setSize }) => {
         defaultValue={9}
         name="size"
         id="size"
-        onChange={(e) => setSize(e.target.value)}
+        onChange={(e) => setSize(+e.target.value)}
       >
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((op) => {
           return (
