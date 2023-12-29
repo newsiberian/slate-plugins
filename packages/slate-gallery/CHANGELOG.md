@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.0-alpha.3](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@0.8.0-alpha.2...@mercuriya/slate-gallery@1.0.0-alpha.0) (2023-12-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* rename type `RenderEditModalArgs` to `RenderEditModalParams`; `RenderControlsArgs` to ``RenderControlsParams`
+* `renderEditModal` now has new `open` argument
+
+### Changes
+
+* `renderEditModal` now renders outside of upload dropzone as well as images `Grid` ([cbb97d0](https://github.com/newsiberian/slate-plugins/commit/cbb97d095b64bc84b9c2443a2b507934c6fe2332))
+
+
+
 ## [0.8.0-alpha.2](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@1.0.0-alpha.0...@mercuriya/slate-gallery@0.8.0-alpha.2) (2023-12-27)
 
 ### Changes
