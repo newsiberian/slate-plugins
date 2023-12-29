@@ -5,22 +5,15 @@ import type {
   RenderImageProps,
 } from '@mercuriya/slate-gallery-common';
 
-import Controls from './Controls';
-import type { RenderControlsArgs } from './types';
+import { Controls } from './Controls';
+import type { RenderControlsParams } from './types';
 
-export type ImageProps = {
-  /**
-   * We need to know index in cases when we need to edit or remove image, so it
-   * is not used in Image component, but passed down to Controls component
-   */
-  index: number;
+export type ImageProps = RenderControlsParams & {
   image: ImageParams;
-  renderControls?: (args: RenderControlsArgs) => ReactNode;
+  renderControls?: (params: RenderControlsParams) => ReactNode;
   renderImage?: RenderImageFn;
-  wrapperStyle: CSSProperties;
   onSelect?: RenderImageProps['onSelect'];
-  onOpenEditModal?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
-  onRemove?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
+  wrapperStyle: CSSProperties;
   imageClassName?: string;
   imageWrapperClassName?: string;
 };
@@ -43,11 +36,8 @@ export function Image({
   imageClassName,
   imageWrapperClassName,
 }: ImageProps) {
-  const imageWrapperProps = {} as { className?: string };
-  const imageProps = {} as {
-    className?: string;
-    style?: CSSProperties;
-  };
+  const imageWrapperProps: { className?: string } = {};
+  const imageProps: { className?: string; style?: CSSProperties } = {};
 
   if (imageWrapperClassName) {
     imageWrapperProps.className = imageWrapperClassName;
@@ -65,10 +55,11 @@ export function Image({
     }
   };
 
-  const renderControlsComponent = (): ReactNode => {
+  const renderControlsComponent = () => {
     if (typeof renderControls === 'function') {
       return renderControls({ index, onOpenEditModal, onRemove });
     }
+
     return (
       <Controls
         index={index}
@@ -87,6 +78,7 @@ export function Image({
         onSelect,
       });
     }
+
     return (
       <img
         src={image.src}

@@ -15,7 +15,7 @@ import type {
   ExtendedFile,
 } from '@mercuriya/slate-gallery-common';
 
-import Grid from './Grid';
+import { Grid } from './Grid';
 import { changeNodeData } from './utils';
 import type { GalleryOptions } from './types';
 
@@ -78,9 +78,11 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
   imageWrapperClassName,
   leftClassName,
 }: GalleryProps<Editor>) {
-  const [openEditModal, serOpenEditModal] = useState<boolean>(false);
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   // currently editable image index
   const [imageIndex, setImageIndex] = useState<number | null>(null);
+  const { images = [] } = element;
+
   const onDrop = useCallback(
     (acceptedFiles) => {
       insertImage(
@@ -96,6 +98,7 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
     },
     [element],
   );
+
   const {
     getRootProps,
     getInputProps,
@@ -107,7 +110,6 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
     onDrop,
     ...dropzoneProps,
   });
-  const { images = [] } = element;
 
   useEffect(() => {
     return () => {
@@ -120,15 +122,12 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
     event: MouseEvent<HTMLButtonElement>,
     index: number,
   ) => {
-    event.preventDefault();
-    event.stopPropagation();
-
     setImageIndex(index);
 
     // when user uses custom modal, he must implement all logic manually. See
     // storybook 'Edit modal custom component'
     if (typeof renderEditModal === 'function') {
-      serOpenEditModal(true);
+      setOpenEditModal(true);
     } else {
       const description = window.prompt(
         'Modify image description',
@@ -142,7 +141,7 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
   };
 
   const handleEdit = useCallback(
-    (index: number, text: string): void => {
+    (index: number, text: string) => {
       const image = images[index];
 
       // We can have two cases here: new images as Files or previously saved
@@ -176,10 +175,7 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
   );
 
   const handleRemove = useCallback(
-    (event: MouseEvent<HTMLButtonElement>, index: number): void => {
-      event.preventDefault();
-      event.stopPropagation();
-
+    (event: MouseEvent<HTMLButtonElement>, index: number) => {
       changeNodeData(editor, element, {
         images: images.filter((image, i) => i !== index),
       });
@@ -187,23 +183,23 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
     [element],
   );
 
-  const handleClose = useCallback((): void => {
-    serOpenEditModal(false);
+  const handleClose = useCallback(() => {
+    setOpenEditModal(false);
   }, []);
 
   /**
    * Insert images File objects into gallery's data
    */
-  function insertImage(files: ExtendedFile[]): void {
+  const insertImage = (files: ExtendedFile[]) => {
     changeNodeData(editor, element, {
       images: Array.isArray(element.images)
         ? element.images.concat(files)
         : files,
     });
-  }
+  };
 
   const getDescription = useCallback(
-    (index): string => {
+    (index) => {
       const image = images[index];
 
       if (!image) {
@@ -221,16 +217,18 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
     [element],
   );
 
-  function renderEditModalComponent() {
+  const renderEditModalComponent = () => {
     if (typeof renderEditModal === 'function') {
       return renderEditModal({
+        key: imageIndex,
+        open: openEditModal,
         index: imageIndex,
         onEdit: handleEdit,
         onClose: handleClose,
         description: getDescription(imageIndex),
       });
     }
-  }
+  };
 
   const placeholderNode = useMemo(
     () =>
@@ -248,50 +246,41 @@ export function Gallery<Editor extends BaseEditor & ReactEditor>({
     [droppingPlaceholder],
   );
 
-  const style = useMemo(
-    () => ({
-      ...root,
-      ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
-      ...(isDragActive ? active : {}),
-      ...(isDragAccept ? accepted : {}),
-      ...(isDragReject ? rejected : {}),
-    }),
-    [isDragActive, isDragAccept, isDragReject],
-  );
-
-  const info = useCallback((): ReactNode | string | null => {
-    if (!images.length) {
-      return isDragActive ? droppingPlaceholderNode : placeholderNode;
-    }
-    return null;
-  }, [images.length, isDragActive]);
-
   return (
-    <div {...attributes}>
-      <div {...getRootProps()} style={style} contentEditable={false}>
+    <div {...attributes} contentEditable={false}>
+      <div
+        {...getRootProps()}
+        style={{
+          ...root,
+          ...(!isDragActive && !isDragAccept && !isDragReject ? normal : {}),
+          ...(isDragActive ? active : {}),
+          ...(isDragAccept ? accepted : {}),
+          ...(isDragReject ? rejected : {}),
+        }}
+      >
         <input {...getInputProps()} />
 
-        {info()}
-
-        <Grid
-          editor={editor}
-          element={element}
-          images={images}
-          size={size}
-          renderControls={renderControls}
-          renderImage={renderImage}
-          onOpenEditModal={handleOpenEditModal}
-          onRemove={handleRemove}
-          imageClassName={imageClassName}
-          imageWrapperClassName={imageWrapperClassName}
-          leftClassName={leftClassName}
-          sortableContainerProps={sortableContainerProps}
-        />
-
-        {openEditModal && renderEditModalComponent()}
+        {isDragActive ? droppingPlaceholderNode : placeholderNode}
       </div>
 
+      <Grid
+        editor={editor}
+        element={element}
+        images={images}
+        size={size}
+        renderControls={renderControls}
+        renderImage={renderImage}
+        onOpenEditModal={handleOpenEditModal}
+        onRemove={handleRemove}
+        imageClassName={imageClassName}
+        imageWrapperClassName={imageWrapperClassName}
+        leftClassName={leftClassName}
+        sortableContainerProps={sortableContainerProps}
+      />
+
       {children}
+
+      {renderEditModalComponent()}
     </div>
   );
 }

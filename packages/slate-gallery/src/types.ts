@@ -3,7 +3,7 @@ import type { DropzoneProps } from 'react-dropzone';
 import type { SortableContainerProps } from 'react-sortable-hoc';
 import type { GalleryReadOnlyOptions } from '@mercuriya/slate-gallery-read-only';
 
-export interface RenderControlsArgs {
+export type RenderControlsParams = {
   /**
    * An index of selected image
    */
@@ -13,9 +13,11 @@ export interface RenderControlsArgs {
    */
   onOpenEditModal: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
   onRemove: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
-}
+};
 
-export interface RenderEditModalArgs {
+export type RenderEditModalParams = {
+  key: number;
+  open: boolean;
   index: number;
   onEdit: (index: number, text: string) => void;
   /**
@@ -26,7 +28,7 @@ export interface RenderEditModalArgs {
    * Image description
    */
   description?: string;
-}
+};
 
 export type GalleryOptions = GalleryReadOnlyOptions & {
   /**
@@ -40,7 +42,7 @@ export type GalleryOptions = GalleryReadOnlyOptions & {
   /**
    * Custom controls component. It is uses only for "readOnly: true" mode
    * Handlers must be added to each child-button accordingly
-   * @param {RenderControlsArgs} args
+   * @param {RenderControlsParams} params
    * @return {ReactNode}
    *
    * Example:
@@ -53,9 +55,9 @@ export type GalleryOptions = GalleryReadOnlyOptions & {
    *   </button>
    * </div>
    */
-  renderControls?: (args: RenderControlsArgs) => ReactNode;
+  renderControls?: (params: RenderControlsParams) => ReactNode;
   /**
    * A render function which allows you to use whatever modal you wish
    */
-  renderEditModal?: (args: RenderEditModalArgs) => ReactNode;
+  renderEditModal?: (params: RenderEditModalParams) => ReactNode;
 };

@@ -5,6 +5,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.8.0-alpha.2](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@1.0.0-alpha.0...@mercuriya/slate-gallery@0.8.0-alpha.2) (2023-12-27)
 
+### Changes
+
+use generic for `Editor` type and inject new methods via `Object.assign`, that help to extend Editor type naturally, w/o using `as`.
+
 **Note:** Version bump only for package @mercuriya/slate-gallery
 
 

@@ -1,10 +1,6 @@
-import type { CSSProperties, MouseEvent } from 'react';
+import type { CSSProperties } from 'react';
 
-interface ControlsProps {
-  index: number;
-  onOpenEditModal: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
-  onRemove: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
-}
+import type { RenderControlsParams } from './types';
 
 const root: CSSProperties = {
   position: 'absolute',
@@ -12,31 +8,29 @@ const root: CSSProperties = {
   right: 0,
   marginTop: 8,
   marginRight: 8,
+
+  display: 'flex',
+  gap: 4,
 };
 
-const Controls = ({ index, onOpenEditModal, onRemove }: ControlsProps) => {
+export const Controls = ({
+  index,
+  onOpenEditModal,
+  onRemove,
+}: RenderControlsParams) => {
   return (
     <div style={root}>
       <button
+        title="Edit image description"
         onClick={(event) => {
-          event.preventDefault();
-          event.stopPropagation();
-
           onOpenEditModal(event, index);
         }}
-        onMouseDown={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        title="Edit image description"
       >
         &#x270e;
       </button>
-      <button onClick={(event) => onRemove(event, index)} title="Remove image">
+      <button title="Remove image" onClick={(event) => onRemove(event, index)}>
         &#xd7;
       </button>
     </div>
   );
 };
-
-export default Controls;

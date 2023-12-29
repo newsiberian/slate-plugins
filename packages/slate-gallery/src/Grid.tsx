@@ -1,17 +1,10 @@
-import {
-  useCallback,
-  useMemo,
-  CSSProperties,
-  MouseEvent,
-  ReactNode,
-} from 'react';
-import arrayMove from 'array-move';
+import { useCallback, CSSProperties, MouseEvent, ReactNode } from 'react';
 import {
   SortableContainer,
   SortableElement,
   SortableContainerProps,
-  SortableElementProps,
 } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 import type { BaseEditor } from 'slate';
 import type { ReactEditor } from 'slate-react';
 import {
@@ -22,7 +15,7 @@ import {
 } from '@mercuriya/slate-gallery-common';
 
 import { Image } from './Image';
-import { RenderControlsArgs } from './types';
+import { RenderControlsParams } from './types';
 import { changeNodeData } from './utils';
 
 type GridProps<Editor extends BaseEditor & ReactEditor> = {
@@ -30,35 +23,47 @@ type GridProps<Editor extends BaseEditor & ReactEditor> = {
   element: GalleryElement;
   images?: GalleryElement['images'];
   size: number;
-  renderControls?: (args: RenderControlsArgs) => ReactNode;
+  renderControls?: (params: RenderControlsParams) => ReactNode;
   renderImage?: RenderImageFn;
-  onOpenEditModal?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
-  onRemove?: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
+  onOpenEditModal: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
+  onRemove: (e: MouseEvent<HTMLButtonElement>, index: number) => void;
   imageWrapperClassName?: string;
   imageClassName?: string;
   leftClassName?: string;
   sortableContainerProps: SortableContainerProps;
 };
 
-type SortableListProps = SortableContainerProps & {
+type SortableListProps<Editor extends BaseEditor & ReactEditor> = Omit<
+  GridProps<Editor>,
+  'editor' | 'element' | 'images' | 'size' | 'sortableContainerProps'
+> & {
   images?: GalleryElement['images'];
   maxLength: number;
 };
 
-type SortableItemProps = SortableElementProps & {
+type SortableItemProps<Editor extends BaseEditor & ReactEditor> = Omit<
+  GridProps<Editor>,
+  'editor' | 'element' | 'images' | 'size' | 'sortableContainerProps'
+> & {
   image: GalleryElement['images'][number];
   imageIndex: number;
   wrapperStyle: CSSProperties;
 };
 
-const SortableItem = SortableElement<SortableItemProps>(
-  ({ imageIndex, ...props }: SortableItemProps) => (
-    <Image index={imageIndex} {...props} />
-  ),
-);
+const SortableItem = SortableElement<
+  SortableItemProps<BaseEditor & ReactEditor>
+>(({ imageIndex, ...props }: SortableItemProps<BaseEditor & ReactEditor>) => (
+  <Image index={imageIndex} {...props} />
+));
 
-const SortableList = SortableContainer<SortableListProps>(
-  ({ images, maxLength, ...props }) => {
+const SortableList = SortableContainer<
+  SortableListProps<BaseEditor & ReactEditor>
+>(
+  ({
+    images,
+    maxLength,
+    ...props
+  }: SortableListProps<BaseEditor & ReactEditor>) => {
     return (
       <div style={containerStyle(maxLength)}>
         {images.map((image, index) => {
@@ -82,14 +87,16 @@ const SortableList = SortableContainer<SortableListProps>(
   },
 );
 
-const Grid = <Editor extends BaseEditor & ReactEditor>({
+export const Grid = <Editor extends BaseEditor & ReactEditor>({
   editor,
   element,
   images,
   size,
   sortableContainerProps,
-  ...rest
+  ...props
 }: GridProps<Editor>) => {
+  const maxLength = Math.min(9, size, images.length ?? 1);
+
   const handleSortEnd = useCallback(
     ({ oldIndex, newIndex }) => {
       changeNodeData(editor, element, {
@@ -99,14 +106,9 @@ const Grid = <Editor extends BaseEditor & ReactEditor>({
     [element, images],
   );
 
-  const shouldCancelStart = useCallback(() => false, []);
-
-  const length = images.length || 1;
-  const fixedSize = useMemo(
-    () => (typeof size === 'number' && size > 0 && size <= 9 ? size : 9),
-    [size],
-  );
-  const maxLength = length > fixedSize ? fixedSize : length;
+  const shouldCancelStart = (e) => {
+    return e.target.nodeName !== 'IMG';
+  };
 
   return (
     <SortableList
@@ -115,10 +117,8 @@ const Grid = <Editor extends BaseEditor & ReactEditor>({
       maxLength={maxLength}
       onSortEnd={handleSortEnd}
       shouldCancelStart={shouldCancelStart}
-      {...rest}
+      {...props}
       {...sortableContainerProps}
     />
   );
 };
-
-export default Grid;

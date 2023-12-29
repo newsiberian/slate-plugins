@@ -10,14 +10,9 @@ import {
 import { Gallery } from './Gallery';
 import type { GalleryOptions } from './types';
 
-const getGalleryElementKind = (
-  galleryElement: GalleryElement | ReadOnlyGalleryElement,
-  readOnly: boolean,
-): galleryElement is ReadOnlyGalleryElement => readOnly;
-
 export const useGallery = <Editor extends BaseEditor & ReactEditor>(
   editor: Editor,
-  options = {} as GalleryOptions,
+  options = {} satisfies GalleryOptions,
 ): Editor => {
   const readOnly = useReadOnly();
   const { isVoid: isVoidOrigin } = editor;
@@ -33,13 +28,14 @@ export const useGallery = <Editor extends BaseEditor & ReactEditor>(
   }: Omit<RenderElementProps, 'element'> & {
     element: GalleryElement | ReadOnlyGalleryElement;
   }) => {
-    if (readOnly && getGalleryElementKind(element, readOnly)) {
+    if (readOnly) {
       return (
         <ReadOnlyGallery element={element} {...props} {...options}>
           {children}
         </ReadOnlyGallery>
       );
     }
+
     return (
       <Gallery editor={editor} element={element} {...props} {...options}>
         {children}
