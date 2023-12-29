@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.8.0-alpha.3](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@0.8.0-alpha.2...@mercuriya/slate-gallery@1.0.0-alpha.0) (2023-12-29)
+## [0.8.0-alpha.3](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@0.8.0-alpha.2...@mercuriya/slate-gallery@0.8.0-alpha.3) (2023-12-29)
 
 
 ### ⚠ BREAKING CHANGES
@@ -29,7 +29,7 @@ use generic for `Editor` type and inject new methods via `Object.assign`, that h
 
 
 
-## [1.0.0-alpha.0](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@0.7.1...@mercuriya/slate-gallery@1.0.0-alpha.0) (2023-06-03)
+## [0.8.0-alpha.1](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery@0.7.1...@mercuriya/slate-gallery@0.8.0-alpha.1) (2023-06-03)
 
 
 ### ⚠ BREAKING CHANGES
