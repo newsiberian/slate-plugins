@@ -47,7 +47,7 @@
     "eslint-plugin-react": "7.33.2",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-storybook": "0.6.15",
-    "lerna": "7.4.2",
+    "lerna": "8.0.1",
     "linkify-it": "4.0.1",
     "prettier": "3.1.1",
     "react": "18.2.0",
