@@ -12,7 +12,7 @@ import type { GalleryOptions } from './types';
 
 export const useGallery = <Editor extends BaseEditor & ReactEditor>(
   editor: Editor,
-  options = {} satisfies GalleryOptions,
+  options: GalleryOptions = {} satisfies GalleryOptions,
 ): Editor => {
   const readOnly = useReadOnly();
   const { isVoid: isVoidOrigin } = editor;
