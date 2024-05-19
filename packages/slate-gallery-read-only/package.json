@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "react": "*",
-    "slate": "^0.94.1",
-    "slate-react": "^0.94.2"
+    "slate": "^0.103.0",
+    "slate-react": "^0.104.0"
   }
 }
