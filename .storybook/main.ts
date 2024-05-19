@@ -1,5 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-webpack5';
-import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
