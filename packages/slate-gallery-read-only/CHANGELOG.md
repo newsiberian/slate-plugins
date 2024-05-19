@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.0-alpha.4](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery-read-only@0.8.0-alpha.3...@mercuriya/slate-gallery-read-only@0.8.0-alpha.4) (2024-05-19)
+
+**Note:** Version bump only for package @mercuriya/slate-gallery-read-only
+
+
+
+
+
 ## [0.8.0-alpha.3](https://github.com/newsiberian/slate-plugins/compare/@mercuriya/slate-gallery-read-only@0.8.0-alpha.2...@mercuriya/slate-gallery-read-only@0.8.0-alpha.3) (2024-05-19)
 
 **Note:** Version bump only for package @mercuriya/slate-gallery-read-only

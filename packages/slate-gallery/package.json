@@ -1,6 +1,6 @@
 {
   "name": "@mercuriya/slate-gallery",
-  "version": "0.8.0-alpha.5",
+  "version": "0.8.0-alpha.6",
   "description": "An image gallery for slate-js",
   "license": "MIT",
   "main": "dist/cjs/index.js",
@@ -39,8 +39,8 @@
     "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
-    "@mercuriya/slate-gallery-common": "0.8.0-alpha.3",
-    "@mercuriya/slate-gallery-read-only": "0.8.0-alpha.3",
+    "@mercuriya/slate-gallery-common": "^0.8.0-alpha.4",
+    "@mercuriya/slate-gallery-read-only": "^0.8.0-alpha.4",
     "tslib": "^2.5.2"
   },
   "peerDependencies": {
